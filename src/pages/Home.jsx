@@ -28,6 +28,7 @@ const Home = () => {
 
 
         {addTask && <AddTaskModal onClose={()=> setAddTask(false)} onConfirm={addItem} />}
+
     </> 
     );
 }
