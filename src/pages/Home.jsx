@@ -13,16 +13,21 @@ const Home = () => {
         setAddTask(false);
     }
 
+    const removeItem = (index) => {
+        const newList = listItems.filter((_, i) => i !== index);
+        setListItems(newList);
+    }
+
     return ( 
     <>
         <Header/>
         <div className='flex flex-col gap-4 m-4'>
             <div className='flex justify-center flex-col gap-4'>
                 {listItems.map((item, index) => (
-                    <ListItem key={index} text={item} />
+                    <ListItem key={index} text={item} onDelete={()=> removeItem(index)}/>
                 ))}
             </div>
-            <button onClick={() => setAddTask(true)} className='bg-main-green text-white p-2 w-32 rounded-lg py-4 self-end'>Add Task</button>
+            <button onClick={() => setAddTask(true)} className='bg-main-green text-white p-2 w-32 rounded-lg py-4 self-end font-bold'>Add Task</button>
 
         </div>
 

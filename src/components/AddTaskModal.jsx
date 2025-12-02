@@ -11,8 +11,8 @@ const AddTaskModal = ({ onClose, onConfirm }) => {
         <div className="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
             <h2 className="text-xl font-semibold mb-4">New Task</h2>
             <div className="text-gray-600 mb-6 flex-col gap-4 flex">
-                <input type="text" placeholder="Task Title" onChange={(e)=> setTitle(e.target.value)}/>
-                <textarea name="description" placeholder="Enter task description"></textarea>
+                <input type="text" placeholder="Task Title" onChange={(e)=> setTitle(e.target.value)} className="border border-gray-400 p-2 focus:outline-none"/>
+                <textarea name="description" placeholder="Enter task description" className="border border-gray-400 p-2 focus:outline-none sm:h-44" onChange={(e) => setDescription(e.target.value)}/>
             </div>
 
             <div className="flex justify-end gap-3">
