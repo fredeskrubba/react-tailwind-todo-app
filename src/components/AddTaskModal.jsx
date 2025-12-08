@@ -19,7 +19,7 @@ const AddTaskModal = ({ onClose, onConfirm }) => {
             <button className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300" onClick={onClose}>
                 Cancel
             </button>
-            <button className="px-4 py-2 rounded-lg bg-main-green text-white hover:bg-blue-700" onClick={() => onConfirm(title)}>
+            <button className="px-4 py-2 rounded-lg bg-main-green text-white hover:bg-blue-700" onClick={() => onConfirm({title, description})}>
                 Confirm
             </button>
             </div>

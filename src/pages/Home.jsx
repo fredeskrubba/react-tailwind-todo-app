@@ -5,10 +5,24 @@ import { useState } from 'react';
 
 const Home = () => {
 
-    const [listItems, setListItems] = useState(["Item 1", "Item 2", "Item 3"]);
+    const [listItems, setListItems] = useState([
+        {
+            title: "Item 1",
+            description: "big description for item 1 very big description for item 1 very big description for item 1"    
+        },
+        {
+            title: "Item 2",
+            description: "big description for item 2 very big description for item 2 very big description for item 2"    
+        },
+        {
+            title: "Item 3",
+            description: "big description for item 3 very big description for item 3 very big description for item 3"    
+        }
+]);
     const [addTask, setAddTask] = useState(false);  
 
     const addItem = (item) => {
+        console.log(item);
         setListItems([...listItems, item]);
         setAddTask(false);
     }
@@ -24,7 +38,7 @@ const Home = () => {
         <div className='flex flex-col gap-4 m-4'>
             <div className='flex justify-center flex-col gap-4'>
                 {listItems.map((item, index) => (
-                    <ListItem key={index} text={item} onDelete={()=> removeItem(index)}/>
+                    <ListItem key={index} text={item.title} description={item.description} onDelete={()=> removeItem(index)}/>
                 ))}
             </div>
             <button onClick={() => setAddTask(true)} className='bg-main-green text-white p-2 w-32 rounded-lg py-4 self-end font-bold'>Add Task</button>
