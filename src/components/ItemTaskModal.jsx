@@ -1,10 +1,10 @@
 import { useState } from "react";
 
-const EditTaskModal = ({ onClose, onConfirm, prevInfo }) => {
+const ItemTaskModal = ({ onClose, prevInfo, setListItems }) => {
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [selectedBackgroundColor, setSelectedBackgroundColor] = useState("");
+    const [selectedBackgroundColor, setSelectedBackgroundColor] = useState("#61BD92");
 
     const backGroundColors = ["#61BD92", "#C490D1", "#F0B67F", "#E54B4B", "#227C9D"];
 
@@ -13,6 +13,39 @@ const EditTaskModal = ({ onClose, onConfirm, prevInfo }) => {
         setTitle(prevInfo.title)
         setDescription(prevInfo.description);
         setSelectedBackgroundColor(prevInfo.backgroundColor);
+    }
+
+    const SubmitForm = async () => {
+        const item = {
+            description: description,
+            title: title,
+            color: selectedBackgroundColor,
+        }
+
+        if(!prevInfo){
+            fetch('https://localhost:7203/api/todo', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(item)}).then(res => res.json()).then(createdItem => {
+                setListItems(prev => [...prev, createdItem]);
+                onClose();
+            });
+
+        } else {
+            fetch('https://localhost:7203/api/todo', {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(item)}).then(res => res.json()).then(createdItem => {
+                setListItems(prev => [...prev, createdItem]);
+                onClose();
+            });
+        }
     }
 
     return ( 
@@ -35,8 +68,8 @@ const EditTaskModal = ({ onClose, onConfirm, prevInfo }) => {
                 Cancel
             </button>
             <button className="px-4 py-2 rounded-lg bg-main-green text-white hover:bg-blue-700" onClick={() => {
-                onConfirm({title, description})
-                onClose();}}>
+                SubmitForm()
+            }}>
                 Confirm
             </button>
             </div>
@@ -45,4 +78,4 @@ const EditTaskModal = ({ onClose, onConfirm, prevInfo }) => {
     );
 }
  
-export default EditTaskModal;
+export default ItemTaskModal;
