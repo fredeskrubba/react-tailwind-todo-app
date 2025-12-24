@@ -44,7 +44,7 @@ const ListItem = ({item, setListItems}) => {
             </div>
             
             
-            {editTask && <ItemTaskModal onClose={()=> setEditTask(false)} prevInfo={item} />}
+            {editTask && <ItemTaskModal onClose={()=> setEditTask(false)} prevInfo={item} setListItems={setListItems}/>}
     </div> 
     );
 }

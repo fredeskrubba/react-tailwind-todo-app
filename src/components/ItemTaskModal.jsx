@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const ItemTaskModal = ({ onClose, prevInfo, setListItems }) => {
 
@@ -9,17 +9,21 @@ const ItemTaskModal = ({ onClose, prevInfo, setListItems }) => {
     const backGroundColors = ["#61BD92", "#C490D1", "#F0B67F", "#E54B4B", "#227C9D"];
 
 
-    if (prevInfo) {
-        setTitle(prevInfo.title)
-        setDescription(prevInfo.description);
-        setSelectedBackgroundColor(prevInfo.backgroundColor);
-    }
+    useEffect(() => {
+        console.log(prevInfo);
+        if (prevInfo) {
+            setTitle(prevInfo.title)
+            setDescription(prevInfo.description);
+            setSelectedBackgroundColor(prevInfo.color);
+        }}, [prevInfo]);
 
     const SubmitForm = async () => {
         const item = {
             description: description,
             title: title,
             color: selectedBackgroundColor,
+            id: prevInfo ? prevInfo.id : 0,
+            IsComplete: false
         }
 
         if(!prevInfo){
@@ -35,14 +39,16 @@ const ItemTaskModal = ({ onClose, prevInfo, setListItems }) => {
             });
 
         } else {
-            fetch('https://localhost:7203/api/todo', {
+            fetch(`https://localhost:7203/api/todo/${item.id}`, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(item)}).then(res => res.json()).then(createdItem => {
-                setListItems(prev => [...prev, createdItem]);
+            body: JSON.stringify(item)}).then(res => res.json()).then(updatedItem => {
+                setListItems(prev =>
+                    prev.map(li => li.id === updatedItem.id ? updatedItem : li 
+                ));
                 onClose();
             });
         }
