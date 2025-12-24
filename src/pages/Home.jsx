@@ -30,16 +30,16 @@ const Home = () => {
     <>
         <Header/>
         <div className='flex flex-col gap-4 m-4'>
-            <div className='flex justify-center flex-col gap-4'>
+            <div className='grid grid-cols-3 gap-4 items-start'>
                 {listItems.map((item, index) => (
                     <ListItem key={index} item={item} setListItems={setListItems} />
                 ))}
             </div>
-            <button onClick={() => setAddTask(true)} className='bg-main-green text-white p-2 w-32 rounded-lg py-4 self-end font-bold'>Add Task</button>
 
         </div>
 
 
+        <button onClick={() => setAddTask(true)} className='fixed bottom-4 right-4 bg-main-green text-white text-xl p-6 rounded-lg py-4 font-bold shadow-lg'>Add Task</button>
         {addTask && <ItemTaskModal onClose={()=> setAddTask(false)} onConfirm={addItem} setListItems={setListItems}/>}
 
     </> 
