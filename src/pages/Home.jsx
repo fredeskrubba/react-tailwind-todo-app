@@ -30,8 +30,9 @@ const Home = () => {
     <>
         <Header/>
         <div className='flex flex-col gap-4 m-4'>
-            <div className='grid grid-cols-3 gap-4 items-start'>
-                {listItems.map((item, index) => (
+            <div className='grid grid-cols-2 gap-4 items-start lg:grid-cols-4'>
+                
+                {listItems.length <= 0 || listItems == null ? <p>Get started by adding todo items by pressing the add task button!</p> : listItems.map((item, index) => (
                     <ListItem key={index} item={item} setListItems={setListItems} />
                 ))}
             </div>

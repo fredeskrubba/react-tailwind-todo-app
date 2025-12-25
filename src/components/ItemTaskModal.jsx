@@ -1,16 +1,23 @@
 import { useEffect, useState } from "react";
+import { Sketch, Wheel, ShadeSlider } from '@uiw/react-color';
+import { hsvaToHex } from '@uiw/color-convert';
 
 const ItemTaskModal = ({ onClose, prevInfo, setListItems }) => {
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+    // for desktop
     const [selectedBackgroundColor, setSelectedBackgroundColor] = useState("#61BD92");
 
+    // for mobile
+    const [hsva, setHsva] = useState({ h: 214, s: 43, v: 90, a: 1 });
+
+    const [showColorPicker, setShowColorPicker] = useState(false);
     const backGroundColors = ["#61BD92", "#C490D1", "#F0B67F", "#E54B4B", "#227C9D"];
 
 
     useEffect(() => {
-        console.log(prevInfo);
+        
         if (prevInfo) {
             setTitle(prevInfo.title)
             setDescription(prevInfo.description);
@@ -58,15 +65,43 @@ const ItemTaskModal = ({ onClose, prevInfo, setListItems }) => {
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
         <div className="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
             <h2 className="text-xl font-semibold mb-4"> {prevInfo ? "Update Task" : "New Task" }</h2>
-            <div className="text-gray-600 mb-6 flex-col gap-4 flex">
+            <div className="text-gray-600 mb-6 flex-col gap-4 flex relative">
                 <input type="text" placeholder="Task Title" onChange={(e)=> setTitle(e.target.value)} className="border border-gray-400 p-2 focus:outline-none" value={title} />
                 <textarea name="description" placeholder="Enter task description" className="border border-gray-400 p-2 focus:outline-none sm:h-44" onChange={(e) => setDescription(e.target.value)} value={description} />
                 <p className="m-0">Select Background Color:</p>
                 <div className="flex items-center gap-2">
-                    {backGroundColors.map((color, index) => (
-                        <div key={index} className={`w-8 h-8 rounded-sm cursor-pointer ${selectedBackgroundColor === color ? "ring-2 ring-offset-2 ring-neutral-900" : ""}`} style={{backgroundColor: color}} onClick={() => setSelectedBackgroundColor(color)}></div>
-                    ))}
+                    <div className={`w-8 h-8 rounded-sm cursor-pointer`} style={{backgroundColor: selectedBackgroundColor}} onClick={() => setShowColorPicker(!showColorPicker)}/>
                 </div>
+
+
+                {showColorPicker &&
+                <>
+                    <div className="absolute left-12 top-72 z-50 hidden lg:block">
+                            <Sketch
+                            color={selectedBackgroundColor}
+                            presetColors={backGroundColors}
+                            disableAlpha={true}
+                            onChange={(color) => {
+                                setSelectedBackgroundColor(color.hex);
+                            }}/>
+                    </div>
+                    <div className="absolute left-12 top-20 bg-neutral-50 p-2  md:top-40 z-50 lg:hidden">
+                            <Wheel color={hsva} onChange={(color) => {
+                                setHsva(color.hsva);
+                                setSelectedBackgroundColor(hsvaToHex(color.hsva))
+                            }} />
+                            <ShadeSlider
+                                hsva={hsva}
+                                style={{ width: 210, marginTop: 20 }}
+                                onChange={(newShade) => {
+                                setHsva({ ...hsva, ...newShade });
+                                }}
+                            />
+                            <div style={{ width: '100%', height: 34, marginTop: 20, background: hsvaToHex(hsva) }}></div>
+                    </div>
+                
+                </>
+                }
             </div>
 
             <div className="flex justify-end gap-3">
@@ -80,6 +115,8 @@ const ItemTaskModal = ({ onClose, prevInfo, setListItems }) => {
             </button>
             </div>
         </div>
+        
+        
     </div> 
     );
 }
