@@ -6,14 +6,16 @@ const ItemTaskModal = ({ onClose, prevInfo, setListItems }) => {
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+
+    
     // for desktop
     const [selectedBackgroundColor, setSelectedBackgroundColor] = useState("#61BD92");
+    const backGroundColors = ["#61BD92", "#C490D1", "#F0B67F", "#E54B4B", "#227C9D"];
 
     // for mobile
     const [hsva, setHsva] = useState({ h: 214, s: 43, v: 90, a: 1 });
 
     const [showColorPicker, setShowColorPicker] = useState(false);
-    const backGroundColors = ["#61BD92", "#C490D1", "#F0B67F", "#E54B4B", "#227C9D"];
 
 
     useEffect(() => {
