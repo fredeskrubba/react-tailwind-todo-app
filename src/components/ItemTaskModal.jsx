@@ -66,17 +66,28 @@ const ItemTaskModal = ({ onClose, prevInfo, setListItems }) => {
         <div className="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
             <h2 className="text-xl font-semibold mb-4"> {prevInfo ? "Update Task" : "New Task" }</h2>
             <div className="text-gray-600 mb-6 flex-col gap-4 flex relative">
-                <input type="text" placeholder="Task Title" onChange={(e)=> setTitle(e.target.value)} className="border border-gray-400 p-2 focus:outline-none" value={title} />
-                <textarea name="description" placeholder="Enter task description" className="border border-gray-400 p-2 focus:outline-none sm:h-44" onChange={(e) => setDescription(e.target.value)} value={description} />
-                <p className="m-0">Select Background Color:</p>
-                <div className="flex items-center gap-2">
-                    <div className={`w-8 h-8 rounded-sm cursor-pointer`} style={{backgroundColor: selectedBackgroundColor}} onClick={() => setShowColorPicker(!showColorPicker)}/>
+                <div className="flex flex-col gap-2">
+                    <h2>Title</h2>
+                    <input type="text" placeholder="Task Title" onChange={(e)=> setTitle(e.target.value)} className="border border-gray-400 p-2 focus:outline-none" value={title} />
                 </div>
-
+                <div className="flex flex-col gap-2">
+                    <h2>Description</h2>
+                    <textarea name="description" placeholder="Enter task description" className="border border-gray-400 p-2 focus:outline-none sm:h-44" onChange={(e) => setDescription(e.target.value)} value={description} />
+                </div>
+                <div className="flex flex-col gap-2">
+                    <h2>Due Date</h2>
+                    <input type="datetime-local" className="border border-gray-400 p-2 focus:outline-none" placeholder=""/>
+                </div>
+                <div className="flex justify-between items-center mt-4">
+                    <p className="m-0">Select Background Color:</p>
+                    <div className="flex items-center gap-2">
+                        <div className={`w-8 h-8 rounded-sm cursor-pointer`} style={{backgroundColor: selectedBackgroundColor}} onClick={() => setShowColorPicker(!showColorPicker)}/>
+                    </div>
+                </div>
 
                 {showColorPicker &&
                 <>
-                    <div className="absolute left-12 top-72 z-50 hidden lg:block">
+                    <div className="absolute right-10 bottom-0 z-50 hidden lg:block">
                             <Sketch
                             color={selectedBackgroundColor}
                             presetColors={backGroundColors}
@@ -85,7 +96,7 @@ const ItemTaskModal = ({ onClose, prevInfo, setListItems }) => {
                                 setSelectedBackgroundColor(color.hex);
                             }}/>
                     </div>
-                    <div className="absolute left-12 top-20 bg-neutral-50 p-2  md:top-40 z-50 lg:hidden">
+                    <div className="absolute right-15 bottom-0 bg-neutral-50 p-2 md:top-40 z-50 lg:hidden">
                             <Wheel color={hsva} onChange={(color) => {
                                 setHsva(color.hsva);
                                 setSelectedBackgroundColor(hsvaToHex(color.hsva))
