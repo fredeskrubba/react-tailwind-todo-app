@@ -1,8 +1,8 @@
-import Header from '../components/Header.jsx';
 import ListItem from '../components/ListItem.jsx';
 import ItemTaskModal from '../components/Modals/ItemTaskModal.jsx';
 import { useEffect, useState } from 'react';
 import LoadingIcon from '../components/LoadingIcon.jsx';
+import Layout from '../components/Layout/Layout.jsx';
 
 const TodoList = () => {
     async function getTodoItems() {
@@ -31,21 +31,22 @@ const TodoList = () => {
 
     return ( 
     <>
-        <Header/>
-        {isLoading ?
-            <LoadingIcon /> : 
-            <div className='flex flex-col gap-4 m-4'>
-                <div className='grid grid-cols-1  gap-4 items-start sm:grid-cols-2 lg:grid-cols-4'>
-                {
-                    listItems.length <= 0 || listItems == null ? 
-                    <p>Get started by adding todo items by pressing the add task button!</p> : 
-                    listItems.map((item, index) => (
-                        <ListItem key={index} item={item} setListItems={setListItems} />
-                    ))
-                }   
-                        
-                </div>
-            </div>}
+        <Layout type="todo">
+            {isLoading ?
+                <LoadingIcon /> : 
+                <div className='flex flex-col gap-4 m-4'>
+                    <div className='grid grid-cols-1  gap-4 items-start sm:grid-cols-2 lg:grid-cols-4'>
+                    {
+                        listItems.length <= 0 || listItems == null ? 
+                        <p>Get started by adding todo items by pressing the add task button!</p> : 
+                        listItems.map((item, index) => (
+                            <ListItem key={index} item={item} setListItems={setListItems} />
+                        ))
+                    }   
+                            
+                    </div>
+                </div>}
+        </Layout>
 
 
         <button onClick={() => setAddTask(true)} className='fixed bottom-4 right-4 bg-main-green text-white text-xl p-6 rounded-lg py-4 font-bold shadow-lg cursor-pointer'>Add Task</button>

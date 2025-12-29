@@ -1,7 +1,8 @@
 import { Link, useLocation } from "wouter";
-import LogoutIcon from "../assets/icons/logout-icon.svg?react";
+import LogoutIcon from "../../assets/icons/logout-icon.svg?react";
+import BurgerIcon from "../../assets/icons/burger-icon.svg?react";
 
-const Header = () => {
+const Header = ({ setIsMenuOpen}) => {
     const [location] = useLocation();
 
     return ( 
@@ -14,9 +15,14 @@ const Header = () => {
                     <p className={`text-main-green text-xl sm:text-2xl ${location === "/Notes" ? "font-bold" : ""}`}>Notes</p>
                 </Link>
             </div>
-            <Link to="/">
-                <LogoutIcon className="w-6 h-6 sm:w-8 sm:h-8" />
-            </Link>
+            <div className="flex items-center gap-4">
+                
+                <BurgerIcon className="w-4 h-4 sm:w-5 sm:h-5 md:hidden" onClick={() => setIsMenuOpen(true)}/>
+                
+                <Link to="/">
+                    <LogoutIcon className="w-6 h-6 sm:w-8 sm:h-8" />
+                </Link>
+            </div>
         </div>
 
      );
