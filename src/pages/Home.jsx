@@ -1,6 +1,6 @@
 import Header from '../components/Header.jsx';
 import ListItem from '../components/ListItem.jsx';
-import ItemTaskModal from '../components/ItemTaskModal.jsx';
+import ItemTaskModal from '../components/Modals/ItemTaskModal.jsx';
 import { useEffect, useState } from 'react';
 import LoadingIcon from '../components/LoadingIcon.jsx';
 

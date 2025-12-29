@@ -5,8 +5,8 @@ import CheckmarkIcon from "../assets/icons/checkmark-icon.svg?react";
 import DateIcon from "../assets/icons/date-icon.svg?react";
 import TimeIcon from "../assets/icons/time-icon.svg?react";
 import { useState } from "react";
-import ItemTaskModal from "./ItemTaskModal.jsx";
-import WarningModal from "./WarningModal.jsx";
+import ItemTaskModal from "./Modals/ItemTaskModal.jsx";
+import WarningModal from "./Modals/WarningModal.jsx";
 
 const ListItem = ({item, setListItems}) => {
 

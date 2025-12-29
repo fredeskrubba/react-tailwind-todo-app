@@ -6,7 +6,7 @@ const ItemTaskModal = ({ onClose, prevInfo, setListItems }) => {
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-
+    const [dueDate, setDueDate] = useState(new Date().toISOString().slice(0, 16));
     
     // for desktop
     const [selectedBackgroundColor, setSelectedBackgroundColor] = useState("#61BD92");
@@ -17,6 +17,7 @@ const ItemTaskModal = ({ onClose, prevInfo, setListItems }) => {
 
     const [showColorPicker, setShowColorPicker] = useState(false);
 
+    const [error, setError] = useState({});
 
     useEffect(() => {
         
@@ -24,15 +25,36 @@ const ItemTaskModal = ({ onClose, prevInfo, setListItems }) => {
             setTitle(prevInfo.title)
             setDescription(prevInfo.description);
             setSelectedBackgroundColor(prevInfo.color);
+            setDueDate(prevInfo.dueDate);
         }}, [prevInfo]);
 
     const SubmitForm = async () => {
+
+        //  validation
+        if (title.trim() === "") {
+            setError({title: "Title is required"});
+            return;
+        }
+
+        if(description.trim() === "") {
+            setError({description: "Description is required"});
+            return;
+        }
+
+        if (!dueDate) {
+            setError({dueDate: "Due date is required"});
+            return;
+        }
+
+    
+            
         const item = {
             description: description,
             title: title,
             color: selectedBackgroundColor,
             id: prevInfo ? prevInfo.id : 0,
-            IsComplete: false
+            IsComplete: false,
+            dueDate: dueDate
         }
 
         if(!prevInfo){
@@ -71,14 +93,23 @@ const ItemTaskModal = ({ onClose, prevInfo, setListItems }) => {
                 <div className="flex flex-col gap-2">
                     <h2>Title</h2>
                     <input type="text" placeholder="Task Title" onChange={(e)=> setTitle(e.target.value)} className="border border-gray-400 p-2 focus:outline-none" value={title} />
+                    {
+                        error && error.title && <p className="text-red-500 text-sm m-0">{error.title}</p>
+                    }
                 </div>
                 <div className="flex flex-col gap-2">
                     <h2>Description</h2>
                     <textarea name="description" placeholder="Enter task description" className="border border-gray-400 p-2 focus:outline-none sm:h-44" onChange={(e) => setDescription(e.target.value)} value={description} />
+                    {
+                        error && error.description && <p className="text-red-500 text-sm m-0">{error.description}</p>
+                    }
                 </div>
                 <div className="flex flex-col gap-2">
                     <h2>Due Date</h2>
-                    <input type="datetime-local" className="border border-gray-400 p-2 focus:outline-none" placeholder=""/>
+                    <input type="datetime-local" className="border border-gray-400 p-2 focus:outline-none" value={dueDate} onChange={(e) => setDueDate(e.target.value)}/>
+                    {
+                        error && error.dueDate && <p className="text-red-500 text-sm m-0">{error.dueDate}</p>
+                    }
                 </div>
                 <div className="flex justify-between items-center mt-4">
                     <p className="m-0">Select Background Color:</p>
