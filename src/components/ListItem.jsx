@@ -23,6 +23,8 @@ const ListItem = ({item, setListItems}) => {
             prev.filter(item => item.id !== deletedItem.id)
         );
         })
+
+        setShowWarningModal(false);
     }
 
     const toggleComplete = async () => {
