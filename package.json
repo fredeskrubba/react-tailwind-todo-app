@@ -14,7 +14,8 @@
     "@uiw/react-color": "^2.9.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "tailwindcss": "^4.1.17"
+    "tailwindcss": "^4.1.17",
+    "wouter": "^3.9.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",

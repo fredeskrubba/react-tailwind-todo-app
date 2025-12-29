@@ -1,13 +1,16 @@
 import './App.css'
-import { useState } from 'react'
-import Home from './pages/Home'
+import { Route } from "wouter";
+import Login from './pages/Login.jsx'
+import TodoList from './pages/TodoList.jsx';
 
 function App() {
   
 
   return (
     <>
-      <Home/>
+      <Route path="/" component={Login} />
+      <Route path="/TodoList" component={TodoList} />        
+     
     </>
   )
 }

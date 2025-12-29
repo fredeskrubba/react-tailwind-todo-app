@@ -4,7 +4,7 @@ import ItemTaskModal from '../components/Modals/ItemTaskModal.jsx';
 import { useEffect, useState } from 'react';
 import LoadingIcon from '../components/LoadingIcon.jsx';
 
-const Home = () => {
+const TodoList = () => {
     async function getTodoItems() {
         const response = await fetch('https://localhost:7203/api/todo', { method: 'GET' });
         const data = await response.json(); 
@@ -55,4 +55,4 @@ const Home = () => {
     );
 }
  
-export default Home;
+export default TodoList;
