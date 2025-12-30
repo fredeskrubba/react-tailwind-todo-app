@@ -1,7 +1,7 @@
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import { useState } from "react";
-const Layout = ({ type, children }) => {
+const Layout = ({ PageMode, children }) => {
     
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -10,7 +10,7 @@ const Layout = ({ type, children }) => {
         <Header setIsMenuOpen={setIsMenuOpen} />
 
         <div className="flex flex-1">
-            <Sidebar type={type} isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+            <Sidebar PageMode={PageMode} isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
 
             <div className="flex-1 p-6 overflow-auto">
             {children}

@@ -15,12 +15,12 @@ const Header = ({ setIsMenuOpen}) => {
                     <p className={`text-main-green text-xl sm:text-2xl ${location === "/Notes" ? "font-bold" : ""}`}>Notes</p>
                 </Link>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-6">
                 
-                <BurgerIcon className="w-4 h-4 sm:w-5 sm:h-5 md:hidden" onClick={() => setIsMenuOpen(true)}/>
+                <BurgerIcon className="w-4 h-4 fill-main-green sm:w-7 sm:h-7 md:hidden" onClick={() => setIsMenuOpen(true)}/>
                 
                 <Link to="/">
-                    <LogoutIcon className="w-6 h-6 sm:w-8 sm:h-8" />
+                    <LogoutIcon className="w-6 h-6 fill-main-green sm:w-8 sm:h-8" />
                 </Link>
             </div>
         </div>

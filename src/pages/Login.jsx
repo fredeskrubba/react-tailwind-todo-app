@@ -40,7 +40,7 @@ const LoginPage = () => {
         {/* Login Button */}
 
         <Link to="/TodoList">
-            <button className="w-full bg-main-green text-white py-2 rounded-md hover:bg-blue-700 transition"> Login </button>
+            <button className="w-full bg-main-green text-white py-2 rounded-md cursor-pointer transition"> Login </button>
         </Link>
 
       </div>

@@ -31,9 +31,9 @@ const TodoList = () => {
 
     return ( 
     <>
-        <Layout type="todo">
+        <Layout PageMode="todo">
             {isLoading ?
-                <LoadingIcon /> : 
+                <LoadingIcon/> : 
                 <div className='flex flex-col gap-4 m-4'>
                     <div className='grid grid-cols-1  gap-4 items-start sm:grid-cols-2 lg:grid-cols-4'>
                     {
