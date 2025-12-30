@@ -7,15 +7,15 @@ const Layout = ({ PageMode, children }) => {
 
     return (
         <div className="flex flex-col h-screen">
-        <Header setIsMenuOpen={setIsMenuOpen} />
+            <Header setIsMenuOpen={setIsMenuOpen} />
 
-        <div className="flex flex-1">
-            <Sidebar PageMode={PageMode} isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+            <div className="flex flex-1 min-h-0 overflow-hidden">
+                <Sidebar PageMode={PageMode} isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
 
-            <div className="flex-1 p-6 overflow-auto">
-            {children}
+                <div className="flex-1 p-6 overflow-auto">
+                {children}
+                </div>
             </div>
-        </div>
         </div>
     );
 };
