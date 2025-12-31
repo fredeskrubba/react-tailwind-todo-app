@@ -11,7 +11,7 @@ const ItemTaskModal = ({ onClose, prevInfo, setListItems }) => {
     // for desktop
     const [selectedBackgroundColor, setSelectedBackgroundColor] = useState("#61BD92");
     const backGroundColors = ["#61BD92", "#C490D1", "#F0B67F", "#E54B4B", "#227C9D"];
-
+    
     // for mobile
     const [hsva, setHsva] = useState({ h: 214, s: 43, v: 90, a: 1 });
 
@@ -149,14 +149,14 @@ const ItemTaskModal = ({ onClose, prevInfo, setListItems }) => {
             </div>
 
             <div className="flex justify-end gap-3">
-            <button className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300" onClick={onClose}>
-                Cancel
-            </button>
-            <button className="px-4 py-2 rounded-lg bg-main-green text-white hover:bg-blue-700" onClick={() => {
-                SubmitForm()
-            }}>
-                Confirm
-            </button>
+                <button className="px-4 py-2 rounded-lg bg-gray-200 cursor-pointer" onClick={onClose}>
+                    Cancel
+                </button>
+                <button className="px-4 py-2 rounded-lg bg-main-green text-white cursor-pointer" onClick={() => {
+                    SubmitForm()
+                }}>
+                    Confirm
+                </button>
             </div>
         </div>
         

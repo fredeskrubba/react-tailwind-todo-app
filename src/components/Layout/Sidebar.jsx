@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import CrossIcon from "../../assets/icons/cross-icon.svg?react";
 import BurgerIcon from "../../assets/icons/burger-icon.svg?react";
+import AddCategoryModal from "../Modals/AddCategoryModal";
 
 const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
   
   const [activeItem, setActiveItem] = useState("All");
-  
+  const [isCreateCategoryModalOpen, setCreateCategoryModalOpen] = useState(false);
+
   // TODO create api, page mode note menu items represent individual notes
   const noteMenuItems = [
     { name: "All", color: "#227C9D" },
@@ -20,39 +22,19 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
     { name: "All", color: "#227C9D" },
     { name: "Completed", color: "#10B981" },
     { name: "Todo", color: "#FBBF24" },
-        { name: "All", color: "#227C9D" },
-    { name: "Completed", color: "#10B981" },
-    { name: "Todo", color: "#FBBF24" },
-        { name: "All", color: "#227C9D" },
-    { name: "Completed", color: "#10B981" },
-    { name: "Todo", color: "#FBBF24" },
-        { name: "All", color: "#227C9D" },
-    { name: "Completed", color: "#10B981" },
-    { name: "Todo", color: "#FBBF24" },
-        { name: "All", color: "#227C9D" },
-    { name: "Completed", color: "#10B981" },
-    { name: "Todo", color: "#FBBF24" },
-        { name: "All", color: "#227C9D" },
-    { name: "Completed", color: "#10B981" },
-    { name: "Todo", color: "#FBBF24" },
-        { name: "All", color: "#227C9D" },
-    { name: "Completed", color: "#10B981" },
-    { name: "Todo", color: "#FBBF24" },
-        { name: "All", color: "#227C9D" },
-    { name: "Completed", color: "#10B981" },
-    { name: "Todo", color: "#FBBF24" },
-        { name: "All", color: "#227C9D" },
-    { name: "Completed", color: "#10B981" },
-    { name: "Todo", color: "#FBBF24" },
-        { name: "All", color: "#227C9D" },
-    { name: "Completed", color: "#10B981" },
-    { name: "Todo", color: "#FBBF24" },
   ];
   
-  let menuItems = [] 
+  const [menuItems, setMenuItems] = useState([]);
   
-  menuItems = PageMode === "notes" ? noteMenuItems : todoMenuItems;
+  useEffect(() => {
 
+    PageMode === "notes" ? setMenuItems(noteMenuItems) : setMenuItems(todoMenuItems);
+  }, [PageMode]);
+
+
+  const AddCategory = (category) => {
+    setMenuItems(prev => [...prev, category]);
+  };
 
   return (
     <>
@@ -70,7 +52,7 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
             ))}
 
           </div>
-          <button className="mt-4 px-3 py-2 border-2 border-main-green text-main-green bg-neutral-100 cursor-pointer mt-auto">
+          <button className="mt-4 px-3 py-2 border-2 border-main-green text-main-green bg-neutral-100 cursor-pointer mt-auto" onClick={() => PageMode === "todo" && setCreateCategoryModalOpen(true)}>
             {
               PageMode === "notes" ? "Add Note" : "Add Category"
             }
@@ -100,6 +82,10 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
           ))}
         </div>
       </div>
+
+      {
+        isCreateCategoryModalOpen && <AddCategoryModal onClose={() => setCreateCategoryModalOpen(false)} onSubmit={AddCategory} />
+      }
     </>
   );
 };
