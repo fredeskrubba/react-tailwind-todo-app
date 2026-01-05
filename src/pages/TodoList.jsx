@@ -16,9 +16,6 @@ const TodoList = () => {
     const listItems = useTodoStore((state) => state.todoItems);
     const [addTask, setAddTask] = useState(false);  
     
-    const addItem = (item) => {
-        console.log("Adding item to store", item);
-    }
 
     async function getTodoItems() {
         setIsLoading(true);
@@ -51,7 +48,7 @@ const TodoList = () => {
 
 
         <button onClick={() => setAddTask(true)} className='fixed bottom-4 right-4 bg-main-green text-white text-xl p-6 rounded-lg py-4 font-bold shadow-lg cursor-pointer'>Add Task</button>
-        {addTask && <ItemTaskModal onClose={()=> setAddTask(false)} onConfirm={addItem} />}
+        {addTask && <ItemTaskModal onClose={()=> setAddTask(false)} />}
 
     </> 
     );

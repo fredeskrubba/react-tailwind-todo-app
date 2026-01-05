@@ -7,6 +7,7 @@ import TimeIcon from "../assets/icons/time-icon.svg?react";
 import { useState } from "react";
 import ItemTaskModal from "./Modals/ItemTaskModal.jsx";
 import WarningModal from "./Modals/WarningModal.jsx";
+import useTodoStore from "../store/TodoStore.js";
 
 const ListItem = ({item, setListItems}) => {
 
@@ -15,32 +16,20 @@ const ListItem = ({item, setListItems}) => {
     const [editTask, setEditTask] = useState(false);
     const [showWarningModal, setShowWarningModal] = useState(false);
 
+    const todoStore = useTodoStore();
     const dateObj = new Date(item.dueDate);
 
     const removeItem = async () => {
-        await fetch(`https://localhost:7203/api/todo/${item.id}`, { method: 'DELETE' }).then(res => res.json()).then(deletedItem => {
-            setListItems(prev =>
-            prev.filter(item => item.id !== deletedItem.id)
-        );
-        })
-
+        
+        await todoStore.deleteTodoItem(item.id);
         setShowWarningModal(false);
     }
 
     const toggleComplete = async () => {
         const updatedItem = { ...item, isComplete: !item.isComplete };
         
-        fetch(`https://localhost:7203/api/todo/${item.id}`, {
-            method: 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(updatedItem)}).then(res => res.json()).then(result => {
-                setListItems(prev =>
-                    prev.map(li => li.id === result.id ? result : li 
-                ));
-            });
+        await todoStore.updateTodoItem(updatedItem);
+        
     }
 
     return (

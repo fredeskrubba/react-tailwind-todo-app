@@ -1,13 +1,16 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import CrossIcon from "../../assets/icons/cross-icon.svg?react";
 import BurgerIcon from "../../assets/icons/burger-icon.svg?react";
 import AddCategoryModal from "../Modals/AddCategoryModal";
+import useTodoStore from "../../store/TodoStore";
+
 
 const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
   
   const [activeItem, setActiveItem] = useState("All");
   const [isCreateCategoryModalOpen, setCreateCategoryModalOpen] = useState(false);
 
+  
   // TODO create api, page mode note menu items represent individual notes
   const noteMenuItems = [
     { name: "All", color: "#227C9D" },
@@ -16,28 +19,45 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
     { name: "Work", color: "#EF4444" },
     { name: "Personal", color: "#10B981" }
   ];
-  
 
   
   const [menuItems, setMenuItems] = useState([]);
-  
-  async function getTodoItems() {
-        const response = await fetch('https://localhost:7203/api/category', { method: 'GET' });
-        const data = await response.json(); 
-        
-        return data;
-    }
+  const todoStore = useTodoStore();
+  const categories = useTodoStore(state => state.categories);
 
+  const getTodoItems = async () => {
+    await todoStore.fetchCategories();
+
+    console.log("Categories in Sidebar:", todoStore.categories);
+
+
+    const defaultCategories = [
+      { name: "All", color: "#227C9D" },
+      { name: "Incomplete", color: "#E54B4B" },
+      { name: "Complete", color: "#10B981" }
+    ];
+    setMenuItems([...defaultCategories, ...categories]);
+  }
 
   useEffect(() => {
-    if (PageMode === "todo") {
-      getTodoItems().then(data => setMenuItems([{ name: "All", color: "#227C9D" }, ...data]));
+    if (PageMode === 'todo') {
+      todoStore.fetchCategories();
     } else {
       setMenuItems(noteMenuItems);
     }
+  }, []);
 
-    setActiveItem(menuItems[0]?.name || "All");
-  }, [PageMode]);
+  useEffect(() => {
+  if (PageMode !== 'todo') return;
+
+  const defaultCategories = [
+    { name: "All", color: "#227C9D" },
+    { name: "Incomplete", color: "#E54B4B" },
+    { name: "Complete", color: "#10B981" },
+  ];
+
+  setMenuItems([...defaultCategories, ...categories]);
+}, [categories, PageMode]);
 
 
   const AddCategory = (category) => {

@@ -3,7 +3,7 @@ import { Sketch, Wheel, ShadeSlider } from '@uiw/react-color';
 import { hsvaToHex } from '@uiw/color-convert';
 import useTodoStore from "../../store/TodoStore";
 
-const ItemTaskModal = ({ onClose, prevInfo, setListItems }) => {
+const ItemTaskModal = ({ onClose, prevInfo,  }) => {
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
