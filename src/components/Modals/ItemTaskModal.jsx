@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Sketch, Wheel, ShadeSlider } from '@uiw/react-color';
 import { hsvaToHex } from '@uiw/color-convert';
+import useTodoStore from "../../store/TodoStore";
 
 const ItemTaskModal = ({ onClose, prevInfo, setListItems }) => {
 
@@ -8,6 +9,7 @@ const ItemTaskModal = ({ onClose, prevInfo, setListItems }) => {
     const [description, setDescription] = useState("");
     const [dueDate, setDueDate] = useState(new Date().toISOString().slice(0, 16));
     
+    const todoStore = useTodoStore();
     // for desktop
     const [selectedBackgroundColor, setSelectedBackgroundColor] = useState("#61BD92");
     const backGroundColors = ["#61BD92", "#C490D1", "#F0B67F", "#E54B4B", "#227C9D"];
@@ -58,30 +60,12 @@ const ItemTaskModal = ({ onClose, prevInfo, setListItems }) => {
         }
 
         if(!prevInfo){
-            fetch('https://localhost:7203/api/todo', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(item)}).then(res => res.json()).then(createdItem => {
-                setListItems(prev => [...prev, createdItem]);
-                onClose();
-            });
+            todoStore.createTodoItem(item);
+            onClose();
 
         } else {
-            fetch(`https://localhost:7203/api/todo/${item.id}`, {
-            method: 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(item)}).then(res => res.json()).then(updatedItem => {
-                setListItems(prev =>
-                    prev.map(li => li.id === updatedItem.id ? updatedItem : li 
-                ));
-                onClose();
-            });
+            await todoStore.updateTodoItem(item);
+            onClose();
         }
     }
 

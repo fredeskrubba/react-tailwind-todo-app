@@ -17,18 +17,26 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
     { name: "Personal", color: "#10B981" }
   ];
   
-  // TODO create api, page mode todo menu items represent individual todo categories
-  const todoMenuItems = [
-    { name: "All", color: "#227C9D" },
-    { name: "Completed", color: "#10B981" },
-    { name: "Todo", color: "#FBBF24" },
-  ];
+
   
   const [menuItems, setMenuItems] = useState([]);
   
-  useEffect(() => {
+  async function getTodoItems() {
+        const response = await fetch('https://localhost:7203/api/category', { method: 'GET' });
+        const data = await response.json(); 
+        
+        return data;
+    }
 
-    PageMode === "notes" ? setMenuItems(noteMenuItems) : setMenuItems(todoMenuItems);
+
+  useEffect(() => {
+    if (PageMode === "todo") {
+      getTodoItems().then(data => setMenuItems([{ name: "All", color: "#227C9D" }, ...data]));
+    } else {
+      setMenuItems(noteMenuItems);
+    }
+
+    setActiveItem(menuItems[0]?.name || "All");
   }, [PageMode]);
 
 

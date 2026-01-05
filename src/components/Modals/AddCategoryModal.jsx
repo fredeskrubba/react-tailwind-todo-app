@@ -1,7 +1,7 @@
 import BaseModal from "./BaseModal";
 import { Sketch, Wheel, ShadeSlider } from '@uiw/react-color';
 import { hsvaToHex } from '@uiw/color-convert';
-import { useState } from "react";
+import { use, useState } from "react";
 
 const AddCategoryModal = ({ onClose, onSubmit }) => {
     // for desktop
@@ -15,14 +15,28 @@ const AddCategoryModal = ({ onClose, onSubmit }) => {
     const [name, setName] = useState("");
     const [error, setError] = useState({});
 
-    const AddCategory = () => {
+    const AddCategory = async () => {
         if (name.trim() === "") {
             setError({name: "name is required"});
             return;
         }
 
-        onSubmit({ name: name, color: selectedBackgroundColor });
-        onClose();
+        const item = {
+            name: name,
+            color: selectedBackgroundColor,
+            userId: 1
+        }
+
+        await fetch('https://localhost:7203/api/category', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(item)}).then(res => res.json()).then(createdItem => {
+                onSubmit(createdItem);
+                onClose();
+            });
     }
 
     return (

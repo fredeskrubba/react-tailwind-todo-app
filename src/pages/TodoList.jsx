@@ -3,30 +3,31 @@ import ItemTaskModal from '../components/Modals/ItemTaskModal.jsx';
 import { useEffect, useState } from 'react';
 import LoadingIcon from '../components/LoadingIcon.jsx';
 import Layout from '../components/Layout/Layout.jsx';
+import useMainStore from '../store/Mainstore.js';
+import useTodoStore from '../store/TodoStore.js';
 
 const TodoList = () => {
-    async function getTodoItems() {
-        const response = await fetch('https://localhost:7203/api/todo', { method: 'GET' });
-        const data = await response.json(); 
-        setIsLoading(false);
-        return data;
-    }
-
-    const [isLoading, setIsLoading] = useState(true); 
-    const [listItems, setListItems] = useState([]);
+    
+    
+    const todoStore = useTodoStore();
+    const isLoading = useMainStore((state) => state.isLoading);
+    const setIsLoading = useMainStore((state) => state.setIsLoading);
+    
+    const listItems = useTodoStore((state) => state.todoItems);
     const [addTask, setAddTask] = useState(false);  
-
+    
     const addItem = (item) => {
-        
-        setListItems([...listItems, item]);
-        setAddTask(false);
+        console.log("Adding item to store", item);
     }
 
+    async function getTodoItems() {
+        setIsLoading(true);
+        await todoStore.fetchTodoItems();
+        setIsLoading(false);
+    }
 
     useEffect(() => {
-        getTodoItems().then(data => {
-            setListItems(data)
-        });
+        getTodoItems();
     }, []);
 
     return ( 
@@ -40,7 +41,7 @@ const TodoList = () => {
                         listItems.length <= 0 || listItems == null ? 
                         <p>Get started by adding todo items by pressing the add task button!</p> : 
                         listItems.map((item, index) => (
-                            <ListItem key={index} item={item} setListItems={setListItems} />
+                            <ListItem key={index} item={item}/>
                         ))
                     }   
                             
@@ -50,7 +51,7 @@ const TodoList = () => {
 
 
         <button onClick={() => setAddTask(true)} className='fixed bottom-4 right-4 bg-main-green text-white text-xl p-6 rounded-lg py-4 font-bold shadow-lg cursor-pointer'>Add Task</button>
-        {addTask && <ItemTaskModal onClose={()=> setAddTask(false)} onConfirm={addItem} setListItems={setListItems}/>}
+        {addTask && <ItemTaskModal onClose={()=> setAddTask(false)} onConfirm={addItem} />}
 
     </> 
     );
