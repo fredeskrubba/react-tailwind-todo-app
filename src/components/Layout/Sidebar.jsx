@@ -25,20 +25,6 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
   const todoStore = useTodoStore();
   const categories = useTodoStore(state => state.categories);
 
-  const getTodoItems = async () => {
-    await todoStore.fetchCategories();
-
-    console.log("Categories in Sidebar:", todoStore.categories);
-
-
-    const defaultCategories = [
-      { name: "All", color: "#227C9D" },
-      { name: "Incomplete", color: "#E54B4B" },
-      { name: "Complete", color: "#10B981" }
-    ];
-    setMenuItems([...defaultCategories, ...categories]);
-  }
-
   useEffect(() => {
     if (PageMode === 'todo') {
       todoStore.fetchCategories();
@@ -64,6 +50,11 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
     setMenuItems(prev => [...prev, category]);
   };
 
+  const changeActiveCategory = (category) => {
+    setActiveItem(category);
+    todoStore.setActiveCategory(category);
+  };
+
   return (
     <>
         
@@ -73,7 +64,7 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
                 <button
                   className={`text-left px-3 py-2 rounded border-l-4 cursor-pointer ${activeItem === item.name ? ` text-white` : `text-left px-3 py-2 rounded border-l-4`}`}
                   style={activeItem === item.name ? { backgroundColor: item.color, borderColor: item.color} : { borderColor: item.color }}
-                  onClick={() => setActiveItem(item.name)}
+                  onClick={() => changeActiveCategory(item.name)}
                 >
                 {item.name}
                 </button>

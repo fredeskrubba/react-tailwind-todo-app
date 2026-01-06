@@ -1,6 +1,6 @@
 import ListItem from '../components/ListItem.jsx';
 import ItemTaskModal from '../components/Modals/ItemTaskModal.jsx';
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import LoadingIcon from '../components/LoadingIcon.jsx';
 import Layout from '../components/Layout/Layout.jsx';
 import useMainStore from '../store/Mainstore.js';
@@ -10,10 +10,13 @@ const TodoList = () => {
     
     
     const todoStore = useTodoStore();
+
     const isLoading = useMainStore((state) => state.isLoading);
     const setIsLoading = useMainStore((state) => state.setIsLoading);
     
     const listItems = useTodoStore((state) => state.todoItems);
+    const activeCategory = useTodoStore((state) => state.activeCategory);
+
     const [addTask, setAddTask] = useState(false);  
     
 
@@ -26,6 +29,24 @@ const TodoList = () => {
     useEffect(() => {
         getTodoItems();
     }, []);
+    
+
+
+    const filteredListItems = listItems.filter((item) => {
+        switch (activeCategory.toLowerCase()) {
+            case "all":
+            return true;
+
+            case "complete":
+            return item.isComplete === true;
+
+            case "incomplete":
+            return item.isComplete === false;
+
+            default:
+            return item.category === activeCategory;
+        }
+});
 
     return ( 
     <>
@@ -35,9 +56,9 @@ const TodoList = () => {
                 <div className='flex flex-col gap-4 m-4'>
                     <div className='grid grid-cols-1  gap-4 items-start sm:grid-cols-2 lg:grid-cols-4'>
                     {
-                        listItems.length <= 0 || listItems == null ? 
+                        filteredListItems.length <= 0 || filteredListItems == null ? 
                         <p>Get started by adding todo items by pressing the add task button!</p> : 
-                        listItems.map((item, index) => (
+                        filteredListItems.map((item, index) => (
                             <ListItem key={index} item={item}/>
                         ))
                     }   

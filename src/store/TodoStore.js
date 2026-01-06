@@ -3,8 +3,11 @@ import { create } from 'zustand'
 const useTodoStore = create((set) => ({
     todoItems: [],
     categories: [],
+    activeCategory: "All",
     setTodoItems: (items) => set({ todoItems: items }),
     setCategories: (categories) => set({ categories: categories }),
+    setActiveCategory: (category) => set({ activeCategory: category }),
+
 
     fetchTodoItems: async () => {
         const response = await fetch('https://localhost:7203/api/todo', { method: 'GET' });
@@ -52,9 +55,7 @@ const useTodoStore = create((set) => ({
     fetchCategories: async () => {
         const response = await fetch('https://localhost:7203/api/category', { method: 'GET' });
         const data = await response.json(); 
-        console.log("Fetched categories:", data);
         set({ categories: data });
-        console.log("Categories set in store:", data);
     }
 }))
 
