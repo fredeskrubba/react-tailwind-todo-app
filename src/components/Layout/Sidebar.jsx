@@ -7,7 +7,7 @@ import useTodoStore from "../../store/TodoStore";
 
 const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
   
-  const [activeItem, setActiveItem] = useState("All");
+  const [activeItem, setActiveItem] = useState({"name": "All", "color": "#227C9D"});
   const [isCreateCategoryModalOpen, setCreateCategoryModalOpen] = useState(false);
 
   
@@ -32,17 +32,17 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
       setMenuItems(noteMenuItems);
     }
   }, []);
-
+  
   useEffect(() => {
-  if (PageMode !== 'todo') return;
-
-  const defaultCategories = [
-    { name: "All", color: "#227C9D" },
-    { name: "Incomplete", color: "#E54B4B" },
-    { name: "Complete", color: "#10B981" },
-  ];
-
-  setMenuItems([...defaultCategories, ...categories]);
+    if (PageMode !== 'todo') return;
+    
+    const defaultCategories = [
+      { name: "All", color: "#227C9D" },
+      { name: "Incomplete", color: "#E54B4B" },
+      { name: "Complete", color: "#10B981" },
+    ];
+    
+    setMenuItems([...defaultCategories, ...categories]);
 }, [categories, PageMode]);
 
 
@@ -52,7 +52,8 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
 
   const changeActiveCategory = (category) => {
     setActiveItem(category);
-    todoStore.setActiveCategory(category);
+    console.log(category);
+    todoStore.setActiveCategory({name: category.name, id: category.id, color: category.color, userId: 1});
   };
 
   return (
@@ -62,9 +63,9 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
           <div className="flex flex-col gap-2 flex-1 min-h-0 overflow-y-auto">
             {menuItems.map((item) => (
                 <button
-                  className={`text-left px-3 py-2 rounded border-l-4 cursor-pointer ${activeItem === item.name ? ` text-white` : `text-left px-3 py-2 rounded border-l-4`}`}
-                  style={activeItem === item.name ? { backgroundColor: item.color, borderColor: item.color} : { borderColor: item.color }}
-                  onClick={() => changeActiveCategory(item.name)}
+                  className={`text-left px-3 py-2 rounded border-l-4 cursor-pointer ${activeItem.name === item.name ? ` text-white` : `text-left px-3 py-2 rounded border-l-4`}`}
+                  style={activeItem.name === item.name ? { backgroundColor: item.color, borderColor: item.color} : { borderColor: item.color }}
+                  onClick={() => changeActiveCategory(item)}
                 >
                 {item.name}
                 </button>
@@ -95,7 +96,10 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
           {menuItems.map((item) => (
             <button
               className="text-left px-3 py-2 hover:bg-gray-100 rounded text-lg"
-            >
+              style={activeItem.name === item.name ? { backgroundColor: item.color, color: "#fff"} : {}}
+              onClick={() => { 
+                changeActiveCategory(item); 
+                setIsMenuOpen(false); }}>
               {item.name}
             </button>
           ))}

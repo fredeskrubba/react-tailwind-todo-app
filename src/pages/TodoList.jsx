@@ -30,10 +30,8 @@ const TodoList = () => {
         getTodoItems();
     }, []);
     
-
-
     const filteredListItems = listItems.filter((item) => {
-        switch (activeCategory.toLowerCase()) {
+        switch (activeCategory.name.toLowerCase()) {
             case "all":
             return true;
 
@@ -44,7 +42,7 @@ const TodoList = () => {
             return item.isComplete === false;
 
             default:
-            return item.category === activeCategory;
+            return item.categoryId === activeCategory.id;
         }
 });
 

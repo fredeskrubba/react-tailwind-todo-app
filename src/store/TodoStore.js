@@ -3,7 +3,7 @@ import { create } from 'zustand'
 const useTodoStore = create((set) => ({
     todoItems: [],
     categories: [],
-    activeCategory: "All",
+    activeCategory: { name: "All", id: null },
     setTodoItems: (items) => set({ todoItems: items }),
     setCategories: (categories) => set({ categories: categories }),
     setActiveCategory: (category) => set({ activeCategory: category }),

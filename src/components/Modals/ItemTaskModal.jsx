@@ -20,6 +20,7 @@ const ItemTaskModal = ({ onClose, prevInfo,  }) => {
     const [showColorPicker, setShowColorPicker] = useState(false);
 
     const [error, setError] = useState({});
+    const activeCategory = useTodoStore((state) => state.activeCategory);
 
     useEffect(() => {
         
@@ -47,8 +48,6 @@ const ItemTaskModal = ({ onClose, prevInfo,  }) => {
             setError({dueDate: "Due date is required"});
             return;
         }
-
-    
             
         const item = {
             description: description,
@@ -56,7 +55,8 @@ const ItemTaskModal = ({ onClose, prevInfo,  }) => {
             color: selectedBackgroundColor,
             id: prevInfo ? prevInfo.id : 0,
             IsComplete: false,
-            dueDate: dueDate
+            dueDate: dueDate,
+            categoryId: activeCategory.name.toLowerCase() != "all" || activeCategory.name.toLowerCase() != "complete" || activeCategory.name.toLowerCase() != "incomplete"? activeCategory.id : null
         }
 
         if(!prevInfo){
