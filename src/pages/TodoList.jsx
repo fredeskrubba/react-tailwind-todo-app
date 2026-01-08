@@ -52,10 +52,10 @@ const TodoList = () => {
             {isLoading ?
                 <LoadingIcon/> : 
                 <div className='flex flex-col gap-4 m-4'>
-                    <div className='grid grid-cols-1  gap-4 items-start sm:grid-cols-2 lg:grid-cols-4'>
+                    <div className={`${filteredListItems.length <= 0 || filteredListItems == null ? "block" : "grid grid-cols-1 gap-4 items-start sm:grid-cols-2 lg:grid-cols-4"}`}>
                     {
                         filteredListItems.length <= 0 || filteredListItems == null ? 
-                        <p>Get started by adding todo items by pressing the add task button!</p> : 
+                        <p className='text-center'>No items in the current Category</p> : 
                         filteredListItems.map((item, index) => (
                             <ListItem key={index} item={item}/>
                         ))
@@ -63,11 +63,11 @@ const TodoList = () => {
                             
                     </div>
                 </div>}
+            <button onClick={() => setAddTask(true)} className='fixed bottom-4 right-4 bg-main-green text-white text-xl p-6 rounded-lg py-4 font-bold shadow-lg cursor-pointer'>Add Task</button>
+            {addTask && <ItemTaskModal onClose={()=> setAddTask(false)} />}
         </Layout>
 
 
-        <button onClick={() => setAddTask(true)} className='fixed bottom-4 right-4 bg-main-green text-white text-xl p-6 rounded-lg py-4 font-bold shadow-lg cursor-pointer'>Add Task</button>
-        {addTask && <ItemTaskModal onClose={()=> setAddTask(false)} />}
 
     </> 
     );

@@ -14,7 +14,6 @@ const LoginPage = () => {
                 This app is a project developed by me, using React and tailwind for the frontend, and ASP.NET Core for the backend. MySql was used as the database solution.
             </p>
         </div>
-        {/* Email */}
         <div className="mb-4">
           <label className="block text-sm font-medium mb-1">
             Email
@@ -26,7 +25,6 @@ const LoginPage = () => {
           />
         </div>
 
-        {/* Password */}
         <div className="mb-6">
           <label className="block text-sm font-medium mb-1">
             Password
@@ -36,13 +34,16 @@ const LoginPage = () => {
             className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-main-green"
           />
         </div>
+        <div className="flex flex-col gap-4">
+          <Link to="/TodoList">
+              <button className="w-full bg-main-green text-white py-2 rounded-md cursor-pointer transition hover:bg-main-green-dark"> Login </button>
+          </Link>
 
-        {/* Login Button */}
+          <Link to="/TodoList">
+              <button className="w-full bg-main-green text-white py-2 rounded-md cursor-pointer transition hover:bg-main-green-dark" > Continue as guest</button>
+          </Link>
 
-        <Link to="/TodoList">
-            <button className="w-full bg-main-green text-white py-2 rounded-md cursor-pointer transition"> Login </button>
-        </Link>
-
+        </div>
       </div>
     </div>
   );
