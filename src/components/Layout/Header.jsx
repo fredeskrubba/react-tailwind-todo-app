@@ -9,10 +9,10 @@ const Header = ({ setIsMenuOpen}) => {
         <div className="py-4 px-8 border-2 border-b-main-green border-t-0 border-x-0 flex justify-between items-center">
             <div className="flex gap-4">
                 <Link to="/TodoList">
-                    <p className={`text-main-green text-xl sm:text-2xl ${location === "/TodoList" ? "font-bold" : ""}`}>Todo List</p>
+                    <p className={`text-base md:text-xl border-2 rounded-md p-2 ${location === "/TodoList" ? "font-bold text-main-green border-main-green"  : " text-neutral-500 border-neutral-500"}`}>Todo List</p>
                 </Link>
                 <Link to="/Notes">
-                    <p className={`text-main-green text-xl sm:text-2xl ${location === "/Notes" ? "font-bold" : ""}`}>Notes</p>
+                    <p className={`text-base md:text-xl border-2 rounded-md p-2 ${location === "/Notes" ? "font-bold text-main-green border-main-green" : " text-neutral-500 border-neutral-500"}`}>Notes</p>
                 </Link>
             </div>
             <div className="flex items-center gap-6">
