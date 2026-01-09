@@ -3,7 +3,7 @@ import CrossIcon from "../../assets/icons/cross-icon.svg?react";
 import BurgerIcon from "../../assets/icons/burger-icon.svg?react";
 import AddCategoryModal from "../Modals/AddCategoryModal";
 import useTodoStore from "../../store/TodoStore";
-
+import { Menu, Item, Separator, Submenu, useContextMenu } from 'react-contexify';
 
 const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
   
@@ -19,11 +19,25 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
     { name: "Work", color: "#EF4444" },
     { name: "Personal", color: "#10B981" }
   ];
-
+  
   
   const [menuItems, setMenuItems] = useState([]);
   const todoStore = useTodoStore();
   const categories = useTodoStore(state => state.categories);
+  
+  const MENU_ID = "category_menu";
+  const { show } = useContextMenu({
+    id: MENU_ID,
+  });
+
+  function handleContextMenu(event){
+      show({
+        event,
+        props: {
+            key: 'value'
+        }
+      })
+  }
 
   useEffect(() => {
     if (PageMode === 'todo') {
@@ -50,9 +64,13 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
     setMenuItems(prev => [...prev, category]);
   };
 
+  const deleteCategory = ({id}) => {
+    todoStore.deleteCategory(id);
+    handleContextMenu();
+  }
+
   const changeActiveCategory = (category) => {
     setActiveItem(category);
-    console.log(category);
     todoStore.setActiveCategory({name: category.name, id: category.id, color: category.color, userId: 1});
   };
 
@@ -62,13 +80,24 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
         <div className="w-64 min-h-0 h-full border-r-2 border-main-green p-4 flex flex-col hidden md:flex md:flex-col md:gap-2 ">
           <div className="flex flex-col gap-2 flex-1 min-h-0 overflow-y-auto">
             {menuItems.map((item) => (
+              <>
                 <button
                   className={`text-left px-3 py-2 rounded border-l-4 cursor-pointer ${activeItem.name === item.name ? ` text-white` : `text-left px-3 py-2 rounded border-l-4`}`}
                   style={activeItem.name === item.name ? { backgroundColor: item.color, borderColor: item.color} : { borderColor: item.color }}
                   onClick={() => changeActiveCategory(item)}
+                  onContextMenu={handleContextMenu}
                 >
                 {item.name}
                 </button>
+                 <Menu id={MENU_ID} theme="myTheme">
+                  {
+                    item.name === "All" || item.name === "Incomplete" || item.name === "Complete" ? 
+                    <Item id="delete" onClick={() => deleteCategory({id: item.id})} disabled>Delete</Item> :
+                    <Item id="delete" onClick={() => deleteCategory({id: item.id})}>Delete</Item>
+                  }
+                </Menu>
+              </>
+                
             ))}
 
           </div>

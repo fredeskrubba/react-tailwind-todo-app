@@ -56,7 +56,14 @@ const useTodoStore = create((set) => ({
         const response = await fetch('https://localhost:7203/api/category', { method: 'GET' });
         const data = await response.json(); 
         set({ categories: data });
-    }
+    },
+
+    deleteCategory: async (id) => {
+        await fetch(`https://localhost:7203/api/category/${id}`, { method: 'DELETE' });
+        set((state) => ({
+            categories: state.categories.filter(c => c.id !== id),
+        }));
+    },
 }))
 
 export default useTodoStore;
