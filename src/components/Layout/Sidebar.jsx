@@ -30,14 +30,14 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
     id: MENU_ID,
   });
 
-  function handleContextMenu(event){
-      show({
-        event,
-        props: {
-            key: 'value'
-        }
-      })
-  }
+  const handleContextMenu = (e, item) => {
+ 
+    show({
+      id: MENU_ID,
+      event: e,
+      props: item,
+    });
+  };
 
   useEffect(() => {
     if (PageMode === 'todo') {
@@ -80,26 +80,28 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
         <div className="w-64 min-h-0 h-full border-r-2 border-main-green p-4 flex flex-col hidden md:flex md:flex-col md:gap-2 ">
           <div className="flex flex-col gap-2 flex-1 min-h-0 overflow-y-auto">
             {menuItems.map((item) => (
-              <>
+              
                 <button
-                  className={`text-left px-3 py-2 rounded border-l-4 cursor-pointer ${activeItem.name === item.name ? ` text-white` : `text-left px-3 py-2 rounded border-l-4`}`}
-                  style={activeItem.name === item.name ? { backgroundColor: item.color, borderColor: item.color} : { borderColor: item.color }}
+                  key={item.id}
+                  className={`text-left px-3 py-2 rounded border-l-4 cursor-pointer ${activeItem.name === item.name ? "text-white" : ""}`}
+                  style={activeItem.name === item.name ? { backgroundColor: item.color, borderColor: item.color } : { borderColor: item.color }}
                   onClick={() => changeActiveCategory(item)}
-                  onContextMenu={handleContextMenu}
-                >
-                {item.name}
-                </button>
-                 <Menu id={MENU_ID} theme="myTheme">
-                  {
-                    item.name === "All" || item.name === "Incomplete" || item.name === "Complete" ? 
-                    <Item id="delete" onClick={() => deleteCategory({id: item.id})} disabled>Delete</Item> :
-                    <Item id="delete" onClick={() => deleteCategory({id: item.id})}>Delete</Item>
-                  }
-                </Menu>
-              </>
-                
+                  onContextMenu={(e) => handleContextMenu(e, item)}>
+                  {item.name}
+                </button>   
             ))}
-
+            <Menu id={MENU_ID} theme="myTheme">
+              <Item
+                disabled={({ props }) =>
+                  props?.name === "All" ||
+                  props?.name === "Incomplete" ||
+                  props?.name === "Complete"
+                }
+                onClick={({ props }) => deleteCategory({ id: props.id })}
+              >
+                Delete
+              </Item>
+            </Menu>
           </div>
           <button className="mt-4 px-3 py-2 border-2 border-main-green text-main-green bg-neutral-100 cursor-pointer mt-auto" onClick={() => PageMode === "todo" && setCreateCategoryModalOpen(true)}>
             {
