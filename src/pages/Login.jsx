@@ -1,6 +1,71 @@
 import { Link } from "wouter";
+import useAuthStore from "../store/AuthStore";
+import React, { use } from "react";
+import { useState } from "react";
+import { useLocation } from "wouter";
 
 const LoginPage = () => {
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const login = useAuthStore((state) => state.login);
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+
+  let emailValid = false;
+  let passwordValid = false;
+
+  const [, navigate] = useLocation();
+  const userToken = useAuthStore((state) => state.token);
+  
+  const setUserToken = useAuthStore((state) => state.setUserToken);
+  const checkEmailValidity = (email) => {
+    const emailRegex = /\S+@\S+\.\S+/;
+    if(emailRegex.test(email)){
+      setEmailError("");
+      emailValid = true;
+    } else {
+      setEmailError("Please enter a valid email address.");
+      emailValid = false;
+    }
+  }
+  
+  const checkPasswordValidity = (password) => {
+    if(password.length >= 5){
+      setPasswordError("");
+      passwordValid = true;
+    } else {
+      setPasswordError("Password must be at least 5 characters long.");
+      passwordValid = false;
+    }
+  }
+
+  const OnLogin = async () => {
+    setEmailError("");
+    setPasswordError("");
+
+    checkEmailValidity(email);
+    checkPasswordValidity(password);
+
+    if (!emailValid || !passwordValid) return;
+
+    await login({ email, password });
+    
+    
+
+    if (!userToken) {
+      console.error("Login failed");
+      return;
+    } else {
+      setUserToken(userToken);
+
+      navigate("/TodoList");
+    }
+
+
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
@@ -22,7 +87,16 @@ const LoginPage = () => {
             type="email"
             placeholder="you@example.com"
             className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-main-green"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value)
+              checkEmailValidity(e.target.value);
+            }}
+            
           />
+          {emailError && (
+            <p className="text-red-500 text-sm mt-1">{emailError}</p>
+          )}
         </div>
 
         <div className="mb-6">
@@ -32,12 +106,18 @@ const LoginPage = () => {
           <input
             type="password"
             className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-main-green"
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value)
+              checkPasswordValidity(e.target.value);
+            }}
           />
+          {passwordError && (
+            <p className="text-red-500 text-sm mt-1">{passwordError}</p>
+          )}
         </div>
         <div className="flex flex-col gap-4">
-          <Link to="/TodoList">
-              <button className="w-full bg-main-green text-white py-2 rounded-md cursor-pointer transition hover:bg-main-green-dark"> Login </button>
-          </Link>
+          <button className="w-full bg-main-green text-white py-2 rounded-md cursor-pointer transition hover:bg-main-green-dark" onClick={OnLogin}> Login </button>
 
           <Link to="/TodoList">
               <button className="w-full bg-main-green text-white py-2 rounded-md cursor-pointer transition hover:bg-main-green-dark" > Continue as guest</button>
