@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Sketch, Wheel, ShadeSlider } from '@uiw/react-color';
 import { hsvaToHex } from '@uiw/color-convert';
 import useTodoStore from "../../store/TodoStore";
+import useAuthStore from "../../store/AuthStore";
 
 const ItemTaskModal = ({ onClose, prevInfo,  }) => {
 
@@ -21,6 +22,7 @@ const ItemTaskModal = ({ onClose, prevInfo,  }) => {
 
     const [error, setError] = useState({});
     const activeCategory = useTodoStore((state) => state.activeCategory);
+    const activeUser = useAuthStore((state) => state.activeUser);
 
     useEffect(() => {
         
@@ -32,7 +34,7 @@ const ItemTaskModal = ({ onClose, prevInfo,  }) => {
         }}, [prevInfo]);
 
     const SubmitForm = async () => {
-
+        console.log(activeUser);
         //  validation
         if (title.trim() === "") {
             setError({title: "Title is required"});
@@ -54,7 +56,8 @@ const ItemTaskModal = ({ onClose, prevInfo,  }) => {
             title: title,
             color: selectedBackgroundColor,
             id: prevInfo ? prevInfo.id : 0,
-            IsComplete: false,
+            userId: activeUser.id,
+            isComplete: false,
             dueDate: dueDate,
             categoryId: activeCategory.name.toLowerCase() != "all" || activeCategory.name.toLowerCase() != "complete" || activeCategory.name.toLowerCase() != "incomplete"? activeCategory.id : null
         }

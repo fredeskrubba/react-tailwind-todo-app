@@ -3,8 +3,8 @@ import { create } from 'zustand'
 const useAuthStore = create((set) => ({
     userToken: null,
     setUserToken: (token) => set({ userToken: token }),
-    ActiveUser: null,
-    setActiveUser: (user) => set({ ActiveUser: user }),
+    activeUser: null,
+    setActiveUser: (user) => set({ activeUser: user }),
     login: async (userData) => {
         const response = await fetch('https://localhost:7203/api/auth/login', {
             method: 'POST',
@@ -14,10 +14,11 @@ const useAuthStore = create((set) => ({
             },
             body: JSON.stringify(userData)
         });
-        const token = await response.json(); 
-        set({ isAuthenticated: true, ActiveUser: userData, userToken: token });
+        const result = await response.json(); 
+        console.log(result)
+        set({ userToken: result.token, activeUser: result.user});
     },
-    logout: () => set({ userToken: null, ActiveUser: null })
+    logout: () => set({ userToken: null, activeUser: null })
 }));
 
 export default useAuthStore;

@@ -5,6 +5,7 @@ import LoadingIcon from '../components/LoadingIcon.jsx';
 import Layout from '../components/Layout/Layout.jsx';
 import useMainStore from '../store/Mainstore.js';
 import useTodoStore from '../store/TodoStore.js';
+import useAuthStore from '../store/AuthStore.js';
 
 const TodoList = () => {
     
@@ -13,7 +14,7 @@ const TodoList = () => {
 
     const isLoading = useMainStore((state) => state.isLoading);
     const setIsLoading = useMainStore((state) => state.setIsLoading);
-    
+    const activeUser = useAuthStore((state) => state.activeUser);
     const listItems = useTodoStore((state) => state.todoItems);
     const activeCategory = useTodoStore((state) => state.activeCategory);
 
@@ -22,7 +23,7 @@ const TodoList = () => {
 
     async function getTodoItems() {
         setIsLoading(true);
-        await todoStore.fetchTodoItems();
+        await todoStore.fetchTodoItems(activeUser.id);
         setIsLoading(false);
     }
 

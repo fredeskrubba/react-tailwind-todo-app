@@ -9,8 +9,8 @@ const useTodoStore = create((set) => ({
     setActiveCategory: (category) => set({ activeCategory: category }),
 
 
-    fetchTodoItems: async () => {
-        const response = await fetch('https://localhost:7203/api/todo', { method: 'GET' });
+    fetchTodoItems: async (userId) => {
+        const response = await fetch(`https://localhost:7203/api/todo/${userId}`, { method: 'GET' });
         const data = await response.json(); 
         set({ todoItems: data });
     },
@@ -52,8 +52,8 @@ const useTodoStore = create((set) => ({
         }));
     },
 
-    fetchCategories: async () => {
-        const response = await fetch('https://localhost:7203/api/category', { method: 'GET' });
+    fetchCategories: async (userId) => {
+        const response = await fetch(`https://localhost:7203/api/category/${userId}`, { method: 'GET' });
         const data = await response.json(); 
         set({ categories: data });
     },

@@ -2,6 +2,7 @@ import BaseModal from "./BaseModal";
 import { Sketch, Wheel, ShadeSlider } from '@uiw/react-color';
 import { hsvaToHex } from '@uiw/color-convert';
 import { use, useState } from "react";
+import useAuthStore from "../../store/AuthStore";
 
 const AddCategoryModal = ({ onClose, onSubmit }) => {
     // for desktop
@@ -15,6 +16,7 @@ const AddCategoryModal = ({ onClose, onSubmit }) => {
     const [name, setName] = useState("");
     const [error, setError] = useState({});
 
+    const activeUser = useAuthStore((state) => state.activeUser);
     const AddCategory = async () => {
         if (name.trim() === "") {
             setError({name: "name is required"});
@@ -24,7 +26,7 @@ const AddCategoryModal = ({ onClose, onSubmit }) => {
         const item = {
             name: name,
             color: selectedBackgroundColor,
-            userId: 1
+            userId: activeUser.id
         }
 
         await fetch('https://localhost:7203/api/category', {

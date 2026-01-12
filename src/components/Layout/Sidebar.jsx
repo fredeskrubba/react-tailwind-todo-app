@@ -4,12 +4,13 @@ import BurgerIcon from "../../assets/icons/burger-icon.svg?react";
 import AddCategoryModal from "../Modals/AddCategoryModal";
 import useTodoStore from "../../store/TodoStore";
 import { Menu, Item, Separator, Submenu, useContextMenu } from 'react-contexify';
+import useAuthStore from "../../store/AuthStore";
 
 const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
   
   const [activeItem, setActiveItem] = useState({"name": "All", "color": "#227C9D"});
   const [isCreateCategoryModalOpen, setCreateCategoryModalOpen] = useState(false);
-
+  const activeUser = useAuthStore(state => state.activeUser);
   
   // TODO create api, page mode note menu items represent individual notes
   const noteMenuItems = [
@@ -41,7 +42,7 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
 
   useEffect(() => {
     if (PageMode === 'todo') {
-      todoStore.fetchCategories();
+      todoStore.fetchCategories(activeUser.id);
     } else {
       setMenuItems(noteMenuItems);
     }

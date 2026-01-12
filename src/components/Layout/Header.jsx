@@ -1,9 +1,15 @@
 import { Link, useLocation } from "wouter";
 import LogoutIcon from "../../assets/icons/logout-icon.svg?react";
 import BurgerIcon from "../../assets/icons/burger-icon.svg?react";
+import useAuthStore from "../../store/AuthStore";
 
 const Header = ({ setIsMenuOpen}) => {
     const [location] = useLocation();
+    const logout = useAuthStore(state => state.logout);
+
+    const onLogout = () => {
+        logout();
+    }
 
     return ( 
         <div className="py-4 px-8 border-2 border-b-main-green border-t-0 border-x-0 flex justify-between items-center">
@@ -19,9 +25,10 @@ const Header = ({ setIsMenuOpen}) => {
                 
                 <BurgerIcon className="w-4 h-4 fill-main-green sm:w-7 sm:h-7 md:hidden" onClick={() => setIsMenuOpen(true)}/>
                 
-                <Link to="/">
+                <button type="button" onClick={onLogout}>
                     <LogoutIcon className="w-6 h-6 fill-main-green sm:w-8 sm:h-8" />
-                </Link>
+                </button>
+                
             </div>
         </div>
 

@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import useAuthStore from "../store/AuthStore";
 import React, { use } from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 
 const LoginPage = () => {
@@ -16,8 +16,8 @@ const LoginPage = () => {
   let emailValid = false;
   let passwordValid = false;
 
-  const [, navigate] = useLocation();
-  const userToken = useAuthStore((state) => state.token);
+  const [location, navigate] = useLocation();
+  const userToken = useAuthStore((state) => state.userToken);
   
   const setUserToken = useAuthStore((state) => state.setUserToken);
   const checkEmailValidity = (email) => {
@@ -51,20 +51,14 @@ const LoginPage = () => {
     if (!emailValid || !passwordValid) return;
 
     await login({ email, password });
-    
-    
+  
+  };
 
-    if (!userToken) {
-      console.error("Login failed");
-      return;
-    } else {
-      setUserToken(userToken);
-
+    useEffect(() => {
+    if (userToken) {
       navigate("/TodoList");
     }
-
-
-  };
+  }, [userToken]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
