@@ -118,9 +118,9 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
           ${isMenuOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
-        <div className="flex justify-end mb-4">
+        <div className="flex justify-end mb-4 border-b-2 border-main-green pb-3">
           
-            <CrossIcon className="w-6 h-6" onClick={() => setIsMenuOpen(false)}/>
+            <CrossIcon className="w-6 h-6 fill-main-green" onClick={() => setIsMenuOpen(false)}/>
           
         </div>
 

@@ -4,7 +4,7 @@ import { hsvaToHex } from '@uiw/color-convert';
 import useTodoStore from "../../store/TodoStore";
 import useAuthStore from "../../store/AuthStore";
 
-const ItemTaskModal = ({ onClose, prevInfo,  }) => {
+const ItemTaskModal = ({ onClose, prevInfo}) => {
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -34,7 +34,7 @@ const ItemTaskModal = ({ onClose, prevInfo,  }) => {
         }}, [prevInfo]);
 
     const SubmitForm = async () => {
-        console.log(activeUser);
+       
         //  validation
         if (title.trim() === "") {
             setError({title: "Title is required"});

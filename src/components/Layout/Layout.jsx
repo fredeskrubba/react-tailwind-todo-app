@@ -18,7 +18,7 @@ const Layout = ({ PageMode, children }) => {
                 <div className="flex flex-1 min-h-0 overflow-hidden">
                     <Sidebar PageMode={PageMode} isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
 
-                    <div className="flex-1 p-6 overflow-auto">
+                    <div className="flex-1 p-6 overflow-auto bg-neutral-50">
                     {children}
                     </div>
                 </div>
