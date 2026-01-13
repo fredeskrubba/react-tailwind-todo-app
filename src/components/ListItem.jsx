@@ -28,7 +28,7 @@ const ListItem = ({item}) => {
     }
 
     return (
-        <div className="border-l-4 w-full p-4 transition-transform duration-300 bg-white cursor-pointer rounded-sm shadow-sm" 
+        <div className="border-l-4 w-full p-4 transition-transform duration-300 bg-white cursor-pointer rounded-sm shadow-sm md:min-h-30" 
             style={{borderColor: item.color, backgroundColor: backgroundColor, color: textColor}} 
             onClick={()=> setShowInfo(true)} 
             onMouseEnter={(e) => { setIsHover(true)}}
