@@ -94,7 +94,7 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
                   onClick={() => changeActiveCategory(item)}
                   onContextMenu={(e) => handleContextMenu(e, item)}
                   onMouseEnter={(e) => { setIsHovering(item.id)}}
-                  onMouseLeave={(e) => { setIsHovering(item.id) }}>
+                  onMouseLeave={(e) => { setIsHovering(null) }}>
                   {item.name}
                 </button>   
             ))}

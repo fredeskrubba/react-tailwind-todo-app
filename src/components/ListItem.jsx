@@ -35,6 +35,7 @@ const ListItem = ({item}) => {
         setShowWarningModal(false);
         onClose();
     }
+
     const toggleComplete = async () => {
         const updatedItem = { ...item, isComplete: !item.isComplete };
         await updateItem(updatedItem);    
@@ -43,7 +44,11 @@ const ListItem = ({item}) => {
     return (
         <div className="border-l-4 w-full p-4 transition-transform duration-300 bg-white cursor-pointer rounded-sm shadow-sm md:min-h-30" 
             style={{borderColor: item.color, backgroundColor: backgroundColor, color: textColor}} 
-            onClick={()=> setShowInfo(true)} 
+            onClick={(e)=> {
+                e.stopPropagation();
+                setShowInfo(true)
+            }
+            } 
             onMouseEnter={(e) => { setIsHover(true)}}
             onMouseLeave={(e) => { setIsHover(false) }}
         > 
@@ -63,8 +68,12 @@ const ListItem = ({item}) => {
 
 
             </div> 
-                {editTask && <ItemTaskModal onClose={() => setEditTask(false)}  />}
-                {showWarningModal && <WarningModal text="Are you sure you want to delete this item?" onConfirm={removeItem} onCancel={() => setShowWarningModal(false)}/>}  
+                {editTask && <ItemTaskModal onClose={(e) => {
+                    setEditTask(false)
+                }}  prevInfo={item}/>}
+
+                {showWarningModal && <WarningModal text="Are you sure you want to delete this item?" onConfirm={removeItem} onCancel={() => setShowWarningModal(false)}/>} 
+                     
                 {showInfo && 
                     <TodoItemDetailsModal item={item} 
                         onClose={(e)=> {

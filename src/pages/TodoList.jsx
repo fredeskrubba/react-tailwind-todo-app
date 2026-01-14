@@ -6,6 +6,7 @@ import Layout from '../components/Layout/Layout.jsx';
 import useMainStore from '../store/Mainstore.js';
 import useTodoStore from '../store/TodoStore.js';
 import useAuthStore from '../store/AuthStore.js';
+import AddIcon from "../assets/icons/plus-icon.svg?react"
 
 const TodoList = () => {
     
@@ -45,7 +46,7 @@ const TodoList = () => {
             default:
             return item.categoryId === activeCategory.id;
         }
-});
+    });
 
     return ( 
     <>
@@ -64,7 +65,9 @@ const TodoList = () => {
                             
                     </div>
                 </div>}
-            <button onClick={() => setAddTask(true)} className='fixed bottom-4 right-4 bg-main-green text-white text-xl p-6 rounded-lg py-4 font-bold shadow-lg cursor-pointer'>Add Task</button>
+            <button onClick={() => setAddTask(true)} className='fixed bottom-4 right-4 bg-main-green text-white text-xl p-6 rounded-full font-bold shadow-lg cursor-pointer hover:bg-main-green-dark'>
+                <AddIcon className="h-6 w-6 fill-white"/>
+            </button>
             {addTask && <ItemTaskModal onClose={()=> setAddTask(false)} />}
         </Layout>
 

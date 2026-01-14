@@ -15,7 +15,6 @@ const useAuthStore = create((set) => ({
             body: JSON.stringify(userData)
         });
         const result = await response.json(); 
-        console.log(result)
         set({ userToken: result.token, activeUser: result.user});
     },
     logout: () => set({ userToken: null, activeUser: null })
