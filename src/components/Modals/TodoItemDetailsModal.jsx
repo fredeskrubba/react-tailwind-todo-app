@@ -1,27 +1,12 @@
-import React from "react";
-import { useState } from "react";
-import WarningModal from "./WarningModal";
-import ItemTaskModal from "./ItemTaskModal";
 import DateIcon from "../../assets/icons/date-icon.svg?react";
 import TimeIcon from "../../assets/icons/time-icon.svg?react";
 import TrashIcon from "../../assets/icons/trash-icon.svg?react";
 import EditIcon from "../../assets/icons/edit-icon.svg?react";
 import CrossIcon from "../../assets/icons/cross-icon.svg?react";
-import useTodoStore from "../../store/TodoStore";
 
-const TodoItemDetailsModal = ({ item, onClose }) => {
+
+const TodoItemDetailsModal = ({ item, onClose, showEditModal, showDeleteModal }) => {
     const dateObj = new Date(item.dueDate);
-    const [editTask, setEditTask] = useState(false);
-    const [showWarningModal, setShowWarningModal] = useState(false);
-
-    const deleteItem = useTodoStore(state => state.deleteItem);
-
-    const removeItem = async () => {
-        
-        await deleteItem(item.id);
-        setShowWarningModal(false);
-        onClose();
-    }
 
     return (
        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -67,22 +52,20 @@ const TodoItemDetailsModal = ({ item, onClose }) => {
         <div className="border-t px-6 py-4 flex justify-end gap-4" style={{ borderColor: item.color }}>
             <button onClick={(e) => {
                 e.stopPropagation();
-                setEditTask(true);
+                showEditModal();
             }} className="rounded-full p-3 transition hover:opacity-90" style={{ backgroundColor: item.color }}>
                 <EditIcon className="w-4 h-4 fill-white" />
             </button>
 
             <button onClick={(e) => {
             e.stopPropagation();
-            setShowWarningModal(true);
+            showDeleteModal();
             }} className="rounded-full p-3 transition hover:opacity-90" style={{ backgroundColor: item.color }}>
                 <TrashIcon className="w-4 h-4 fill-white" />
             </button>
         </div>
     </div>
 
-    {editTask && <ItemTaskModal onClose={() => setEditTask(false)} />}
-    {showWarningModal && <WarningModal text="Are you sure you want to delete this item?" onConfirm={removeItem} onCancel={() => setShowWarningModal(false)}/>}
 </div>
 )}
 

@@ -3,12 +3,18 @@ import { useState } from "react";
 import useTodoStore from "../store/TodoStore.js";
 import TodoItemDetailsModal from "./Modals/TodoItemDetailsModal.jsx";
 import { lightenColor } from "../helpers/colorHelpers.js";
+import WarningModal from "./Modals/WarningModal.jsx";
+import ItemTaskModal from "./Modals/ItemTaskModal.jsx";
 
 const ListItem = ({item}) => {
 
     const [isHover, setIsHover] = useState(false);
     const [showInfo, setShowInfo] = useState(false);
     const updateItem = useTodoStore(state => state.updateTodoItem)
+    const [editTask, setEditTask] = useState(false);
+    const [showWarningModal, setShowWarningModal] = useState(false);
+
+    const deleteItem = useTodoStore(state => state.deleteItem);
 
     const backgroundColor = showInfo
     ? lightenColor(item.color) 
@@ -22,6 +28,13 @@ const ListItem = ({item}) => {
     ? "#fff"
     : "#000"; 
 
+
+    const removeItem = async () => {
+        
+        await deleteItem(item.id);
+        setShowWarningModal(false);
+        onClose();
+    }
     const toggleComplete = async () => {
         const updatedItem = { ...item, isComplete: !item.isComplete };
         await updateItem(updatedItem);    
@@ -50,15 +63,26 @@ const ListItem = ({item}) => {
 
 
             </div> 
-            
-            {showInfo && (<TodoItemDetailsModal item={item} onClose={(e)=> {
-                // stop bubbling so showInfo is always true
-                e.stopPropagation()
+                {editTask && <ItemTaskModal onClose={() => setEditTask(false)}  />}
+                {showWarningModal && <WarningModal text="Are you sure you want to delete this item?" onConfirm={removeItem} onCancel={() => setShowWarningModal(false)}/>}  
+                {showInfo && 
+                    <TodoItemDetailsModal item={item} 
+                        onClose={(e)=> {
+                        // stop bubbling so showInfo is always true
+                        e.stopPropagation()
 
-                setIsHover(false)
-                setShowInfo(false)
-                }}
-            />)}
+                        setIsHover(false);
+                        setShowInfo(false);
+                        }}
+                        showDeleteModal={()=> {
+                            setShowWarningModal(true);
+                            setShowInfo(false);
+                        }}
+                        showEditModal={()=> {
+                          setEditTask(true);
+                          setShowInfo(false);  
+                        }}
+            />}
 
         </div> 
     );

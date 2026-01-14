@@ -1,17 +1,21 @@
-import { use, useEffect, useState } from "react";
+import { act, use, useEffect, useState } from "react";
 import CrossIcon from "../../assets/icons/cross-icon.svg?react";
 import BurgerIcon from "../../assets/icons/burger-icon.svg?react";
 import AddCategoryModal from "../Modals/AddCategoryModal";
 import useTodoStore from "../../store/TodoStore";
 import { Menu, Item, Separator, Submenu, useContextMenu } from 'react-contexify';
 import useAuthStore from "../../store/AuthStore";
+import { lightenColor } from "../../helpers/colorHelpers.js";
 
 const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
   
-  const [activeItem, setActiveItem] = useState({"name": "All", "color": "#227C9D"});
+  const [activeItem, setActiveItem] = useState(0);
   const [isCreateCategoryModalOpen, setCreateCategoryModalOpen] = useState(false);
+  const [isHovering, setIsHovering] = useState(null);
   const activeUser = useAuthStore(state => state.activeUser);
   
+
+
   // TODO create api, page mode note menu items represent individual notes
   const noteMenuItems = [
     { name: "All", color: "#227C9D" },
@@ -51,13 +55,10 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
   useEffect(() => {
     if (PageMode !== 'todo') return;
     
-    const defaultCategories = [
-      { name: "All", color: "#227C9D" },
-      { name: "Incomplete", color: "#E54B4B" },
-      { name: "Complete", color: "#10B981" },
-    ];
-    
-    setMenuItems([...defaultCategories, ...categories]);
+    setMenuItems([...categories]);
+    if(menuItems.length > 0){
+      setActiveItem(menuItems[0].id)
+    }
 }, [categories, PageMode]);
 
 
@@ -71,7 +72,7 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
   }
 
   const changeActiveCategory = (category) => {
-    setActiveItem(category);
+    setActiveItem(category.id);
     todoStore.setActiveCategory({name: category.name, id: category.id, color: category.color, userId: 1});
   };
 
@@ -84,10 +85,16 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
               
                 <button
                   key={item.id}
-                  className={`text-left px-3 py-2 rounded border-l-4 cursor-pointer ${activeItem.name === item.name ? "text-white" : ""}`}
-                  style={activeItem.name === item.name ? { backgroundColor: item.color, borderColor: item.color } : { borderColor: item.color }}
+                  className={`text-left px-3 py-2 rounded border-l-4 cursor-pointer`}
+                  style={{
+                    color: activeItem === item.id ? "#fff" : isHovering === item.id ? "#fff" : "#000",
+                    backgroundColor: activeItem === item.id ? item.color : isHovering === item.id ? lightenColor(item.color, 0.3) : "#fff",      
+                    borderColor: item.color,
+                  }}
                   onClick={() => changeActiveCategory(item)}
-                  onContextMenu={(e) => handleContextMenu(e, item)}>
+                  onContextMenu={(e) => handleContextMenu(e, item)}
+                  onMouseEnter={(e) => { setIsHovering(item.id)}}
+                  onMouseLeave={(e) => { setIsHovering(item.id) }}>
                   {item.name}
                 </button>   
             ))}
