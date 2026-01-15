@@ -9,7 +9,7 @@ const TodoItemDetailsModal = ({ item, onClose, showEditModal, showDeleteModal })
     const dateObj = new Date(item.dueDate);
 
     return (
-       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 cursor-default">
         <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose}/>
 
         <div className="relative z-10 w-full max-w-lg rounded-md bg-white border-2 shadow-xl max-h-[85vh] min-h-130 flex flex-col" style={{ borderColor: item.color }}>
@@ -49,18 +49,18 @@ const TodoItemDetailsModal = ({ item, onClose, showEditModal, showDeleteModal })
                 </div>
         </div>
 
-        <div className="border-t px-6 py-4 flex justify-end gap-4" style={{ borderColor: item.color }}>
+        <div className="border-t px-6 py-4 flex justify-end gap-4 " style={{ borderColor: item.color }}>
             <button onClick={(e) => {
                 e.stopPropagation();
                 showEditModal();
-            }} className="rounded-full p-3 transition hover:opacity-90" style={{ backgroundColor: item.color }}>
+            }} className="rounded-full p-3 transition hover:opacity-90 cursor-pointer" style={{ backgroundColor: item.color }}>
                 <EditIcon className="w-4 h-4 fill-white" />
             </button>
 
             <button onClick={(e) => {
             e.stopPropagation();
             showDeleteModal();
-            }} className="rounded-full p-3 transition hover:opacity-90" style={{ backgroundColor: item.color }}>
+            }} className="rounded-full p-3 transition hover:opacity-90 cursor-pointer" style={{ backgroundColor: item.color }}>
                 <TrashIcon className="w-4 h-4 fill-white" />
             </button>
         </div>

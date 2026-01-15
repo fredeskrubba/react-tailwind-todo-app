@@ -73,7 +73,7 @@ const ItemTaskModal = ({ onClose, prevInfo}) => {
     }
 
     return ( 
-    <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={(e) => e.stopPropagation()} >
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm cursor-default" onClick={(e) => e.stopPropagation()} >
         <div className="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
             <h2 className="text-xl font-semibold mb-4"> {prevInfo ? "Update Task" : "New Task" }</h2>
             <div className="text-gray-600 mb-6 flex-col gap-4 flex relative">
