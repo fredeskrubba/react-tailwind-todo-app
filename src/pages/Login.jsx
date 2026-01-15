@@ -61,8 +61,11 @@ const LoginPage = () => {
   }, [userToken]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
+    <form className="min-h-screen flex items-center justify-center bg-gray-100" onSubmit={(e) => {
+      e.preventDefault();
+      OnLogin();
+    }}>
+      <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8" onMouseDown={(e)=> {if(e.key === "Enter"){OnLogin()}}}>
         
        
         <h1 className="text-2xl font-semibold text-center mb-6">
@@ -111,15 +114,10 @@ const LoginPage = () => {
           )}
         </div>
         <div className="flex flex-col gap-4">
-          <button className="w-full bg-main-green text-white py-2 rounded-md cursor-pointer transition hover:bg-main-green-dark" onClick={OnLogin}> Login </button>
-
-          <Link to="/TodoList">
-              <button className="w-full bg-main-green text-white py-2 rounded-md cursor-pointer transition hover:bg-main-green-dark" > Continue as guest</button>
-          </Link>
-
+          <button className="w-full bg-main-green text-white py-2 rounded-md cursor-pointer transition hover:bg-main-green-dark" type="submit"> Login </button>
         </div>
       </div>
-    </div>
+    </form>
   );
 };
 
