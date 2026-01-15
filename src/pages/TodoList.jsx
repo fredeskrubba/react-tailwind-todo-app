@@ -54,7 +54,7 @@ const TodoList = () => {
             {isLoading ?
                 <LoadingIcon/> : 
                 <div className='flex flex-col gap-4 m-4'>
-                    <div className={`${filteredListItems.length <= 0 || filteredListItems == null ? "block" : "grid grid-cols-1 gap-4 items-start sm:grid-cols-2 lg:grid-cols-4"}`}>
+                    <div className={`${filteredListItems.length <= 0 || filteredListItems == null ? "block" : "flex flex-col gap-2"}`}>
                     {
                         filteredListItems.length <= 0 || filteredListItems == null ? 
                         <p className='text-center'>No items in the current Category</p> : 

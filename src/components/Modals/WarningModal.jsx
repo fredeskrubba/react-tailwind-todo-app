@@ -2,7 +2,7 @@
 
 const WarningModal = ({ text, onConfirm, onCancel }) => {
   return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/50 backdrop-blur-sm ">
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/50 backdrop-blur-sm " onClick={(e) => e.stopPropagation()}>
         <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center border-1 border-red-600">
             <p className="text-center text-gray-800 max-w-sm">{text}</p>
             <div className="flex gap-4">

@@ -14,7 +14,7 @@ const ListItem = ({item}) => {
     const [editTask, setEditTask] = useState(false);
     const [showWarningModal, setShowWarningModal] = useState(false);
 
-    const deleteItem = useTodoStore(state => state.deleteItem);
+    const deleteItem = useTodoStore(state => state.deleteTodoItem);
 
     const backgroundColor = showInfo
     ? lightenColor(item.color) 
@@ -33,7 +33,6 @@ const ListItem = ({item}) => {
         
         await deleteItem(item.id);
         setShowWarningModal(false);
-        onClose();
     }
 
     const toggleComplete = async () => {
@@ -42,7 +41,7 @@ const ListItem = ({item}) => {
     }
 
     return (
-        <div className="border-l-4 w-full p-4 transition-transform duration-300 bg-white cursor-pointer rounded-sm shadow-sm md:min-h-30" 
+        <div className="border-l-4 w-full p-4 transition-transform duration-300 bg-white cursor-pointer rounded-sm shadow-sm md:min-h-3" 
             style={{borderColor: item.color, backgroundColor: backgroundColor, color: textColor}} 
             onClick={(e)=> {
                 e.stopPropagation();
@@ -53,7 +52,7 @@ const ListItem = ({item}) => {
             onMouseLeave={(e) => { setIsHover(false) }}
         > 
             <div className={`flex justify-between items-center`}>
-                <p className="sm:text-lg m-0">
+                <p className="text-xs md:text-base m-0">
                     {item.title}
                 </p>
                 <div className="flex gap-4 items-center">
