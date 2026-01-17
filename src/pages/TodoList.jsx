@@ -65,7 +65,7 @@ const TodoList = () => {
                             
                     </div>
                 </div>}
-            <button onClick={() => setAddTask(true)} className='fixed bottom-4 right-4 bg-main-green text-white text-xl p-6 rounded-full font-bold shadow-lg cursor-pointer hover:bg-main-green-dark'>
+            <button onClick={() => setAddTask(true)} className='fixed bottom-4 right-4 bg-main-green text-white text-xl p-6 rounded-full font-bold shadow-lg cursor-pointer hover:bg-main-green-dark md:hidden'>
                 <AddIcon className="h-6 w-6 fill-white"/>
             </button>
             {addTask && <ItemTaskModal onClose={()=> setAddTask(false)} />}

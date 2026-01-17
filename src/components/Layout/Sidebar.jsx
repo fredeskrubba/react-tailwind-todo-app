@@ -26,7 +26,9 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
   ];
   
   
-  const [menuItems, setMenuItems] = useState([]);
+  const [userMenuItems, setUserMenuItems] = useState([]);
+  const [defaultMenuItems, setDefaultMenuItems] = useState([]);
+
   const todoStore = useTodoStore();
   const categories = useTodoStore(state => state.categories);
   
@@ -48,22 +50,28 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
     if (PageMode === 'todo') {
       todoStore.fetchCategories(activeUser.id);
     } else {
-      setMenuItems(noteMenuItems);
+      setUserMenuItems(noteMenuItems);
     }
   }, []);
   
   useEffect(() => {
     if (PageMode !== 'todo') return;
-    
-    setMenuItems([...categories]);
-    if(menuItems.length > 0){
-      setActiveItem(menuItems[0].id)
+  
+    let defaultItems = categories.filter(cat => cat.userId == null);
+    let userItems = categories.filter(cat => cat.userId != null);
+
+    setDefaultMenuItems(defaultItems)
+    setUserMenuItems(userItems)
+
+    if(userMenuItems.length > 0){
+
+      setActiveItem(defaultMenuItems[0].id)
     }
 }, [categories, PageMode]);
 
 
   const AddCategory = (category) => {
-    setMenuItems(prev => [...prev, category]);
+    setUserMenuItems(prev => [...prev, category]);
   };
 
   const deleteCategory = ({id}) => {
@@ -81,7 +89,27 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
         
         <div className="w-64 min-h-0 h-full border-r-2 border-main-green p-4 flex flex-col hidden md:flex md:flex-col md:gap-2 ">
           <div className="flex flex-col gap-2 flex-1 min-h-0 overflow-y-auto">
-            {menuItems.map((item) => (
+            {defaultMenuItems.map((item) => (
+              
+                <button
+                  key={item.id}
+                  className={`text-left px-3 py-2 rounded border-l-4 cursor-pointer`}
+                  style={{
+                    color: activeItem === item.id ? "#fff" : isHovering === item.id ? "#fff" : "#000",
+                    backgroundColor: activeItem === item.id ? item.color : isHovering === item.id ? lightenColor(item.color, 0.3) : "#fff",      
+                    borderColor: item.color,
+                  }}
+                  onClick={() => changeActiveCategory(item)}
+                  onContextMenu={(e) => handleContextMenu(e, item)}
+                  onMouseEnter={(e) => { setIsHovering(item.id)}}
+                  onMouseLeave={(e) => { setIsHovering(null) }}>
+                  {item.name}
+                </button>   
+            ))}
+
+            <hr className={`border-0 h-0.5 bg-neutral-300 opacity-75`}/>
+
+            {userMenuItems.map((item) => (
               
                 <button
                   key={item.id}
@@ -132,7 +160,7 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
         </div>
 
         <div className="flex flex-col gap-4">
-          {menuItems.map((item) => (
+          {userMenuItems.map((item) => (
             <button
               className="text-left px-3 py-2 hover:bg-gray-100 rounded text-lg"
               style={activeItem.name === item.name ? { backgroundColor: item.color, color: "#fff"} : {}}
