@@ -59,7 +59,7 @@ const ItemTaskModal = ({ onClose, prevInfo}) => {
             userId: activeUser.id,
             isComplete: false,
             dueDate: dueDate,
-            categoryId: activeCategory.name.toLowerCase() != "all" || activeCategory.name.toLowerCase() != "complete" || activeCategory.name.toLowerCase() != "incomplete"? activeCategory.id : null
+            categoryId: activeCategory.id
         }
 
         if(!prevInfo){
