@@ -1,6 +1,6 @@
 import ListItem from '../components/ListItem.jsx';
 import ItemTaskModal from '../components/Modals/ItemTaskModal.jsx';
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import LoadingIcon from '../components/LoadingIcon.jsx';
 import Layout from '../components/Layout/Layout.jsx';
 import useMainStore from '../store/Mainstore.js';
@@ -28,6 +28,23 @@ const TodoList = () => {
     const backGroundColors = ["#61BD92", "#C490D1", "#F0B67F", "#E54B4B", "#227C9D"];
     const [showColorPicker, setShowColorPicker] = useState(false);
     const addTodoItem = useTodoStore((state) => state.createTodoItem);
+    const pickerRef = useRef(null); 
+
+    useEffect(() => {
+    const handleClickOutside = (event) => {
+      // If the picker is open AND the click target is NOT inside pickerRef…
+      if (showColorPicker && pickerRef.current && !pickerRef.current.contains(event.target)) {
+        setShowColorPicker(false);
+      }
+    };
+
+    // Listen on the whole document (mousedown fires before focus changes)
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+
+    }, [showColorPicker]);
 
     const OnAddSubmit = (title) => {
         const today = new Date();
@@ -78,7 +95,7 @@ const TodoList = () => {
             {isLoading ?
                 <LoadingIcon/> : 
                 <div className='flex flex-col gap-4 m-4'>
-                    <div className='flex items-center gap-2 flex items-center gap-2 rounded-md border bg-neutral-100 px-4 py-2 transition-colors duration-150 focus-within:border-main-green hidden md:flex'>
+                    <div className='flex items-center gap-2 flex items-center gap-2 rounded-md border border-neutral-400 bg-neutral-100 px-4 py-2 transition-colors duration-150 focus-within:border-main-green hidden md:flex'>
                         <input type="text" placeholder="+ Add task" className="w-full bg-transparent text-gray-800 placeholder-neutral-400 outline-none" 
                         onKeyDown={(e)=> {
                             if (e.key === 'Enter') {
@@ -86,11 +103,11 @@ const TodoList = () => {
                                 e.target.value = "";
                             }}}/>
                         <div className="relative flex items-center">
+                                     
                             <div className={`w-8 h-8 rounded-sm cursor-pointer`} style={{backgroundColor: selectedBackgroundColor}} onClick={() => setShowColorPicker(!showColorPicker)}/>
-
                             {
                                 showColorPicker &&
-                                <div className="absolute right-10 top-10 z-50 hidden lg:block">
+                                <div className="absolute right-10 top-10 z-50 hidden lg:block" ref={pickerRef}>
                                     <Sketch
                                     color={selectedBackgroundColor}
                                     presetColors={backGroundColors}
