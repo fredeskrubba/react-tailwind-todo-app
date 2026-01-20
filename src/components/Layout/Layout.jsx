@@ -1,4 +1,4 @@
-import Header from "./Header";
+import NavigationBar from "./NavigationBar.jsx";
 import Sidebar from "./Sidebar";
 import { useState } from "react";
 import LoadingIcon from '../LoadingIcon.jsx';
@@ -12,8 +12,9 @@ const Layout = ({ PageMode, children }) => {
     return (
         
         isLoading ? <LoadingIcon/> :
-            <div className="flex flex-col h-screen">
-                <Header setIsMenuOpen={setIsMenuOpen} />
+        <>
+            <div className="flex flex-col h-screen md:hidden">
+                <NavigationBar setIsMenuOpen={setIsMenuOpen} />
 
                 <div className="flex flex-1 min-h-0 overflow-hidden">
                     <Sidebar PageMode={PageMode} isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
@@ -23,6 +24,17 @@ const Layout = ({ PageMode, children }) => {
                     </div>
                 </div>
             </div>
+            <div className="hidden flex-col h-screen md:flex">
+                <div className="flex flex-1 min-h-0 overflow-hidden">
+                    <NavigationBar setIsMenuOpen={setIsMenuOpen} />
+                    <Sidebar PageMode={PageMode} isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+
+                    <div className="flex-1 p-6 overflow-auto bg-neutral-50">
+                    {children}
+                    </div>
+                </div>
+            </div>
+        </>
         
     );
 };

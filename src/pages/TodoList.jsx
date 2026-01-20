@@ -8,6 +8,7 @@ import useTodoStore from '../store/TodoStore.js';
 import useAuthStore from '../store/AuthStore.js';
 import AddIcon from "../assets/icons/plus-icon.svg?react"
 import ExpandIcon from "../assets/icons/expand-icon.svg?react"
+import { Sketch } from '@uiw/react-color';
 
 const TodoList = () => {
     
@@ -23,7 +24,9 @@ const TodoList = () => {
     const [addTask, setAddTask] = useState(false);
     const [completedExpanded, setCompletedExpanded] = useState(true);
     const [incompleteExpanded, setIncompleteExpanded] = useState(true);
-    
+    const [selectedBackgroundColor, setSelectedBackgroundColor] = useState("#61BD92");
+    const backGroundColors = ["#61BD92", "#C490D1", "#F0B67F", "#E54B4B", "#227C9D"];
+    const [showColorPicker, setShowColorPicker] = useState(false);
     const addTodoItem = useTodoStore((state) => state.createTodoItem);
 
     const OnAddSubmit = (title) => {
@@ -31,7 +34,7 @@ const TodoList = () => {
         const item = {
             description: "",
             title: title,
-            color: "#61BD92",
+            color: selectedBackgroundColor,
             userId: activeUser.id,
             id: 0,
             isComplete: false,
@@ -75,12 +78,31 @@ const TodoList = () => {
             {isLoading ?
                 <LoadingIcon/> : 
                 <div className='flex flex-col gap-4 m-4'>
-                    <input type="text" placeholder="+ Add task" class="w-full rounded-md bg-neutral-100 px-4 py-2 text-gray-800 placeholder-neutral-400 border border-gray-300 focus:border-main-green focus:outline-none transition-colors duration-150 hidden md:block" 
-                    onKeyDown={(e)=> {
-                        if (e.key === 'Enter') {
-                            OnAddSubmit(e.target.value);
-                            e.target.value = "";
-                        }}}/>
+                    <div className='flex items-center gap-2 flex items-center gap-2 rounded-md border bg-neutral-100 px-4 py-2 transition-colors duration-150 focus-within:border-main-green hidden md:flex'>
+                        <input type="text" placeholder="+ Add task" className="w-full bg-transparent text-gray-800 placeholder-neutral-400 outline-none" 
+                        onKeyDown={(e)=> {
+                            if (e.key === 'Enter') {
+                                OnAddSubmit(e.target.value);
+                                e.target.value = "";
+                            }}}/>
+                        <div className="relative flex items-center">
+                            <div className={`w-8 h-8 rounded-sm cursor-pointer`} style={{backgroundColor: selectedBackgroundColor}} onClick={() => setShowColorPicker(!showColorPicker)}/>
+
+                            {
+                                showColorPicker &&
+                                <div className="absolute right-10 top-10 z-50 hidden lg:block">
+                                    <Sketch
+                                    color={selectedBackgroundColor}
+                                    presetColors={backGroundColors}
+                                    disableAlpha={true}
+                                    onChange={(color) => {
+                                        setSelectedBackgroundColor(color.hex);
+                                    }}/>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
                     {
                         filteredListItems.filter(item => item.isComplete !== true).length > 0 &&
                         <div className="flex items-center w-full cursor-pointer" onClick={() => setIncompleteExpanded(!incompleteExpanded)}>
