@@ -22,7 +22,7 @@ const TodoList = () => {
     const activeCategory = useTodoStore((state) => state.activeCategory);
 
     const [addTask, setAddTask] = useState(false);
-    const [completedExpanded, setCompletedExpanded] = useState(true);
+    const [completedExpanded, setCompletedExpanded] = useState(false);
     const [incompleteExpanded, setIncompleteExpanded] = useState(true);
     const [selectedBackgroundColor, setSelectedBackgroundColor] = useState("#61BD92");
     const backGroundColors = ["#61BD92", "#C490D1", "#F0B67F", "#E54B4B", "#227C9D"];
@@ -74,7 +74,7 @@ const TodoList = () => {
     }, []);
     
     useEffect(() => {
-        setCompletedExpanded(true);
+        setCompletedExpanded(false);
         setIncompleteExpanded(true);
     }, [activeCategory]);
     
