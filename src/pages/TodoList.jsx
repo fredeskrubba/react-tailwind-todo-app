@@ -29,16 +29,18 @@ const TodoList = () => {
     const [showColorPicker, setShowColorPicker] = useState(false);
     const addTodoItem = useTodoStore((state) => state.createTodoItem);
     const pickerRef = useRef(null); 
+    const [createInputValue, setCreateInputValue] = useState("");
+
+
 
     useEffect(() => {
     const handleClickOutside = (event) => {
-      // If the picker is open AND the click target is NOT inside pickerRef…
+     
       if (showColorPicker && pickerRef.current && !pickerRef.current.contains(event.target)) {
         setShowColorPicker(false);
       }
     };
 
-    // Listen on the whole document (mousedown fires before focus changes)
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -76,6 +78,7 @@ const TodoList = () => {
     useEffect(() => {
         setCompletedExpanded(false);
         setIncompleteExpanded(true);
+        setCreateInputValue("");
     }, [activeCategory]);
     
 
@@ -96,11 +99,12 @@ const TodoList = () => {
                 <LoadingIcon/> : 
                 <div className='flex flex-col gap-4 m-4'>
                     <div className='flex items-center gap-2 flex items-center gap-2 rounded-md border border-neutral-400 bg-neutral-100 px-4 py-2 transition-colors duration-150 focus-within:border-main-green hidden md:flex'>
-                        <input type="text" placeholder="+ Add task" className="w-full bg-transparent text-gray-800 placeholder-neutral-400 outline-none" 
+                        <input type="text" value={createInputValue} placeholder="+ Add task" className="w-full bg-transparent text-gray-800 placeholder-neutral-400 outline-none" 
+                        onChange={(e) => setCreateInputValue(e.target.value)}
                         onKeyDown={(e)=> {
                             if (e.key === 'Enter') {
                                 OnAddSubmit(e.target.value);
-                                e.target.value = "";
+                                setCreateInputValue("");
                             }}}/>
                         <div className="relative flex items-center">
                                      

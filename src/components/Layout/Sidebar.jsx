@@ -6,7 +6,7 @@ import useTodoStore from "../../store/TodoStore";
 import { Menu, Item, Separator, Submenu, useContextMenu } from 'react-contexify';
 import useAuthStore from "../../store/AuthStore";
 import { lightenColor } from "../../helpers/colorHelpers.js";
-
+import WarningModal from "../Modals/WarningModal.jsx";
 const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
   
   const [activeItem, setActiveItem] = useState(0);
@@ -28,6 +28,9 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
   
   const [userMenuItems, setUserMenuItems] = useState([]);
   const [defaultMenuItems, setDefaultMenuItems] = useState([]);
+  const [showWarningModal, setShowWarningModal] = useState(false);
+  const [selectedItemId, setSelectedItemId] = useState("");
+
 
   const todoStore = useTodoStore();
   const categories = useTodoStore(state => state.categories);
@@ -74,8 +77,9 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
     setUserMenuItems(prev => [...prev, category]);
   };
 
-  const deleteCategory = ({id}) => {
+  const deleteCategory = (id) => {
     todoStore.deleteCategory(id);
+    setShowWarningModal(false);
     handleContextMenu();
   }
 
@@ -133,7 +137,10 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
                   props?.name === "Incomplete" ||
                   props?.name === "Complete"
                 }
-                onClick={({ props }) => deleteCategory({ id: props.id })}
+                onClick={({ props }) => {
+                  setSelectedItemId(props.id);
+                  setShowWarningModal(true);
+                }}
               >
                 Delete
               </Item>
@@ -163,6 +170,7 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
           {userMenuItems.map((item) => (
             <button
               className="text-left px-3 py-2 hover:bg-gray-100 rounded text-lg"
+              key={item.id}
               style={activeItem.name === item.name ? { backgroundColor: item.color, color: "#fff"} : {}}
               onClick={() => { 
                 changeActiveCategory(item); 
@@ -176,6 +184,8 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
       {
         isCreateCategoryModalOpen && <AddCategoryModal onClose={() => setCreateCategoryModalOpen(false)} onSubmit={AddCategory} />
       }
+      {showWarningModal && <WarningModal text="Are you sure you want to delete this item?" onConfirm={() => deleteCategory(selectedItemId)} onCancel={() => setShowWarningModal(false)}/>} 
+
     </>
   );
 };
