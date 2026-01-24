@@ -1,9 +1,11 @@
 import Layout from "../components/Layout/Layout";
+import Editor from "../components/Editor";
+
 const Notes = () => {
     return ( 
         <>
              <Layout PageMode="notes">
-                <h1>Notes Page</h1> 
+                <Editor/>
              </Layout>
         </>
      );

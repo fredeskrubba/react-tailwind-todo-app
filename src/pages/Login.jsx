@@ -10,16 +10,15 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const login = useAuthStore((state) => state.login);
   const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+
 
 
   let emailValid = false;
-  let passwordValid = false;
 
   const [location, navigate] = useLocation();
   const userToken = useAuthStore((state) => state.userToken);
   
-  const setUserToken = useAuthStore((state) => state.setUserToken);
+  
   const checkEmailValidity = (email) => {
     const emailRegex = /\S+@\S+\.\S+/;
     if(emailRegex.test(email)){
@@ -31,24 +30,15 @@ const LoginPage = () => {
     }
   }
   
-  const checkPasswordValidity = (password) => {
-    if(password.length >= 5){
-      setPasswordError("");
-      passwordValid = true;
-    } else {
-      setPasswordError("Password must be at least 5 characters long.");
-      passwordValid = false;
-    }
-  }
 
   const OnLogin = async () => {
     setEmailError("");
-    setPasswordError("");
+
 
     checkEmailValidity(email);
-    checkPasswordValidity(password);
 
-    if (!emailValid || !passwordValid) return;
+
+    if (!emailValid) return;
 
     await login({ email, password });
   
@@ -106,12 +96,9 @@ const LoginPage = () => {
             value={password}
             onChange={(e) => {
               setPassword(e.target.value)
-              checkPasswordValidity(e.target.value);
             }}
           />
-          {passwordError && (
-            <p className="text-red-500 text-sm mt-1">{passwordError}</p>
-          )}
+
         </div>
         <div className="flex flex-col gap-4">
           <button className="w-full bg-main-green text-white py-2 rounded-md cursor-pointer transition hover:bg-main-green-dark" type="submit"> Login </button>

@@ -15,17 +15,6 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
   const activeUser = useAuthStore(state => state.activeUser);
   
 
-
-  // TODO create api, page mode note menu items represent individual notes
-  const noteMenuItems = [
-    { name: "All", color: "#227C9D" },
-    { name: "Ideas", color: "#E54B4B" },
-    { name: "School", color: "#3B82F6" },
-    { name: "Work", color: "#EF4444" },
-    { name: "Personal", color: "#10B981" }
-  ];
-  
-  
   const [userMenuItems, setUserMenuItems] = useState([]);
   const [defaultMenuItems, setDefaultMenuItems] = useState([]);
   const [showWarningModal, setShowWarningModal] = useState(false);
@@ -52,8 +41,6 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
   useEffect(() => {
     if (PageMode === 'todo') {
       todoStore.fetchCategories(activeUser.id);
-    } else {
-      setUserMenuItems(noteMenuItems);
     }
   }, []);
   

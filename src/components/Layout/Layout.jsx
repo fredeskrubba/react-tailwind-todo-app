@@ -28,10 +28,17 @@ const Layout = ({ PageMode, children }) => {
                 <div className="flex flex-1 min-h-0 overflow-hidden">
                     <NavigationBar setIsMenuOpen={setIsMenuOpen} />
                     <Sidebar PageMode={PageMode} isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
-
-                    <div className="flex-1 p-6 overflow-auto bg-neutral-50">
-                    {children}
-                    </div>
+                    
+                    {
+                        PageMode === "notes" ? 
+                        <div className="flex-1 p-0 overflow-auto bg-neutral-50">
+                        {children}
+                        </div>
+                        :   
+                        <div className="flex-1 overflow-auto bg-neutral-50">
+                        {children}
+                        </div>
+                    }
                 </div>
             </div>
         </>
