@@ -9,7 +9,7 @@ import useAuthStore from '../store/AuthStore.js';
 import AddIcon from "../assets/icons/plus-icon.svg?react"
 import ExpandIcon from "../assets/icons/expand-icon.svg?react"
 import { Sketch } from '@uiw/react-color';
-import DateIcon from '../assets/icons/date-icon.svg?react';
+import ItemInfoView from '../components/ItemInfoView.jsx';
 
 const TodoList = () => {
     
@@ -128,7 +128,7 @@ const TodoList = () => {
         <Layout PageMode="todo">
             {isLoading ?
                 <LoadingIcon/> : 
-                <div className={`${activeTodoItem !== null ? "grid grid-cols-[3fr_1fr] relative" : ""}`}>
+                <div className={`${activeTodoItem !== null ? "md:grid md:grid-cols-[3fr_1fr] md:relative" : ""}`}>
                     <div className='flex flex-col gap-4 m-4'>
                         <div className='flex items-center gap-2 flex items-center gap-2 rounded-md border border-neutral-400 bg-neutral-100 px-4 py-2 transition-colors duration-150 focus-within:border-main-green hidden md:flex'>
                             <input type="text" value={createInputValue} placeholder="+ Add task" className="w-full bg-transparent text-gray-800 placeholder-neutral-400 outline-none" 
@@ -202,17 +202,7 @@ const TodoList = () => {
                         </div>
                     </div>
                     {activeTodoItem !== null && 
-                    <div className="fixed inset-y-0 right-0 w-[320px] bg-white border-l border-main-green p-6 overflow-y-auto shadow-lg z-50 flex flex-col justify-between">
-                        <div className='flex flex-col gap-4'>
-                            <h2 className="text-xl font-semibold text-gray-900 mb-2">{activeTodoItem.title}</h2>
-                            <textarea className="w-full text-base text-gray-900 bg-transparent border-0 focus:outline-none focus:ring-0 resize-none" value={activeDescription} onChange={(e) => setActiveDescription(e.target.value)} />
-
-                        </div>
-                        <div className='flex justify-between border-t-1 border-main-green pt-4'>
-                            <DateIcon className="h-6 w-6 fill-main-green"/>
-                            <p className="text-main-green">{new Date(activeTodoItem.dueDate).toLocaleDateString()}</p>
-                        </div>
-                    </div>
+                        <ItemInfoView item={activeTodoItem} activeDescription={activeDescription} setActiveDescription={setActiveDescription} />
                     }
                 </div>
                 }

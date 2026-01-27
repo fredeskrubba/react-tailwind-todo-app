@@ -12,6 +12,7 @@ const ListItem = ({item}) => {
     const updateItem = useTodoStore(state => state.updateTodoItem)
     const [editTask, setEditTask] = useState(false);
     const [showWarningModal, setShowWarningModal] = useState(false);
+    const [showInfo, setShowInfo] = useState(false);
 
     const deleteItem = useTodoStore(state => state.deleteTodoItem);
 
@@ -43,14 +44,26 @@ const ListItem = ({item}) => {
     }
 
 
+    const ShowInfoForItem = (item) => {
+        setActiveTodoItem(null);
+        const ismobile = window.innerWidth <= 768;
+        if(ismobile){
+            setShowInfo(true);
+        } else {
+            if(activeTodoItem && activeTodoItem.id === item.id){
+                setActiveTodoItem(null);
+            } else {
+                setActiveTodoItem(item);
+            }
+        }
+    }
 
     return (
         <div className="border-l-4 w-full p-4 transition-transform duration-300 bg-white cursor-pointer rounded-sm shadow-sm md:min-h-3" 
             style={{borderColor: item.color, backgroundColor: backgroundColor, color: textColor}} 
             onClick={(e)=> {
                 e.stopPropagation();
-
-                setActiveTodoItem(item)
+                ShowInfoForItem(item)
             }
             } 
             onMouseEnter={(e) => { setIsHover(true)}}
@@ -78,7 +91,7 @@ const ListItem = ({item}) => {
 
                 {showWarningModal && <WarningModal text="Are you sure you want to delete this item?" onConfirm={removeItem} onCancel={() => setShowWarningModal(false)}/>} 
                      
-                {/* {showInfo && 
+                {showInfo && 
                     <TodoItemDetailsModal item={item} 
                         onClose={(e)=> {
                         // stop bubbling so showInfo is always true
@@ -95,7 +108,7 @@ const ListItem = ({item}) => {
                           setEditTask(true);
                           setShowInfo(false);  
                         }}
-            />} */}
+            />}
 
         </div> 
     );
