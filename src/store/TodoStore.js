@@ -4,10 +4,11 @@ const useTodoStore = create((set) => ({
     todoItems: [],
     categories: [],
     activeCategory: { name: "All", id: null },
+    activeTodoItem: null,
     setTodoItems: (items) => set({ todoItems: items }),
     setCategories: (categories) => set({ categories: categories }),
     setActiveCategory: (category) => set({ activeCategory: category }),
-
+    setActiveTodoItem: (item) => set({ activeTodoItem: item }), 
 
     fetchTodoItems: async (userId) => {
         const response = await fetch(`https://localhost:7203/api/todo/${userId}`, { method: 'GET' });

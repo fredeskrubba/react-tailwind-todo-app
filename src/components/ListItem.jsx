@@ -9,20 +9,22 @@ import ItemTaskModal from "./Modals/ItemTaskModal.jsx";
 const ListItem = ({item}) => {
 
     const [isHover, setIsHover] = useState(false);
-    const [showInfo, setShowInfo] = useState(false);
     const updateItem = useTodoStore(state => state.updateTodoItem)
     const [editTask, setEditTask] = useState(false);
     const [showWarningModal, setShowWarningModal] = useState(false);
 
     const deleteItem = useTodoStore(state => state.deleteTodoItem);
 
-    const backgroundColor = showInfo
-    ? lightenColor(item.color) 
+    const setActiveTodoItem = useTodoStore((state) => state.setActiveTodoItem);
+    const activeTodoItem = useTodoStore((state) => state.activeTodoItem);
+
+    const backgroundColor = activeTodoItem && activeTodoItem.id === item.id
+    ? item.color
     : isHover
     ? lightenColor(item.color)
     : "white"; 
 
-    const textColor = showInfo
+    const textColor = activeTodoItem && activeTodoItem.id === item.id
     ? "#fff" 
     : isHover
     ? "#fff"
@@ -40,12 +42,15 @@ const ListItem = ({item}) => {
         await updateItem(updatedItem);    
     }
 
+
+
     return (
         <div className="border-l-4 w-full p-4 transition-transform duration-300 bg-white cursor-pointer rounded-sm shadow-sm md:min-h-3" 
             style={{borderColor: item.color, backgroundColor: backgroundColor, color: textColor}} 
             onClick={(e)=> {
                 e.stopPropagation();
-                setShowInfo(true)
+
+                setActiveTodoItem(item)
             }
             } 
             onMouseEnter={(e) => { setIsHover(true)}}
@@ -73,7 +78,7 @@ const ListItem = ({item}) => {
 
                 {showWarningModal && <WarningModal text="Are you sure you want to delete this item?" onConfirm={removeItem} onCancel={() => setShowWarningModal(false)}/>} 
                      
-                {showInfo && 
+                {/* {showInfo && 
                     <TodoItemDetailsModal item={item} 
                         onClose={(e)=> {
                         // stop bubbling so showInfo is always true
@@ -90,7 +95,7 @@ const ListItem = ({item}) => {
                           setEditTask(true);
                           setShowInfo(false);  
                         }}
-            />}
+            />} */}
 
         </div> 
     );
