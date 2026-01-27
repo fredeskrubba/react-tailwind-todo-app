@@ -37,7 +37,10 @@ const TodoList = () => {
     const [activeDescription, setActiveDescription] = useState(null);
 
     useEffect(() => {
-        setActiveDescription(activeTodoItem.description);
+        if(activeTodoItem){
+        
+            setActiveDescription(activeTodoItem.description);
+        }
     }, [activeTodoItem]);
 
     useEffect(() => {
@@ -100,11 +103,24 @@ const TodoList = () => {
     });
 
 
-    const saveNewDescription = () => {
-        todoStore.updateTodoItem({
-            ...activeTodoItem,
-            description: activeDescription
-        });
+    // debounce logic for saving description, so it doesn't call the api on every keystroke
+    useEffect(() => {
+        const delayDebounceFn = setTimeout(() => {
+            if(activeTodoItem){
+                saveNewDescription();
+            }
+        }, 1000);
+
+        return () => clearTimeout(delayDebounceFn);
+    }, [activeDescription]);
+
+    const saveNewDescription = async () => {
+        if(activeTodoItem && activeDescription !== activeTodoItem.description){
+            await todoStore.updateTodoItem({
+                ...activeTodoItem,
+                description: activeDescription
+            });
+        }
     }
 
     return ( 
@@ -189,7 +205,7 @@ const TodoList = () => {
                     <div className="fixed inset-y-0 right-0 w-[320px] bg-white border-l border-main-green p-6 overflow-y-auto shadow-lg z-50 flex flex-col justify-between">
                         <div className='flex flex-col gap-4'>
                             <h2 className="text-xl font-semibold text-gray-900 mb-2">{activeTodoItem.title}</h2>
-                            <textarea className="w-full text-base text-gray-900 bg-transparent border-0 focus:outline-none focus:ring-0 resize-none" value={activeDescription} onChange={(e) => setActiveDescription(e.target.value)} onKeyUp={()=> saveNewDescription()}/>
+                            <textarea className="w-full text-base text-gray-900 bg-transparent border-0 focus:outline-none focus:ring-0 resize-none" value={activeDescription} onChange={(e) => setActiveDescription(e.target.value)} />
 
                         </div>
                         <div className='flex justify-between border-t-1 border-main-green pt-4'>
