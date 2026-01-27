@@ -43,7 +43,10 @@ const AddCategoryModal = ({ onClose, onSubmit }) => {
 
     return (
         <BaseModal title="Add Category" onClose={onClose} onSubmit={AddCategory}>
-            <form className="space-y-4 relative text-gray-600">
+            <form className="space-y-4 relative text-gray-600" 
+            onSubmit={(e) => {
+                e.preventDefault();
+            }}>
                 <div>
                     <h2 className="m-0 mb-2">Category Name</h2>
                     <input
