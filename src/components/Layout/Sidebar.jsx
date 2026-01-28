@@ -7,6 +7,9 @@ import { Menu, Item, useContextMenu } from 'react-contexify';
 import useAuthStore from "../../store/AuthStore";
 import { lightenColor } from "../../helpers/colorHelpers.js";
 import WarningModal from "../Modals/WarningModal.jsx";
+import { toast } from 'react-toastify';
+
+
 const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
   
   const [activeItem, setActiveItem] = useState(0);
@@ -59,6 +62,7 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
     }
 }, [categories, PageMode]);
 
+  const notify = () => toast("Wow so easy!");
 
   const AddCategory = (category) => {
     setUserMenuItems(prev => [...prev, category]);
@@ -117,6 +121,9 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
                   {item.name}
                 </button>   
             ))}
+            <div>
+              <button onClick={notify}>Notify!</button>
+            </div>
             <Menu id={MENU_ID} theme="myTheme">
               <Item
                 disabled={({ props }) =>

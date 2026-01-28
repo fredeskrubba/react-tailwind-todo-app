@@ -10,6 +10,7 @@ import AddIcon from "../assets/icons/plus-icon.svg?react"
 import ExpandIcon from "../assets/icons/expand-icon.svg?react"
 import { Sketch } from '@uiw/react-color';
 import ItemInfoView from '../components/ItemInfoView.jsx';
+import { toast } from 'react-toastify';
 
 const TodoList = () => {
     
@@ -58,7 +59,10 @@ const TodoList = () => {
 
     }, [showColorPicker]);
 
-    const OnAddSubmit = (title) => {
+    const notifySuccess = () => toast("Item added", { type: "success", position: "bottom-center", autoClose: 2000 });
+    const notifyError = () => toast("Failed to add item", { type: "error", position: "bottom-center", autoClose: 2000 });
+    
+    const OnAddSubmit = async (title) => {
         const today = new Date();
         const item = {
             description: "",
@@ -71,8 +75,16 @@ const TodoList = () => {
             categoryId: activeCategory.id 
         };
 
-        addTodoItem(item);
-        setAddTask(false);
+        try {
+            await addTodoItem(item);
+            notifySuccess();
+        } catch (err) {
+            notifyError();
+        } finally {
+            setIsSaving(false);
+            setAddTask(false);
+        }
+
     }
 
     async function getTodoItems() {

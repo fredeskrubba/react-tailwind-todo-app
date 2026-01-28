@@ -3,6 +3,7 @@ import { Sketch, Wheel, ShadeSlider } from '@uiw/react-color';
 import { hsvaToHex } from '@uiw/color-convert';
 import { use, useState } from "react";
 import useAuthStore from "../../store/AuthStore";
+import { toast } from 'react-toastify';
 
 const AddCategoryModal = ({ onClose, onSubmit }) => {
     // for desktop
@@ -17,6 +18,9 @@ const AddCategoryModal = ({ onClose, onSubmit }) => {
     const [error, setError] = useState({});
 
     const activeUser = useAuthStore((state) => state.activeUser);
+
+    const notifySuccess = () => toast("Category created successfully", { type: "success", position: "bottom-center" });
+
     const AddCategory = async () => {
         if (name.trim() === "") {
             setError({name: "name is required"});
@@ -39,6 +43,7 @@ const AddCategoryModal = ({ onClose, onSubmit }) => {
                 onSubmit(createdItem);
                 onClose();
             });
+        notifySuccess();    
     }
 
     return (

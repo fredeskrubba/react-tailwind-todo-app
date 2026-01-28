@@ -18,3 +18,6 @@
   --contexify-activeArrow-color: #fff;
 }
 
+.Toastify__progress-bar--success {
+  background: var(--color-main-green);
+}

@@ -3,6 +3,7 @@ import Sidebar from "./Sidebar";
 import { useState } from "react";
 import LoadingIcon from '../LoadingIcon.jsx';
 import useMainStore from '../../store/Mainstore.js';
+import { ToastContainer } from 'react-toastify';
 
 const Layout = ({ PageMode, children }) => {
     
@@ -41,6 +42,7 @@ const Layout = ({ PageMode, children }) => {
                     }
                 </div>
             </div>
+             <ToastContainer />
         </>
         
     );

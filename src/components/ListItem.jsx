@@ -7,6 +7,7 @@ import WarningModal from "./Modals/WarningModal.jsx";
 import ItemTaskModal from "./Modals/ItemTaskModal.jsx";
 import { Menu, Item, useContextMenu } from 'react-contexify';
 import {useId} from 'react';
+import { toast } from 'react-toastify';
 
 const ListItem = ({item}) => {
 
@@ -21,6 +22,11 @@ const ListItem = ({item}) => {
 
     const setActiveTodoItem = useTodoStore((state) => state.setActiveTodoItem);
     const activeTodoItem = useTodoStore((state) => state.activeTodoItem);
+    
+    const notifyDeletionSuccess = () => toast("Item added", { type: "success", position: "bottom-center", autoClose: 2000 });
+    const notifyDeletionError = () => toast("Failed to add item", { type: "error", position: "bottom-center", autoClose: 2000 });
+    const notifyCompletedToggleSuccess = () => toast("Item status updated", { type: "success", position: "bottom-center", autoClose: 2000 });
+    const notifyCompletedToggleError = () => toast("Failed to update item status", { type: "error", position: "bottom-center", autoClose: 2000 });
 
     const backgroundColor = activeTodoItem && activeTodoItem.id === item.id
     ? item.color
@@ -51,12 +57,26 @@ const ListItem = ({item}) => {
     const removeItem = async () => {
         
         await deleteItem(item.id);
-        setShowWarningModal(false);
+
+        try {
+            await deleteItem(item.id);
+            notifyDeletionSuccess();
+        } catch (err) {
+            notifyDeletionError();
+        } finally {
+            setShowWarningModal(false);
+        }
     }
 
     const toggleComplete = async () => {
         const updatedItem = { ...item, isComplete: !item.isComplete };
-        await updateItem(updatedItem);    
+
+        try {
+            await updateItem(updatedItem);
+            notifyCompletedToggleSuccess();
+        } catch (err) {
+            notifyCompletedToggleError();
+        }    
     }
 
 
