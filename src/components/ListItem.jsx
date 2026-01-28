@@ -5,6 +5,8 @@ import TodoItemDetailsModal from "./Modals/TodoItemDetailsModal.jsx";
 import { lightenColor } from "../helpers/colorHelpers.js";
 import WarningModal from "./Modals/WarningModal.jsx";
 import ItemTaskModal from "./Modals/ItemTaskModal.jsx";
+import { Menu, Item, useContextMenu } from 'react-contexify';
+import {useId} from 'react';
 
 const ListItem = ({item}) => {
 
@@ -15,6 +17,7 @@ const ListItem = ({item}) => {
     const [showInfo, setShowInfo] = useState(false);
 
     const deleteItem = useTodoStore(state => state.deleteTodoItem);
+    const menuId = `item_menu_${useId()}`;
 
     const setActiveTodoItem = useTodoStore((state) => state.setActiveTodoItem);
     const activeTodoItem = useTodoStore((state) => state.activeTodoItem);
@@ -31,6 +34,19 @@ const ListItem = ({item}) => {
     ? "#fff"
     : "#000"; 
 
+        
+        const { show } = useContextMenu({
+        id: menuId,
+    });
+
+    const handleContextMenu = (e, item) => {
+        
+        show({
+        id: menuId,
+        event: e,
+        props: item,
+        });
+    };
 
     const removeItem = async () => {
         
@@ -68,6 +84,7 @@ const ListItem = ({item}) => {
             } 
             onMouseEnter={(e) => { setIsHover(true)}}
             onMouseLeave={(e) => { setIsHover(false) }}
+            onContextMenu={(e) => handleContextMenu(e, item)}
         > 
             <div className={`flex justify-between items-center`}>
                 <p className="text-xs md:text-base m-0">
@@ -109,7 +126,15 @@ const ListItem = ({item}) => {
                           setShowInfo(false);  
                         }}
             />}
-
+            <Menu id={menuId} theme="myTheme">
+              <Item
+                onClick={({ props }) => {
+                  setShowWarningModal(true);
+                }}
+              >
+                Delete
+              </Item>
+            </Menu>
         </div> 
     );
 }

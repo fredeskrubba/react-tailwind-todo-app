@@ -3,7 +3,7 @@ import CrossIcon from "../../assets/icons/cross-icon.svg?react";
 import BurgerIcon from "../../assets/icons/burger-icon.svg?react";
 import AddCategoryModal from "../Modals/AddCategoryModal";
 import useTodoStore from "../../store/TodoStore";
-import { Menu, Item, Separator, Submenu, useContextMenu } from 'react-contexify';
+import { Menu, Item, useContextMenu } from 'react-contexify';
 import useAuthStore from "../../store/AuthStore";
 import { lightenColor } from "../../helpers/colorHelpers.js";
 import WarningModal from "../Modals/WarningModal.jsx";
