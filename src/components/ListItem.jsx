@@ -110,7 +110,7 @@ const ListItem = ({item}) => {
                 <p className="text-xs md:text-base m-0 p-4">
                     {item.title}
                 </p>
-
+                
              
 
                 <div className={`flex items-center justify-center w-12 h-full md:w-14 md:h-14 cursor-pointer p-2 cursor-pointer ${item.isComplete ? "bg-green-500" : "bg-red-500"}`} onClick={(e)=> {
