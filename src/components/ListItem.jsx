@@ -95,7 +95,7 @@ const ListItem = ({item}) => {
     }
 
     return (
-        <div className="border-l-4 w-full p-4 transition-transform duration-300 bg-white cursor-pointer rounded-sm shadow-sm md:min-h-3" 
+        <div className="border-l-4 w-full transition-transform duration-300 bg-white cursor-pointer rounded-sm shadow-sm md:min-h-3 grid grid-cols-[1fr_auto]" 
             style={{borderColor: item.color, backgroundColor: backgroundColor, color: textColor}} 
             onClick={(e)=> {
                 e.stopPropagation();
@@ -106,22 +106,18 @@ const ListItem = ({item}) => {
             onMouseLeave={(e) => { setIsHover(false) }}
             onContextMenu={(e) => handleContextMenu(e, item)}
         > 
-            <div className={`flex justify-between items-center`}>
-                <p className="text-xs md:text-base m-0">
+                
+                <p className="text-xs md:text-base m-0 p-4">
                     {item.title}
                 </p>
-                <div className="flex gap-4 items-center">
-                    <div className={`cursor-pointer rounded-full p-2 ${item.isComplete ? "bg-green-500" : "bg-red-500"}`}>
-                                <CheckmarkIcon className="w-2 h-2 fill-neutral-50 cursor-pointer" onClick={(e)=> {
-                                    e.stopPropagation()
-                                    toggleComplete()
-                    }} />
-                    </div>
+
+             
+
+                <div className={`flex items-center justify-center w-12 h-full md:w-14 md:h-14 cursor-pointer p-2 cursor-pointer ${item.isComplete ? "bg-green-500" : "bg-red-500"}`} onClick={(e)=> {
+                                e.stopPropagation()
+                                toggleComplete()}}>
+                            <CheckmarkIcon className="w-5 h-5 fill-neutral-50 " />
                 </div>
-                
-
-
-            </div> 
                 {editTask && <ItemTaskModal onClose={(e) => {
                     setEditTask(false)
                 }}  prevInfo={item}/>}

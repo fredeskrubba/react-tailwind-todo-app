@@ -19,7 +19,9 @@ const AddCategoryModal = ({ onClose, onSubmit }) => {
 
     const activeUser = useAuthStore((state) => state.activeUser);
 
-    const notifySuccess = () => toast("Category created successfully", { type: "success", position: "bottom-center" });
+    const notifySuccess = () => toast("Category created successfully", { type: "success", position: "bottom-center", autoClose: 2000 });
+    const notifyError = () => toast("Failed to create category", { type: "error", position: "bottom-center", autoClose: 2000 });
+
 
     const AddCategory = async () => {
         if (name.trim() === "") {
@@ -33,17 +35,21 @@ const AddCategoryModal = ({ onClose, onSubmit }) => {
             userId: activeUser.id
         }
 
-        await fetch('https://localhost:7203/api/category', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(item)}).then(res => res.json()).then(createdItem => {
-                onSubmit(createdItem);
-                onClose();
-            });
-        notifySuccess();    
+        try {
+            await fetch('https://localhost:7203/api/category', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(item)}).then(res => res.json()).then(createdItem => {
+                    onSubmit(createdItem);
+                    onClose();
+                });
+            notifySuccess(); 
+        } catch (err) {
+            notifyError();
+        }   
     }
 
     return (

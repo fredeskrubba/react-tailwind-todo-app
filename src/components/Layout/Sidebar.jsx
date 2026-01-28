@@ -26,6 +26,9 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
 
   const todoStore = useTodoStore();
   const categories = useTodoStore(state => state.categories);
+
+  const notifyDeletionSuccess = () => toast("Category deleted", { type: "success", position: "bottom-center", autoClose: 2000 });
+  const notifyDeletionError = () => toast("Failed to delete category", { type: "error", position: "bottom-center", autoClose: 2000 });
   
   const MENU_ID = "category_menu";
   const { show } = useContextMenu({
@@ -62,16 +65,22 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
     }
 }, [categories, PageMode]);
 
-  const notify = () => toast("Wow so easy!");
+ 
 
   const AddCategory = (category) => {
     setUserMenuItems(prev => [...prev, category]);
   };
 
-  const deleteCategory = (id) => {
-    todoStore.deleteCategory(id);
-    setShowWarningModal(false);
-    handleContextMenu();
+  const deleteCategory = async (id) => {
+    try {
+        await todoStore.deleteCategory(id);
+        notifyDeletionSuccess();
+    } catch (err) {
+        notifyDeletionError();
+    } finally {
+        setShowWarningModal(false);
+        handleContextMenu();
+    }
   }
 
   const changeActiveCategory = (category) => {
@@ -121,9 +130,7 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
                   {item.name}
                 </button>   
             ))}
-            <div>
-              <button onClick={notify}>Notify!</button>
-            </div>
+
             <Menu id={MENU_ID} theme="myTheme">
               <Item
                 disabled={({ props }) =>
