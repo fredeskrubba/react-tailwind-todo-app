@@ -105,9 +105,6 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
     setActiveItem(newNote.id);
   } catch (err) {
     console.error('Failed to create note:', err);
-  } finally {
-    // Optional: log the current list of notes (after creation)
-    console.log('Current notes:', userNotes);
   }
 };
 

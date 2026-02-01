@@ -7,11 +7,12 @@ const Notes = () => {
    
    const [activeContent, setActiveContent] = useState('');
    const [activeTitle, setActiveTitle] = useState('');
+   const [activeDate, setActiveDate] = useState('');
 
    const activeNote = useNoteStore((state) => state.activeNote);
    const noteStore = useNoteStore();
 
-   
+
    // debounce logic for saving note, so it doesn't call the api on every keystroke
        useEffect(() => {
            const delayDebounceFn = setTimeout(() => {
@@ -36,6 +37,7 @@ const Notes = () => {
        const onContentChange = async () => {
            if(activeNote && activeContent !== activeNote.htmlContent){
                await noteStore.updateNote({...activeNote, htmlContent: activeContent, updatedAt: new Date().toISOString()});
+               setActiveDate(activeNote.updatedAt);
            }
        }
 
@@ -49,7 +51,7 @@ const Notes = () => {
     return ( 
         <>
              <Layout PageMode="notes">
-                <Editor setActiveContent={setActiveContent} setActiveTitle={setActiveTitle} activeTitle={activeTitle}/>
+                <Editor setActiveContent={setActiveContent} setActiveTitle={setActiveTitle} activeTitle={activeTitle} activeDate={activeDate} setActiveDate={setActiveDate}/>
              </Layout>
         </>
      );

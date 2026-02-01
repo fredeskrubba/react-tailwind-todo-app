@@ -3,12 +3,13 @@ import StarterKit from '@tiptap/starter-kit'
 import useNoteStore from '../store/NoteStore'
 import { useEffect } from 'react';
 
-const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
+const Editor = ({setActiveContent, setActiveTitle, activeTitle, setActiveDate, activeDate}) => {
 
     const activeNote = useNoteStore(state => state.activeNote);
     
     useEffect(() => {
         if(activeNote){
+            setActiveDate(activeNote.updatedAt);
             editor?.commands.setContent(activeNote.htmlContent || '<p>Get Started writing!</p>');
             setActiveTitle(activeNote.title || '');
         }
@@ -61,8 +62,8 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
             <div className='p-2 flex flex-col gap-3'>
                 <input type="text" placeholder='No title yet' className='w-full text-2xl focus:outline-none' value={activeTitle} onChange={(e) => setActiveTitle(e.target.value)}/>
                 <span className='flex gap-1'>
-                    <p className='text-sm text-neutral-400'>{activeNote?.updatedAt ? new Date(activeNote.updatedAt).toLocaleDateString([], {year: "numeric", month: "long", day: "numeric"}) : ''}</p>
-                    <p className='text-sm text-neutral-400'>{activeNote?.updatedAt ? new Date(activeNote.updatedAt).toLocaleTimeString([], {hour: "2-digit", minute: "2-digit", hour12: false, }) : ''}</p>
+                    <p className='text-sm text-neutral-400'>{activeDate ? new Date(activeDate).toLocaleDateString([], {year: "numeric", month: "long", day: "numeric"}) : ''}</p>
+                    <p className='text-sm text-neutral-400'>{activeDate ? new Date(activeDate).toLocaleTimeString([], {hour: "2-digit", minute: "2-digit", hour12: false, }) : ''}</p>
                 </span>
             </div>
             <EditorContent editor={editor} className='h-full'/>
