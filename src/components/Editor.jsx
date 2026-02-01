@@ -2,14 +2,18 @@ import { useEditor, EditorContent, EditorContext } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import useNoteStore from '../store/NoteStore'
 import { useEffect } from 'react';
+import { useStore } from 'zustand';
 
-const Editor = ({setActiveContent, setActiveTitle, activeTitle, setActiveDate, activeDate}) => {
+const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
 
     const activeNote = useNoteStore(state => state.activeNote);
-    
+    const activeDate = useNoteStore(state => state.activeDate);
+    useEffect(() => {
+        
+    }, [activeNote]);
+
     useEffect(() => {
         if(activeNote){
-            setActiveDate(activeNote.updatedAt);
             editor?.commands.setContent(activeNote.htmlContent || '<p>Get Started writing!</p>');
             setActiveTitle(activeNote.title || '');
         }

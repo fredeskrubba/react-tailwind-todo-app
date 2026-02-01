@@ -3,8 +3,9 @@ import { create } from 'zustand'
 const useNoteStore = create((set) => ({
     notes: [],
     activeNote: null,
+    activeDate: null,
     setNotes: (notes) => set({ notes: notes }),
-    setActiveNote: (note) => set({ activeNote: note }),
+    setActiveNote: (note) => set({ activeNote: note, activeDate: note?.updatedAt || null }),
     fetchNotes: async (userId) => {
         const response = await fetch(`https://localhost:7203/api/note/${userId}`, { method: 'GET' });
         const data = await response.json(); 
@@ -40,6 +41,8 @@ const useNoteStore = create((set) => ({
         });
         if (response.ok) {
             set((state) => ({
+                activeNote: note,
+                activeDate: note.updatedAt,
                 notes: state.notes.map(n => n.id === note.id ? note : n)
             }));
         }
