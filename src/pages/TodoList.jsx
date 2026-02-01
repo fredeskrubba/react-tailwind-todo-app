@@ -45,17 +45,17 @@ const TodoList = () => {
     }, [activeTodoItem]);
 
     useEffect(() => {
-    const handleClickOutside = (event) => {
-     
-      if (showColorPicker && pickerRef.current && !pickerRef.current.contains(event.target)) {
-        setShowColorPicker(false);
-      }
-    };
+        const handleClickOutside = (event) => {
+        
+        if (showColorPicker && pickerRef.current && !pickerRef.current.contains(event.target)) {
+            setShowColorPicker(false);
+        }
+        };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+        };
 
     }, [showColorPicker]);
 

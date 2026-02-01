@@ -1,8 +1,18 @@
 import { useEditor, EditorContent, EditorContext } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
+import useNoteStore from '../store/NoteStore'
+import { useEffect } from 'react';
 
+const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
 
-const Editor = () => {
+    const activeNote = useNoteStore(state => state.activeNote);
+    
+    useEffect(() => {
+        if(activeNote){
+            editor?.commands.setContent(activeNote.htmlContent || '<p>Get Started writing!</p>');
+            setActiveTitle(activeNote.title || '');
+        }
+        }, [activeNote]);
 
     const editor = useEditor({
         editorProps : {
@@ -10,13 +20,17 @@ const Editor = () => {
                 class: 'h-full p-2 focus:outline-none',
             },
         },
-        extensions: [StarterKit], // define your extension array
-        content: '<p>Hello World!</p>', // initial content
+        extensions: [StarterKit],
+        content: activeNote?.htmlContent || '<p>Get Started writing!</p>',
+        onUpdate: ({ editor }) => {
+            const html = editor.getHTML();
+            setActiveContent(html);
+        }
     })
 
     return (
         <div className="h-full relative">
-            <div className=" sticky top-0 z-10 bg-white/90 backdrop-blur border-b border-gray-200">
+            <div className=" sticky top-0 z-10 bg-white/90 backdrop-blur border-b border-main-green">
                 <div className="w-full mx-auto flex items-center justify-center px-4 py-2">
                     <button
                         type="button"
@@ -42,27 +56,14 @@ const Editor = () => {
                         Strike
                     </button>
 
-                    <button
-                        type="button"
-                        className="rounded px-2 py-1 text-sm font-medium text-gray-700 cursor:pointer hover:bg-gray-100"
-                        onClick={() => editor?.chain().focus().setParagraph().run()}
-                    >
-                        P
-                    </button>
-
-                    <button
-                        type="button"
-                        className="rounded px-2 py-1 text-sm font-medium text-gray-700 cursor:pointer hover:bg-gray-100"
-                        onClick={() => editor?.chain().focus().toggleBulletList().run()}
-                    >
-                        • List
-                    </button>
                 </div>
             </div>
             <div className='p-2 flex flex-col gap-3'>
-                <input type="text" placeholder='No title yet' className='w-full text-2xl focus:outline-none'/>
-                <p className='text-sm text-neutral-400'>24-01-2026 15:54</p>
-
+                <input type="text" placeholder='No title yet' className='w-full text-2xl focus:outline-none' value={activeTitle} onChange={(e) => setActiveTitle(e.target.value)}/>
+                <span className='flex gap-1'>
+                    <p className='text-sm text-neutral-400'>{activeNote?.updatedAt ? new Date(activeNote.updatedAt).toLocaleDateString([], {year: "numeric", month: "long", day: "numeric"}) : ''}</p>
+                    <p className='text-sm text-neutral-400'>{activeNote?.updatedAt ? new Date(activeNote.updatedAt).toLocaleTimeString([], {hour: "2-digit", minute: "2-digit", hour12: false, }) : ''}</p>
+                </span>
             </div>
             <EditorContent editor={editor} className='h-full'/>
         </div>
