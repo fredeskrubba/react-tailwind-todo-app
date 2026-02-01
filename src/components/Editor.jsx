@@ -8,9 +8,6 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
 
     const activeNote = useNoteStore(state => state.activeNote);
     const activeDate = useNoteStore(state => state.activeDate);
-    useEffect(() => {
-        
-    }, [activeNote]);
 
     useEffect(() => {
         if(activeNote){

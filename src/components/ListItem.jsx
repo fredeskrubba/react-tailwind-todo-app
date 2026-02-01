@@ -95,7 +95,7 @@ const ListItem = ({item}) => {
     }
 
     return (
-        <div className="border-l-4 w-full transition-transform duration-300 bg-white cursor-pointer rounded-sm shadow-sm md:min-h-3 grid grid-cols-[1fr_auto]" 
+        <div className="border-l-4 w-full transition-transform duration-300 bg-white cursor-pointer shadow-sm md:min-h-3 grid grid-cols-[1fr_auto]" 
             style={{borderColor: item.color, backgroundColor: backgroundColor, color: textColor}} 
             onClick={(e)=> {
                 e.stopPropagation();

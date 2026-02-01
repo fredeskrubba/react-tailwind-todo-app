@@ -9,8 +9,8 @@ const Notes = () => {
    const [activeTitle, setActiveTitle] = useState('');
 
    const activeNote = useNoteStore((state) => state.activeNote);
+   const userNotes = useNoteStore((state) => state.notes);
    const noteStore = useNoteStore();
-
 
    // debounce logic for saving note, so it doesn't call the api on every keystroke
        useEffect(() => {
@@ -49,7 +49,8 @@ const Notes = () => {
     return ( 
         <>
              <Layout PageMode="notes">
-                <Editor setActiveContent={setActiveContent} setActiveTitle={setActiveTitle} activeTitle={activeTitle}/>
+                {userNotes?.length > 0 ? 
+                    <Editor setActiveContent={setActiveContent} setActiveTitle={setActiveTitle} activeTitle={activeTitle}/> : "No notes available. Please create a note to get started."}
              </Layout>
         </>
      );

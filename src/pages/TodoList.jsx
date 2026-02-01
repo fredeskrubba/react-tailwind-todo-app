@@ -81,7 +81,6 @@ const TodoList = () => {
         } catch (err) {
             notifyError();
         } finally {
-            setIsSaving(false);
             setAddTask(false);
         }
 
