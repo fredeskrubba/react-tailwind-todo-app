@@ -35,7 +35,8 @@ const Notes = () => {
        
        const onContentChange = async () => {
            if(activeNote && activeContent !== activeNote.htmlContent){
-               await noteStore.updateNote({...activeNote, htmlContent: activeContent, updatedAt: new Date().toISOString()});
+            
+               await noteStore.updateNote({...activeNote, htmlContent: activeContent});
            }
        }
 
