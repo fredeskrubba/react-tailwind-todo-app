@@ -70,11 +70,12 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
       }
     } else if (PageMode == 'notes'){
       setUserMenuItems(userNotes);
+
       if(userNotes.length > 0){
-        if(noteStore.activeNote === null){
+        
           noteStore.setActiveNote(userNotes[0]);
           setActiveItem(userNotes[0].id)
-        }
+        
       }
     }
   }, [categories, userNotes, PageMode ]);
