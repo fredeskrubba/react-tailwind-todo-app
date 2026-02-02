@@ -136,7 +136,7 @@ const TodoList = () => {
 
     return ( 
     <>
-        <Layout PageMode="todo">
+        <Layout pageMode="todo">
             {isLoading ?
                 <LoadingIcon/> : 
                 <div className={`${activeTodoItem !== null ? "md:grid md:grid-cols-[3fr_1fr] md:relative" : ""}`}>

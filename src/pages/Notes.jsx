@@ -49,7 +49,7 @@ const Notes = () => {
 
     return ( 
         <>
-             <Layout PageMode="notes">
+             <Layout pageMode="notes">
                 {userNotes?.length > 0 ? 
                     <Editor setActiveContent={setActiveContent} setActiveTitle={setActiveTitle} activeTitle={activeTitle}/> : "No notes available. Please create a note to get started."}
              </Layout>

@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 import useNoteStore from "../../store/NoteStore.js";
 
 
-const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
+const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
   
   const [activeItem, setActiveItem] = useState(0);
   const [isCreateCategoryModalOpen, setCreateCategoryModalOpen] = useState(false);
@@ -49,15 +49,15 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
   };
 
   useEffect(() => {
-    if (PageMode === 'todo') {
+    if (pageMode === 'todo') {
       todoStore.fetchCategories(activeUser.id);
-    } else if (PageMode === 'notes') {
+    } else if (pageMode === 'notes') {
       noteStore.fetchNotes(activeUser.id);
     }
   }, []);
   
   useEffect(() => {
-    if (PageMode == 'todo'){
+    if (pageMode == 'todo'){
       let defaultItems = categories.filter(cat => cat.userId == null);
       let userItems = categories.filter(cat => cat.userId != null);
   
@@ -68,7 +68,7 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
   
         setActiveItem(defaultMenuItems[0].id)
       }
-    } else if (PageMode == 'notes'){
+    } else if (pageMode == 'notes'){
       setUserMenuItems(userNotes);
 
       if(userNotes.length > 0){
@@ -78,9 +78,11 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
         
       }
     }
-  }, [categories, userNotes, PageMode ]);
+  }, [categories, userNotes, pageMode ]);
 
-  
+  useEffect(() => {
+
+  }, [activeItem]);
 
   const AddCategory = (category) => {
     setUserMenuItems(prev => [...prev, category]);
@@ -144,7 +146,7 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
 
 
           {
-            PageMode === "todo" &&
+            pageMode === "todo" &&
             <div className="flex flex-col gap-2 flex-1 min-h-0 overflow-y-auto">
               {defaultMenuItems.map((item) => (
                 
@@ -200,7 +202,7 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
 
 
           {
-            PageMode === "notes" &&
+            pageMode === "notes" &&
               <div className="flex flex-col gap-2 flex-1 min-h-0 overflow-y-auto">
                 {userNotes.map((note) => (
                    
@@ -241,9 +243,9 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
 
 
 
-          <button className="mt-4 px-3 py-2 border-2 border-main-green text-main-green bg-neutral-100 cursor-pointer mt-auto" onClick={() => PageMode === "todo" ? setCreateCategoryModalOpen(true) : addNote()}>
+          <button className="mt-4 px-3 py-2 border-2 border-main-green text-main-green bg-neutral-100 cursor-pointer mt-auto" onClick={() => pageMode === "todo" ? setCreateCategoryModalOpen(true) : addNote()}>
             {
-              PageMode === "notes" ? "Add Note" : "Add Category"
+              pageMode === "notes" ? "Add Note" : "Add Category"
             }
           </button>
         </div>
@@ -280,9 +282,9 @@ const Sidebar = ({ PageMode, isMenuOpen, setIsMenuOpen }) => {
         isCreateCategoryModalOpen && <AddCategoryModal onClose={() => setCreateCategoryModalOpen(false)} onSubmit={AddCategory} />
       }
       {showWarningModal && <WarningModal text="Are you sure you want to delete this item?" onConfirm={() => {
-        if(PageMode === "todo"){
+        if(pageMode === "todo"){
           deleteCategory(selectedItemId);
-        } else if (PageMode === "notes"){
+        } else if (pageMode === "notes"){
           deleteNote(selectedItemId);
         }
       }} onCancel={() => setShowWarningModal(false)}/>} 
