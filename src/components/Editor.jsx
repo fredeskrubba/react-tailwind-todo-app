@@ -1,14 +1,26 @@
 import { useEditor, EditorContent, EditorContext } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import useNoteStore from '../store/NoteStore'
-import { useEffect } from 'react';
-import { useStore } from 'zustand';
+import { useEffect, useState } from 'react';
+import { TextStyle } from '@tiptap/extension-text-style'
+import Color from '@tiptap/extension-color'
 
 const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
 
     const activeNote = useNoteStore(state => state.activeNote);
     const activeDate = useNoteStore(state => state.activeDate);
-
+    const [showColorPicker, setShowColorPicker] = useState(false);
+    const toolbarButton = () =>
+  `
+    px-3 py-1.5
+    rounded-xs
+    text-sm font-medium
+    transition-colors
+    focus:outline-none
+    hover:bg-main-green/10
+    cursor-pointer
+    hover:text-main-green
+  `;
     useEffect(() => {
         if(activeNote){
             editor?.commands.setContent(activeNote.htmlContent || '<p>Get Started writing!</p>');
@@ -22,7 +34,7 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
                 class: 'h-full p-2 focus:outline-none',
             },
         },
-        extensions: [StarterKit],
+        extensions: [StarterKit, TextStyle, Color],
         content: activeNote?.htmlContent || '<p>Get Started writing!</p>',
         onUpdate: ({ editor }) => {
             const html = editor.getHTML();
@@ -33,31 +45,129 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
     return (
         <div className="h-full relative">
             <div className=" sticky top-0 z-10 bg-white/90 backdrop-blur border-b border-main-green">
-                <div className="w-full mx-auto flex items-center justify-center px-4 py-2">
-                    <button
+                <div className="sticky top-0 z-10 border-b border-main-green bg-white/90 backdrop-blur">
+                    <div className="mx-auto flex items-center gap-1 px-4 py-2">
+                        <button
                         type="button"
-                        className="rounded px-2 py-1 text-sm font-medium text-gray-700 cursor:pointer hover:bg-gray-100"
+                        className={toolbarButton()}
                         onClick={() => editor?.chain().focus().toggleBold().run()}
-                    >
+                        >
                         Bold
-                    </button>
+                        </button>
 
-                    <button
+                        <button
                         type="button"
-                        className="rounded px-2 py-1 text-sm font-medium text-gray-700 cursor:pointer hover:bg-gray-100"
+                        className={toolbarButton()}
                         onClick={() => editor?.chain().focus().toggleItalic().run()}
-                    >
+                        >
                         Italic
-                    </button>
+                        </button>
 
-                    <button
+                        <button
                         type="button"
-                        className="rounded px-2 py-1 text-sm font-medium text-gray-700 cursor:pointer hover:bg-gray-100"
+                        className={toolbarButton()}
                         onClick={() => editor?.chain().focus().toggleStrike().run()}
-                    >
+                        >
                         Strike
-                    </button>
+                        </button>
 
+                        <div className="mx-2 h-5 w-px bg-main-green" />
+
+                        <button
+                        type="button"
+                        className={toolbarButton()}
+                        onClick={() => editor?.chain().focus().toggleBulletList().run()}
+                        >
+                        • List
+                        </button>
+
+                        <button
+                        type="button"
+                        className={toolbarButton()}
+                        onClick={() => editor?.chain().focus().toggleOrderedList().run()}
+                        >
+                        1. List
+                        </button>
+
+                        <div className="mx-2 h-5 w-px bg-main-green" />
+
+                        {/* text color */}
+                        <div className="relative inline-flex">
+                            <button
+                                type="button"
+                                className={`
+                                ${toolbarButton()}
+                                rounded-r-none
+                                flex items-center justify-center
+                                px-2
+                                `}
+                                onClick={() => {
+                                editor.chain().focus().unsetColor().run();
+                                }}
+                            >
+                                <span className="relative inline-block font-semibold">
+                                A
+                                <span className="absolute left-0 right-0 -bottom-0.5 h-0.5 bg-main-green" />
+                                </span>
+                            </button>
+                            <button
+                                type="button"
+                                className={`
+                                    ${toolbarButton()}
+                                    rounded-l-none
+                                    px-1
+                                    flex items-center justify-center
+                                    w-6 h-full
+                                `}
+                                onClick={() => setShowColorPicker(v => !v)}
+                            >
+                                ▾
+                            </button> 
+                            {showColorPicker && (
+                                <div
+                                    className="
+                                    absolute top-full mt-2 z-50
+                                    grid grid-cols-5 gap-2
+                                    border-main-green
+                                    rounded-md border
+                                    bg-white p-2
+                                    shadow-lg
+                                    w-36
+                                    "
+                                >
+                                    {[
+                                    '#000000',
+                                    '#374151',
+                                    '#ef4444',
+                                    '#f59e0b',
+                                    '#10b981',
+                                    '#3b82f6',
+                                    '#8b5cf6',
+                                    '#ec4899',
+                                    ].map(color => (
+                                    <button
+                                        key={color}
+                                        onClick={() => {
+                                        editor.chain().focus().setColor(color).run();
+                                        setShowColorPicker(false);
+                                        }}
+                                        className="
+                                        h-6 w-6
+                                        border border-gray-200
+                                        hover:scale-110
+                                        transition
+                                        cursor-pointer
+                                        "
+                                        style={{ backgroundColor: color }}
+                                    />
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                       
+
+                    </div>
                 </div>
             </div>
             <div className='p-2 flex flex-col gap-3'>
@@ -67,7 +177,7 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
                     <p className='text-sm text-neutral-400'>{activeDate ? new Date(activeDate).toLocaleTimeString([], {hour: "2-digit", minute: "2-digit", hour12: false, }) : ''}</p>
                 </span>
             </div>
-            <EditorContent editor={editor} className='h-full'/>
+            <EditorContent editor={editor} className="h-full [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:list-decimal [&_ol]:pl-6"/>
         </div>
     );
 }
