@@ -63,7 +63,7 @@ const LoginPage = () => {
         </h1>
         <div className="border-1 border-main-green rounded-md p-2 my-2">
             <p className="text-center my-2 text-main-green">
-                This app is a project developed by me, using React and tailwind for the frontend, and ASP.NET Core for the backend. MySql was used as the database solution.
+                This app is a project developed by me, using React and tailwind for the frontend, and ASP.NET Core for the backend. MariaDB was used as the database solution.
             </p>
         </div>
         <div className="mb-4">

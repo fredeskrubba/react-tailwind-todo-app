@@ -1,18 +1,16 @@
 import NavigationBar from "./NavigationBar.jsx";
 import Sidebar from "./Sidebar";
 import { useState } from "react";
-import LoadingIcon from '../LoadingIcon.jsx';
-import useMainStore from '../../store/Mainstore.js';
 import { ToastContainer } from 'react-toastify';
 
 const Layout = ({ pageMode, children }) => {
     
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const isLoading = useMainStore((state) => state.isLoading);
-
+    
+    
     return (
         
-        isLoading ? <LoadingIcon/> :
+        
         <>
             <div className="flex flex-col h-screen md:hidden">
                 <NavigationBar setIsMenuOpen={setIsMenuOpen} />

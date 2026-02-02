@@ -9,6 +9,7 @@ import { lightenColor } from "../../helpers/colorHelpers.js";
 import WarningModal from "../Modals/WarningModal.jsx";
 import { toast } from 'react-toastify';
 import useNoteStore from "../../store/NoteStore.js";
+import useMainStore from "../../store/Mainstore.js";
 
 
 const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
@@ -29,6 +30,8 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
   const noteStore = useNoteStore();
   const categories = useTodoStore(state => state.categories);
   const userNotes = useNoteStore(state => state.notes);
+  const setIsLoading = useMainStore((state) => state.setIsLoading);
+  const isLoading = useMainStore((state) => state.isLoading);
 
   const notifyDeletionSuccess = () => toast("Category deleted", { type: "success", position: "bottom-center", autoClose: 2000 });
   const notifyNoteDeletionSuccess = () => toast("Note deleted", { type: "success", position: "bottom-center", autoClose: 2000 });
@@ -48,11 +51,19 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
     });
   };
 
+  const fetchNotes = async () => {
+    setIsLoading(true);
+    await noteStore.fetchNotes(activeUser.id);
+    setIsLoading(false);
+  }
+
   useEffect(() => {
     if (pageMode === 'todo') {
       todoStore.fetchCategories(activeUser.id);
     } else if (pageMode === 'notes') {
-      noteStore.fetchNotes(activeUser.id);
+     
+      fetchNotes();
+      
     }
   }, []);
   
@@ -80,9 +91,6 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
     }
   }, [categories, userNotes, pageMode ]);
 
-  useEffect(() => {
-
-  }, [activeItem]);
 
   const AddCategory = (category) => {
     setUserMenuItems(prev => [...prev, category]);
@@ -139,9 +147,12 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
     noteStore.setActiveNote(note);
   }
 
+  
   return (
+    
     <>
-        
+        {
+          isLoading ? <></> :
         <div className="w-64 min-h-0 h-full border-r-2 border-main-green p-4 flex flex-col hidden md:flex md:flex-col md:gap-2 ">
 
 
@@ -249,6 +260,7 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
             }
           </button>
         </div>
+        }
         
         <div
         className={`
@@ -290,6 +302,7 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
       }} onCancel={() => setShowWarningModal(false)}/>} 
 
     </>
+    
   );
 };
 

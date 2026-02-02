@@ -2,15 +2,20 @@ import Layout from "../components/Layout/Layout";
 import Editor from "../components/Editor";
 import { useEffect, useState } from "react";
 import useNoteStore from "../store/NoteStore";
+import useMainStore from "../store/Mainstore";
+import LoadingIcon from "../components/LoadingIcon";
 
 const Notes = () => {
-   
-   const [activeContent, setActiveContent] = useState('');
-   const [activeTitle, setActiveTitle] = useState('');
+    
+    const [activeContent, setActiveContent] = useState('');
+    const [activeTitle, setActiveTitle] = useState('');
 
+    
    const activeNote = useNoteStore((state) => state.activeNote);
    const userNotes = useNoteStore((state) => state.notes);
    const noteStore = useNoteStore();
+
+   const isLoading = useMainStore((state) => state.isLoading);
 
    // debounce logic for saving note, so it doesn't call the api on every keystroke
        useEffect(() => {
@@ -49,10 +54,22 @@ const Notes = () => {
 
     return ( 
         <>
+           
              <Layout pageMode="notes">
-                {userNotes?.length > 0 ? 
-                    <Editor setActiveContent={setActiveContent} setActiveTitle={setActiveTitle} activeTitle={activeTitle}/> : "No notes available. Please create a note to get started."}
-             </Layout>
+                {
+                    isLoading ? (
+                        <LoadingIcon />
+                    ) : userNotes?.length > 0 ? (
+                        <Editor
+                        setActiveContent={setActiveContent}
+                        setActiveTitle={setActiveTitle}
+                        activeTitle={activeTitle}
+                        />
+                    ) : (
+                        "No notes available. Please create a note to get started."
+                    )
+                }
+             </Layout> 
         </>
      );
 }
