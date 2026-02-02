@@ -83,9 +83,11 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
       setUserMenuItems(userNotes);
 
       if(userNotes.length > 0){
-        
-          noteStore.setActiveNote(userNotes[0]);
-          setActiveItem(userNotes[0].id)
+          if(!noteStore.activeNote){
+            noteStore.setActiveNote(userNotes[0]);
+            setActiveItem(userNotes[0].id)
+
+          }
         
       }
     }
