@@ -23,8 +23,8 @@ const ListItem = ({item}) => {
     const setActiveTodoItem = useTodoStore((state) => state.setActiveTodoItem);
     const activeTodoItem = useTodoStore((state) => state.activeTodoItem);
     
-    const notifyDeletionSuccess = () => toast("Item added", { type: "success", position: "bottom-center", autoClose: 2000 });
-    const notifyDeletionError = () => toast("Failed to add item", { type: "error", position: "bottom-center", autoClose: 2000 });
+    const notifyDeletionSuccess = () => toast("Item deleted", { type: "success", position: "bottom-center", autoClose: 2000 });
+    const notifyDeletionError = () => toast("Failed to delete item", { type: "error", position: "bottom-center", autoClose: 2000 });
     const notifyCompletedToggleSuccess = () => toast("Item status updated", { type: "success", position: "bottom-center", autoClose: 2000 });
     const notifyCompletedToggleError = () => toast("Failed to update item status", { type: "error", position: "bottom-center", autoClose: 2000 });
 
