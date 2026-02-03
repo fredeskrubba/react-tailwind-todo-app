@@ -9,7 +9,7 @@ import { Menu, Item, useContextMenu } from 'react-contexify';
 import {useId} from 'react';
 import { toast } from 'react-toastify';
 
-const ListItem = ({item}) => {
+const ListItem = ({item, isOverdue}) => {
 
     const [isHover, setIsHover] = useState(false);
     const updateItem = useTodoStore(state => state.updateTodoItem)
@@ -27,11 +27,11 @@ const ListItem = ({item}) => {
     const notifyDeletionError = () => toast("Failed to delete item", { type: "error", position: "bottom-center", autoClose: 2000 });
     const notifyCompletedToggleSuccess = () => toast("Item status updated", { type: "success", position: "bottom-center", autoClose: 2000 });
     const notifyCompletedToggleError = () => toast("Failed to update item status", { type: "error", position: "bottom-center", autoClose: 2000 });
-
+    
     const backgroundColor = activeTodoItem && activeTodoItem.id === item.id
-    ? item.color
+    ? isOverdue ? "#f87171" : "#61bd92"
     : isHover
-    ? lightenColor(item.color)
+    ? lightenColor(isOverdue ? "#f87171" : "#61bd92", 40)
     : "white"; 
 
     const textColor = activeTodoItem && activeTodoItem.id === item.id
@@ -96,7 +96,7 @@ const ListItem = ({item}) => {
 
     return (
         <div className="border-l-4 w-full transition-transform duration-300 bg-white cursor-pointer shadow-sm md:min-h-3 grid grid-cols-[1fr_auto]" 
-            style={{borderColor: item.color, backgroundColor: backgroundColor, color: textColor}} 
+            style={{borderColor: isOverdue ? "#f87171" : "#61bd92", backgroundColor: backgroundColor, color: textColor}} 
             onClick={(e)=> {
                 e.stopPropagation();
                 ShowInfoForItem(item)

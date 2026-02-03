@@ -12,14 +12,14 @@ const TodoItemDetailsModal = ({ item, onClose, showEditModal, showDeleteModal })
        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 cursor-default">
         <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose}/>
 
-        <div className="relative z-10 w-full max-w-lg rounded-md bg-white border-2 shadow-xl max-h-[85vh] min-h-130 flex flex-col" style={{ borderColor: item.color }}>
+        <div className="relative z-10 w-full max-w-lg rounded-md bg-white border-2 shadow-xl max-h-[85vh] min-h-130 flex flex-col border-main-green">
             <div className="flex flex-col flex-1 overflow-y-auto p-6 space-y-6">
-                <div className="flex justify-between border-b-1 py-2" style={{borderColor: item.color}}>
+                <div className="flex justify-between border-b-1 py-2 border-main-green">
                     <h2 className="text-xl font-semibold text-gray-800 break-words">
                         {item.title}
                     </h2>
                     <button onClick={onClose}>
-                        <CrossIcon className="w-6 h-6 cursor-pointer" />
+                        <CrossIcon className="w-6 h-6 cursor-pointer fill-main-green" />
                     </button>
                 </div>
 
@@ -49,18 +49,18 @@ const TodoItemDetailsModal = ({ item, onClose, showEditModal, showDeleteModal })
                 </div>
         </div>
 
-        <div className="border-t px-6 py-4 flex justify-end gap-4 " style={{ borderColor: item.color }}>
+        <div className="border-t-2 px-6 py-4 flex justify-end gap-4 border-main-green" >
             <button onClick={(e) => {
                 e.stopPropagation();
                 showEditModal();
-            }} className="rounded-full p-3 transition hover:opacity-90 cursor-pointer" style={{ backgroundColor: item.color }}>
+            }} className="rounded-full p-3 transition hover:opacity-90 cursor-pointer bg-main-green">
                 <EditIcon className="w-4 h-4 fill-white" />
             </button>
 
             <button onClick={(e) => {
             e.stopPropagation();
             showDeleteModal();
-            }} className="rounded-full p-3 transition hover:opacity-90 cursor-pointer" style={{ backgroundColor: item.color }}>
+            }} className="rounded-full p-3 transition hover:opacity-90 cursor-pointer bg-main-green">
                 <TrashIcon className="w-4 h-4 fill-white" />
             </button>
         </div>

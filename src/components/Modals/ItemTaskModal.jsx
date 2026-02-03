@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import { Sketch, Wheel, ShadeSlider } from '@uiw/react-color';
-import { hsvaToHex } from '@uiw/color-convert';
 import useTodoStore from "../../store/TodoStore";
 import useAuthStore from "../../store/AuthStore";
 
@@ -11,14 +9,6 @@ const ItemTaskModal = ({ onClose, prevInfo}) => {
     const [dueDate, setDueDate] = useState(new Date().toISOString().slice(0, 16));
     
     const todoStore = useTodoStore();
-    // for desktop
-    const [selectedBackgroundColor, setSelectedBackgroundColor] = useState("#61BD92");
-    const backGroundColors = ["#61BD92", "#C490D1", "#F0B67F", "#E54B4B", "#227C9D"];
-    
-    // for mobile
-    const [hsva, setHsva] = useState({ h: 214, s: 43, v: 90, a: 1 });
-
-    const [showColorPicker, setShowColorPicker] = useState(false);
 
     const [error, setError] = useState({});
     const activeCategory = useTodoStore((state) => state.activeCategory);
@@ -29,7 +19,6 @@ const ItemTaskModal = ({ onClose, prevInfo}) => {
         if (prevInfo) {
             setTitle(prevInfo.title)
             setDescription(prevInfo.description);
-            setSelectedBackgroundColor(prevInfo.color);
             setDueDate(prevInfo.dueDate);
         }}, [prevInfo]);
 
@@ -54,7 +43,6 @@ const ItemTaskModal = ({ onClose, prevInfo}) => {
         const item = {
             description: description,
             title: title,
-            color: selectedBackgroundColor,
             id: prevInfo ? prevInfo.id : 0,
             userId: activeUser.id,
             isComplete: false,
@@ -98,41 +86,8 @@ const ItemTaskModal = ({ onClose, prevInfo}) => {
                         error && error.dueDate && <p className="text-red-500 text-sm m-0">{error.dueDate}</p>
                     }
                 </div>
-                <div className="flex justify-between items-center mt-4">
-                    <p className="m-0">Select Background Color:</p>
-                    <div className="flex items-center gap-2">
-                        <div className={`w-8 h-8 rounded-sm cursor-pointer`} style={{backgroundColor: selectedBackgroundColor}} onClick={() => setShowColorPicker(!showColorPicker)}/>
-                    </div>
-                </div>
 
-                {showColorPicker &&
-                <>
-                    <div className="absolute right-10 bottom-0 z-50 hidden lg:block">
-                            <Sketch
-                            color={selectedBackgroundColor}
-                            presetColors={backGroundColors}
-                            disableAlpha={true}
-                            onChange={(color) => {
-                                setSelectedBackgroundColor(color.hex);
-                            }}/>
-                    </div>
-                    <div className="absolute right-15 bottom-0 bg-neutral-50 p-2 md:top-40 z-50 lg:hidden">
-                            <Wheel color={hsva} onChange={(color) => {
-                                setHsva(color.hsva);
-                                setSelectedBackgroundColor(hsvaToHex(color.hsva))
-                            }} />
-                            <ShadeSlider
-                                hsva={hsva}
-                                style={{ width: 210, marginTop: 20 }}
-                                onChange={(newShade) => {
-                                setHsva({ ...hsva, ...newShade });
-                                }}
-                            />
-                            <div style={{ width: '100%', height: 34, marginTop: 20, background: hsvaToHex(hsva) }}></div>
-                    </div>
                 
-                </>
-                }
             </div>
 
             <div className="flex justify-end gap-3">

@@ -10,7 +10,7 @@ import WarningModal from "../Modals/WarningModal.jsx";
 import { toast } from 'react-toastify';
 import useNoteStore from "../../store/NoteStore.js";
 import useMainStore from "../../store/Mainstore.js";
-
+import LogoutIcon from "../../assets/icons/logout-icon.svg?react";
 
 const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
   
@@ -32,6 +32,8 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
   const userNotes = useNoteStore(state => state.notes);
   const setIsLoading = useMainStore((state) => state.setIsLoading);
   const isLoading = useMainStore((state) => state.isLoading);
+  const setActiveTodoItem = useTodoStore((state) => state.setActiveTodoItem);
+
 
   const notifyDeletionSuccess = () => toast("Category deleted", { type: "success", position: "bottom-center", autoClose: 2000 });
   const notifyNoteDeletionSuccess = () => toast("Note deleted", { type: "success", position: "bottom-center", autoClose: 2000 });
@@ -50,6 +52,12 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
       props: item,
     });
   };
+
+    const logout = useAuthStore(state => state.logout);
+
+    const onLogout = () => {
+        logout();
+    }
 
   const fetchNotes = async () => {
     setIsLoading(true);
@@ -139,6 +147,7 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
 
   const changeActiveCategory = (category) => {
     setActiveItem(category.id);
+    setActiveTodoItem(null);
     todoStore.setActiveCategory({name: category.name, id: category.id, color: category.color, userId: 1});
   };
 
@@ -274,21 +283,50 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
         <div className="flex justify-end mb-4 border-b-2 border-main-green pb-3">
           
             <CrossIcon className="w-6 h-6 fill-main-green" onClick={() => setIsMenuOpen(false)}/>
-          
+
+
         </div>
 
         <div className="flex flex-col gap-4">
+          {defaultMenuItems.map((item) => (
+                
+                  <button
+                    key={item.id}
+                    className={`text-left px-3 py-2 hover:bg-gray-100 rounded text-lg`}
+                    style={{
+                      color: activeItem === item.id ? "#fff" : isHovering === item.id ? "#fff" : "#000",
+                      backgroundColor: activeItem === item.id ? item.color : isHovering === item.id ? lightenColor(item.color, 0.3) : "#fff",      
+                      borderColor: item.color,
+                    }}
+                    onClick={() => { 
+                      changeActiveCategory(item); 
+                      setIsMenuOpen(false); 
+                    }}>
+                    {item.name}
+                  </button>   
+          ))}
+
           {userMenuItems.map((item) => (
             <button
               className="text-left px-3 py-2 hover:bg-gray-100 rounded text-lg"
               key={item.id}
-              style={activeItem.name === item.name ? { backgroundColor: item.color, color: "#fff"} : {}}
+              style={{
+                      color: activeItem === item.id ? "#fff" : isHovering === item.id ? "#fff" : "#000",
+                      backgroundColor: activeItem === item.id ? item.color : isHovering === item.id ? lightenColor(item.color, 0.3) : "#fff",      
+                      borderColor: item.color,
+                    }}
               onClick={() => { 
                 changeActiveCategory(item); 
                 setIsMenuOpen(false); }}>
               {item.name}
             </button>
           ))}
+        </div>
+
+        <div className="sticky border-t-2 border-main-green w-full py-2 mt-auto flex justify-end items-center">
+            <button type="button" onClick={onLogout} title="logout" className=" md:hidden">
+              <LogoutIcon className="w-8 h-8 fill-main-green cursor-pointer"/>
+            </button>
         </div>
       </div>
 

@@ -29,10 +29,10 @@ const NavigationBar = ({ setIsMenuOpen}) => {
             </div>
             <div className="flex items-center gap-6">
                 
-                <BurgerIcon className="w-4 h-4 fill-main-green sm:w-7 sm:h-7 md:hidden" onClick={() => setIsMenuOpen(true)}/>
+                <BurgerIcon className="w-8 h-8 fill-main-green sm:w-7 sm:h-7 md:hidden" onClick={() => setIsMenuOpen(true)}/>
                 
-                <button type="button" onClick={onLogout} title="logout">
-                    <LogoutIcon className="w-6 h-6 fill-main-green sm:w-8 sm:h-8 cursor-pointer"/>
+                <button type="button" onClick={onLogout} title="logout" className="hidden md:block">
+                    <LogoutIcon className="w-8 h-8 fill-main-green cursor-pointer"/>
                 </button>
                 
             </div>

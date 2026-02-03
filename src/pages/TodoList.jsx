@@ -1,6 +1,6 @@
 import ListItem from '../components/ListItem.jsx';
 import ItemTaskModal from '../components/Modals/ItemTaskModal.jsx';
-import { useEffect, useState, useRef, useMemo } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import LoadingIcon from '../components/LoadingIcon.jsx';
 import Layout from '../components/Layout/Layout.jsx';
 import useMainStore from '../store/Mainstore.js';
@@ -8,7 +8,6 @@ import useTodoStore from '../store/TodoStore.js';
 import useAuthStore from '../store/AuthStore.js';
 import AddIcon from "../assets/icons/plus-icon.svg?react"
 import ExpandIcon from "../assets/icons/expand-icon.svg?react"
-import { Sketch } from '@uiw/react-color';
 import ItemInfoView from '../components/ItemInfoView.jsx';
 import { toast } from 'react-toastify';
 
@@ -28,11 +27,7 @@ const TodoList = () => {
     const [incompleteExpanded, setIncompleteExpanded] = useState(true);
     const [overdueExpanded, setOverdueExpanded] = useState(true);  
 
-    const [selectedBackgroundColor, setSelectedBackgroundColor] = useState("#61BD92");
-    const backGroundColors = ["#61BD92", "#C490D1", "#F0B67F", "#E54B4B", "#227C9D"];
-    const [showColorPicker, setShowColorPicker] = useState(false);
     const addTodoItem = useTodoStore((state) => state.createTodoItem);
-    const pickerRef = useRef(null); 
     const [createInputValue, setCreateInputValue] = useState("");
 
 
@@ -46,20 +41,6 @@ const TodoList = () => {
         }
     }, [activeTodoItem]);
 
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-        
-        if (showColorPicker && pickerRef.current && !pickerRef.current.contains(event.target)) {
-            setShowColorPicker(false);
-        }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-        };
-
-    }, [showColorPicker]);
 
     const notifySuccess = () => toast("Item added", { type: "success", position: "bottom-center", autoClose: 2000 });
     const notifyError = () => toast("Failed to add item", { type: "error", position: "bottom-center", autoClose: 2000 });
@@ -69,7 +50,6 @@ const TodoList = () => {
         const item = {
             description: "",
             title: title,
-            color: selectedBackgroundColor,
             userId: activeUser.id,
             id: 0,
             isComplete: false,
@@ -196,22 +176,14 @@ const TodoList = () => {
                                 }}}/>
                             <div className="relative flex items-center">
                                         
-                                <div className={`w-8 h-8 rounded-sm cursor-pointer`} style={{backgroundColor: selectedBackgroundColor}} onClick={() => setShowColorPicker(!showColorPicker)}/>
-                                {
-                                    showColorPicker &&
-                                    <div className="absolute right-10 top-10 z-50 hidden lg:block" ref={pickerRef}>
-                                        <Sketch
-                                        color={selectedBackgroundColor}
-                                        presetColors={backGroundColors}
-                                        disableAlpha={true}
-                                        onChange={(color) => {
-                                            setSelectedBackgroundColor(color.hex);
-                                        }}/>
-                                    </div>
-                                }
-
+                                <button className={`rounded-sm cursor-pointer bg-main-green text-white p-2 font-medium`} onClick={() => {
+                                    OnAddSubmit(createInputValue);
+                                    setCreateInputValue("");
+                                }}> Create </button>
+                               
                             </div>
                         </div>
+
                         <div className='flex flex-col overflow-y-auto gap-2'>
                             {/* Overdue */}
                             <>
@@ -229,7 +201,7 @@ const TodoList = () => {
                                                 rounded-xs
                                             ">
                                             <p className="text-lg font-medium text-red-500">
-                                                Overdue
+                                                Overdue ({overdueItems.length})
                                             </p>
 
                                             <div className="flex-1" />
@@ -249,7 +221,7 @@ const TodoList = () => {
                                 overdueExpanded && overdueItems.length > 0 && (
                                     <div className="flex flex-col gap-2">
                                         {overdueItems.map((item, index) => (
-                                        <ListItem key={index} item={item} />
+                                        <ListItem key={index} item={item} isOverdue={true} />
                                         ))}
                                     </div>
                                     )
@@ -272,7 +244,7 @@ const TodoList = () => {
                                                 rounded-xs
                                             ">
                                             <p className="text-lg font-medium text-main-green">
-                                                To do
+                                                To do ({todoItems.length})
                                             </p>
 
                                             <div className="flex-1" />
@@ -292,7 +264,7 @@ const TodoList = () => {
                                     {
                                         todoItems.length >= 0 && 
                                         todoItems.map((item, index) => (
-                                            <ListItem key={index} item={item}/>
+                                            <ListItem key={index} item={item} isOverdue={false} />
                                         ))
                                     }   
                                             
@@ -317,7 +289,7 @@ const TodoList = () => {
                                                 rounded-xs
                                             ">
                                             <p className="text-lg font-medium text-main-green">
-                                                Completed
+                                                Completed ({filteredListItems.filter(item => item.isComplete === true).length})
                                             </p>
 
                                             <div className="flex-1" />
@@ -338,7 +310,7 @@ const TodoList = () => {
                                 {
                                     filteredListItems.length >= 0 &&
                                     filteredListItems.filter(item => item.isComplete).map((item, index) => (
-                                        <ListItem key={index} item={item}/>
+                                        <ListItem key={index} item={item} isOverdue={false}/>
                                     ))
                                 }   
                                     
