@@ -21,3 +21,31 @@
 .Toastify__progress-bar--success {
   background: var(--color-main-green);
 }
+
+
+/* styling to hide and position date and time inputs in the item info sidebar */
+.custom-date-input::-webkit-calendar-picker-indicator {
+  width: auto;          /* keep original size just in case */
+  height: auto;
+  opacity: 0;           /* invisible */
+  pointer-events: none; /* don't block clicks */
+}
+
+.custom-date-input {
+  padding-right: 0;
+  text-align: right;
+  position: absolute;   /* remove from flow */
+  right: -3px;       /* move it off-screen */
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+  opacity: 0;                 
+  position: absolute;        
+  right: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  margin-left: -25px;
+  pointer-events: none;       
+}
