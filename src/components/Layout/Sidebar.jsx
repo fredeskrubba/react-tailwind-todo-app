@@ -127,7 +127,8 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
       color: '#61BD92',
     });
 
-    setActiveItem(newNote.id);
+    changeActiveNote(newNote)
+
   } catch (err) {
     console.error('Failed to create note:', err);
   }
