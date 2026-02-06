@@ -1,4 +1,4 @@
-import LoadingSvg from "../assets/icons/Loading-icon.svg?react";
+import LoadingSvg from "../assets/icons/loading-icon.svg?react";
 
 const LoadingIcon = () => {
   return (

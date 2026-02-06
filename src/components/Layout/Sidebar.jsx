@@ -143,6 +143,7 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
     } finally {
         setShowWarningModal(false);
         handleContextMenu();
+        changeActiveNote(null)
     }
   }
 
