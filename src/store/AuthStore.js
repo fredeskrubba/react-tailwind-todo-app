@@ -17,6 +17,19 @@ const useAuthStore = create((set) => ({
         const result = await response.json(); 
         set({ userToken: result.token, activeUser: result.user});
     },
+    loginGuest: async () => {
+        const response = await fetch('https://localhost:7203/api/auth/guest', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({})
+        });
+        const result = await response.json(); 
+        set({ userToken: result.token, activeUser: result.user});
+    },
+    
     logout: () => set({ userToken: null, activeUser: null })
 }));
 

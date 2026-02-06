@@ -9,6 +9,8 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const login = useAuthStore((state) => state.login);
+  const loginGuest = useAuthStore((state) => state.loginGuest);
+
   const [emailError, setEmailError] = useState("");
 
 
@@ -49,6 +51,10 @@ const LoginPage = () => {
       navigate("/TodoList");
     }
   }, [userToken]);
+
+  const onGuestLogin = async () => {
+    await loginGuest();
+  }
 
   return (
     <form className="min-h-screen flex items-center justify-center bg-gray-100" onSubmit={(e) => {
@@ -102,6 +108,8 @@ const LoginPage = () => {
         </div>
         <div className="flex flex-col gap-4">
           <button className="w-full bg-main-green text-white py-2 rounded-md cursor-pointer transition hover:bg-main-green-dark" type="submit"> Login </button>
+
+          <button className="w-full bg-main-green text-white py-2 rounded-md cursor-pointer transition hover:bg-main-green-dark" type="button" onClick={()=> {onGuestLogin()}}> Continue as guest </button>
         </div>
       </div>
     </form>
