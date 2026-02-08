@@ -4,24 +4,21 @@ import useNoteStore from '../store/NoteStore'
 import { useEffect, useState } from 'react';
 import { TextStyle } from '@tiptap/extension-text-style'
 import Color from '@tiptap/extension-color'
+import BoldIcon from "../assets/icons/bold-icon.svg?react"
+import ItalicIcon from "../assets/icons/italic-icon.svg?react"
+import StrikethroughIcon from "../assets/icons/strikethrough-icon.svg?react"
+
+
 
 const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
 
     const activeNote = useNoteStore(state => state.activeNote);
     const activeDate = useNoteStore(state => state.activeDate);
     const [showColorPicker, setShowColorPicker] = useState(false);
-    const toolbarButton = () =>
-  `
-    px-3 py-1.5
-    rounded-xs
-    text-sm font-medium
-    transition-colors
-    focus:outline-none
-    hover:bg-main-green/10
-    cursor-pointer
-    hover:text-main-green
-  `;
-    
+    const [isBoldToggled, setIsBoldToggled] = useState(false);
+    const [isItalicToggled, setIsItalicToggled] = useState(false);
+    const [isStrikethroughToggled, setIsStrikethroughToggled] = useState(false);
+
     useEffect(() => {
 
         // guards so cursor doesnt jump
@@ -38,6 +35,13 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
         setActiveTitle(activeNote.title || '');
     }, [activeNote?.id]);
 
+    
+    function updateToolbar(editor) {
+
+        setIsBoldToggled(editor.isActive('bold'))
+        setIsItalicToggled(editor.isActive('italic'))
+        setIsStrikethroughToggled(editor.isActive('strike'))
+    }
 
     const editor = useEditor({
         editorProps : {
@@ -50,7 +54,10 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
         onUpdate: ({ editor }) => {
             const html = editor.getHTML();
             setActiveContent(html);
-        }
+        },
+        onSelectionUpdate({ editor }) {
+            updateToolbar(editor)
+        },
     })
 
     return (
@@ -60,33 +67,33 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
                     <div className="mx-auto flex items-center gap-1 px-4 py-2">
                         <button
                         type="button"
-                        className={toolbarButton()}
+                        className={` px-1.5 py-1.5 rounded-xs text-sm font-medium transition-colors focus:outline-none hover:bg-neutral-200 cursor-pointer ${isBoldToggled ? "bg-main-green" : ""}`}
                         onClick={() => editor?.chain().focus().toggleBold().run()}
                         >
-                        Bold
+                            <BoldIcon className={`w-4 h-4 ${isBoldToggled ? "fill-white" : "fill-main-green"}`}/>
                         </button>
 
                         <button
-                        type="button"
-                        className={toolbarButton()}
-                        onClick={() => editor?.chain().focus().toggleItalic().run()}
-                        >
-                        Italic
+                            type="button"
+                            className={` px-1.5 py-1.5 rounded-xs text-sm font-medium transition-colors focus:outline-none hover:bg-neutral-200 cursor-pointer ${isItalicToggled ? "bg-main-green" : ""}`}
+                            onClick={() => editor?.chain().focus().toggleItalic().run()}
+                            >
+                            <ItalicIcon className={`w-4 h-4 ${isItalicToggled ? "stroke-white" : "stroke-main-green"}`} />
                         </button>
 
                         <button
-                        type="button"
-                        className={toolbarButton()}
-                        onClick={() => editor?.chain().focus().toggleStrike().run()}
-                        >
-                        Strike
+                            type="button"
+                            className={`px-1.5 py-1.5 rounded-xs text-sm font-medium transition-colors focus:outline-none hover:bg-neutral-200 cursor-pointer ${isStrikethroughToggled ? "bg-main-green" : ""}`}
+                            onClick={() => editor?.chain().focus().toggleStrike().run()}
+                            >
+                            <StrikethroughIcon className={`w-4 h-4 ${isStrikethroughToggled ? "stroke-white" : "stroke-main-green"}`} />
                         </button>
 
                         <div className="mx-2 h-5 w-px bg-main-green" />
 
                         <button
                         type="button"
-                        className={toolbarButton()}
+                        className="px-1.5 py-1.5 rounded-xs text-sm font-medium transition-colors focus:outline-none hover:bg-neutral-200 cursor-pointer"
                         onClick={() => editor?.chain().focus().toggleBulletList().run()}
                         >
                         • List
@@ -94,7 +101,7 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
 
                         <button
                         type="button"
-                        className={toolbarButton()}
+                        className="px-1.5 py-1.5 rounded-xs text-sm font-medium transition-colors focus:outline-none hover:bg-neutral-200 cursor-pointer"
                         onClick={() => editor?.chain().focus().toggleOrderedList().run()}
                         >
                         1. List
@@ -107,7 +114,7 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
                             <button
                                 type="button"
                                 className={`
-                                ${toolbarButton()}
+                                px-1.5 py-1.5 rounded-xs text-sm font-medium transition-colors focus:outline-none hover:bg-neutral-200 cursor-pointer
                                 rounded-r-none
                                 flex items-center justify-center
                                 px-2
@@ -124,7 +131,7 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
                             <button
                                 type="button"
                                 className={`
-                                    ${toolbarButton()}
+                                    px-1.5 py-1.5 rounded-xs text-sm font-medium transition-colors focus:outline-none hover:bg-neutral-200 cursor-pointer
                                     rounded-l-none
                                     px-1
                                     flex items-center justify-center
