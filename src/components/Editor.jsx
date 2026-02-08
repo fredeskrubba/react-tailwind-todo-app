@@ -7,7 +7,8 @@ import Color from '@tiptap/extension-color'
 import BoldIcon from "../assets/icons/bold-icon.svg?react"
 import ItalicIcon from "../assets/icons/italic-icon.svg?react"
 import StrikethroughIcon from "../assets/icons/strikethrough-icon.svg?react"
-
+import UlIcon from "../assets/icons/ul-icon.svg?react"
+import OlIcon from "../assets/icons/ol-icon.svg?react"
 
 
 const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
@@ -18,6 +19,8 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
     const [isBoldToggled, setIsBoldToggled] = useState(false);
     const [isItalicToggled, setIsItalicToggled] = useState(false);
     const [isStrikethroughToggled, setIsStrikethroughToggled] = useState(false);
+    const [currentTextColor, setCurrentTextColor] = useState("#000");
+
 
     useEffect(() => {
 
@@ -41,6 +44,9 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
         setIsBoldToggled(editor.isActive('bold'))
         setIsItalicToggled(editor.isActive('italic'))
         setIsStrikethroughToggled(editor.isActive('strike'))
+
+        const { color } = editor.getAttributes('textStyle')
+        setCurrentTextColor(color || "#000")
     }
 
     const editor = useEditor({
@@ -67,44 +73,45 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
                     <div className="mx-auto flex items-center gap-1 px-4 py-2">
                         <button
                         type="button"
-                        className={` px-1.5 py-1.5 rounded-xs text-sm font-medium transition-colors focus:outline-none hover:bg-neutral-200 cursor-pointer ${isBoldToggled ? "bg-main-green" : ""}`}
+                        className={` px-1.5 py-1.5 rounded-xs text-sm font-medium transition-colors focus:outline-none hover:bg-main-green/30 cursor-pointer ${isBoldToggled ? "bg-main-green" : ""}`}
                         onClick={() => editor?.chain().focus().toggleBold().run()}
                         >
-                            <BoldIcon className={`w-4 h-4 ${isBoldToggled ? "fill-white" : "fill-main-green"}`}/>
+                            <BoldIcon className={`w-4 h-4 ${isBoldToggled ? "fill-white" : "fill-black"}`}/>
                         </button>
 
                         <button
                             type="button"
-                            className={` px-1.5 py-1.5 rounded-xs text-sm font-medium transition-colors focus:outline-none hover:bg-neutral-200 cursor-pointer ${isItalicToggled ? "bg-main-green" : ""}`}
+                            className={` px-1.5 py-1.5 rounded-xs text-sm font-medium transition-colors focus:outline-none hover:bg-main-green/30 cursor-pointer ${isItalicToggled ? "bg-main-green" : ""}`}
                             onClick={() => editor?.chain().focus().toggleItalic().run()}
                             >
-                            <ItalicIcon className={`w-4 h-4 ${isItalicToggled ? "stroke-white" : "stroke-main-green"}`} />
+                            <ItalicIcon className={`w-4 h-4 ${isItalicToggled ? "stroke-white" : "stroke-black"}`} />
                         </button>
 
                         <button
                             type="button"
-                            className={`px-1.5 py-1.5 rounded-xs text-sm font-medium transition-colors focus:outline-none hover:bg-neutral-200 cursor-pointer ${isStrikethroughToggled ? "bg-main-green" : ""}`}
+                            className={`px-1.5 py-1.5 rounded-xs text-sm font-medium transition-colors focus:outline-none hover:bg-main-green/30 cursor-pointer ${isStrikethroughToggled ? "bg-main-green" : ""}`}
                             onClick={() => editor?.chain().focus().toggleStrike().run()}
                             >
-                            <StrikethroughIcon className={`w-4 h-4 ${isStrikethroughToggled ? "stroke-white" : "stroke-main-green"}`} />
+                            <StrikethroughIcon className={`w-4 h-4 ${isStrikethroughToggled ? "stroke-white" : "stroke-black"}`} />
                         </button>
 
                         <div className="mx-2 h-5 w-px bg-main-green" />
 
                         <button
                         type="button"
-                        className="px-1.5 py-1.5 rounded-xs text-sm font-medium transition-colors focus:outline-none hover:bg-neutral-200 cursor-pointer"
+                        className="px-1.5 py-1.5 rounded-xs text-sm font-medium transition-colors focus:outline-none hover:bg-main-green/30 cursor-pointer"
                         onClick={() => editor?.chain().focus().toggleBulletList().run()}
                         >
-                        • List
+                            <UlIcon className="w-5 h-5" />
+
                         </button>
 
                         <button
                         type="button"
-                        className="px-1.5 py-1.5 rounded-xs text-sm font-medium transition-colors focus:outline-none hover:bg-neutral-200 cursor-pointer"
+                        className="px-1.5 py-1.5 rounded-xs text-sm font-medium transition-colors focus:outline-none hover:bg-main-green/30 cursor-pointer"
                         onClick={() => editor?.chain().focus().toggleOrderedList().run()}
                         >
-                        1. List
+                            <OlIcon className="w-5 h-5" />
                         </button>
 
                         <div className="mx-2 h-5 w-px bg-main-green" />
@@ -114,7 +121,7 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
                             <button
                                 type="button"
                                 className={`
-                                px-1.5 py-1.5 rounded-xs text-sm font-medium transition-colors focus:outline-none hover:bg-neutral-200 cursor-pointer
+                                px-1.5 py-1.5 rounded-xs text-sm font-medium transition-colors focus:outline-none hover:bg-main-green/30 cursor-pointer
                                 rounded-r-none
                                 flex items-center justify-center
                                 px-2
@@ -125,13 +132,13 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
                             >
                                 <span className="relative inline-block font-semibold">
                                 A
-                                <span className="absolute left-0 right-0 -bottom-0.5 h-0.5 bg-main-green" />
+                                <span className="absolute left-0 right-0 -bottom-0.5 h-0.5" style={{backgroundColor: currentTextColor}}/>
                                 </span>
                             </button>
                             <button
                                 type="button"
                                 className={`
-                                    px-1.5 py-1.5 rounded-xs text-sm font-medium transition-colors focus:outline-none hover:bg-neutral-200 cursor-pointer
+                                    px-1.5 py-1.5 rounded-xs text-sm font-medium transition-colors focus:outline-none hover:bg-main-green/30 cursor-pointer
                                     rounded-l-none
                                     px-1
                                     flex items-center justify-center
