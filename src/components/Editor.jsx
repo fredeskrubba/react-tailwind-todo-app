@@ -2,7 +2,7 @@ import { useEditor, EditorContent, EditorContext } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import useNoteStore from '../store/NoteStore'
 import { useEffect, useState } from 'react';
-import { TextStyle } from '@tiptap/extension-text-style'
+import { TextStyle, FontSize } from '@tiptap/extension-text-style'
 import Color from '@tiptap/extension-color'
 import BoldIcon from "../assets/icons/bold-icon.svg?react"
 import ItalicIcon from "../assets/icons/italic-icon.svg?react"
@@ -20,7 +20,17 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
     const [isItalicToggled, setIsItalicToggled] = useState(false);
     const [isStrikethroughToggled, setIsStrikethroughToggled] = useState(false);
     const [currentTextColor, setCurrentTextColor] = useState("#000");
-
+    const [showAvailableSizes, setShowAvailableSizes] = useState(false);
+    const [currentTextSize, setCurrentTextSize] = useState("12px");
+    const availableSizes = [
+        "12px",
+        "14px",
+        "16px",
+        "18px",
+        "20px",
+        "22px",
+        "24px"
+    ];
 
     useEffect(() => {
 
@@ -55,7 +65,7 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
                 class: 'h-full p-2 focus:outline-none',
             },
         },
-        extensions: [StarterKit, TextStyle, Color],
+        extensions: [StarterKit, TextStyle, Color, FontSize],
         content: activeNote?.htmlContent || '<p>Get Started writing!</p>',
         onUpdate: ({ editor }) => {
             const html = editor.getHTML();
@@ -117,37 +127,40 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
                         <div className="mx-2 h-5 w-px bg-main-green" />
 
                         {/* text color */}
-                        <div className="relative inline-flex">
-                            <button
-                                type="button"
-                                className={`
-                                px-1.5 py-1.5 rounded-xs text-sm font-medium transition-colors focus:outline-none hover:bg-main-green/30 cursor-pointer
-                                rounded-r-none
-                                flex items-center justify-center
-                                px-2
-                                `}
-                                onClick={() => {
-                                editor.chain().focus().unsetColor().run();
-                                }}
-                            >
-                                <span className="relative inline-block font-semibold">
-                                A
-                                <span className="absolute left-0 right-0 -bottom-0.5 h-0.5" style={{backgroundColor: currentTextColor}}/>
-                                </span>
-                            </button>
-                            <button
-                                type="button"
-                                className={`
+                        <div className="relative">
+                            <div className='flex border-1 border-main-green'>
+                                <button
+                                    type="button"
+                                    className={`
                                     px-1.5 py-1.5 rounded-xs text-sm font-medium transition-colors focus:outline-none hover:bg-main-green/30 cursor-pointer
-                                    rounded-l-none
-                                    px-1
+                                    rounded-r-none
                                     flex items-center justify-center
-                                    w-6 h-full
-                                `}
-                                onClick={() => setShowColorPicker(v => !v)}
-                            >
-                                ▾
-                            </button> 
+                                    px-2
+                                    `}
+                                    onClick={() => {
+                                    editor.chain().focus().unsetColor().run();
+                                    }}
+                                >
+                                    <span className="relative inline-block font-semibold">
+                                    A
+                                    <span className="absolute left-0 right-0 -bottom-0.5 h-0.5" style={{backgroundColor: currentTextColor}}/>
+                                    </span>
+                                </button>
+                                <button
+                                    type="button"
+                                    className={`
+                                        px-1.5 py-1.5 rounded-xs text-sm font-medium transition-colors focus:outline-none hover:bg-main-green/30 cursor-pointer
+                                        rounded-l-none
+                                        px-1
+                                        flex items-center justify-center
+                                        w-6 h-full
+                                    `}
+                                    onClick={() => setShowColorPicker(v => !v)}
+                                >
+                                    ▾
+                                </button> 
+
+                            </div>
                             {showColorPicker && (
                                 <div
                                     className="
@@ -190,8 +203,37 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
                             )}
                         </div>
 
-                       
+                        <div class="relative inline-block w-28">
 
+                        <input
+                            type="text"
+                            placeholder="Text size"
+                            value={currentTextSize}
+                            class="w-full rounded-md border border-main-green bg-white px-3 py-2 text-sm font-medium text-main-green placeholder-main-green/70 focus:outline-none"
+                            onClick={() => setShowAvailableSizes(true)}
+                            
+            
+                        />
+
+                        {
+                            showAvailableSizes == true &&
+                            <div className="absolute z-10 mt-1 w-full rounded-md border border-main-green bg-white shadow-lg">
+                                {
+                                    availableSizes.map((size)=> {
+                                       return <div className="cursor-pointer px-3 py-2 text-sm text-main-green hover:bg-main-green/10" onClick={() => {
+                                            editor.chain().focus().setFontSize(size).run()
+                                            setCurrentTextSize(size)
+                                            setShowAvailableSizes(false)
+                                        }
+                                        }>
+                                           {size}
+                                        </div>
+
+                                    })
+                                }
+                            </div>
+                        }
+                        </div>
                     </div>
                 </div>
             </div>
