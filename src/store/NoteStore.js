@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const useNoteStore = create((set) => ({
     notes: [],
@@ -7,12 +8,12 @@ const useNoteStore = create((set) => ({
     setNotes: (notes) => set({ notes: notes }),
     setActiveNote: (note) => set({ activeNote: note, activeDate: note?.updatedAt || null }),
     fetchNotes: async (userId) => {
-        const response = await fetch(`https://localhost:7203/api/note/${userId}`, { method: 'GET' });
+        const response = await fetch(`${API_BASE_URL}/api/note/${userId}`, { method: 'GET' });
         const data = await response.json(); 
         set({ notes: data });
     },
     createNote: async (note) => {
-        const response = await fetch('https://localhost:7203/api/note', {
+        const response = await fetch(`${API_BASE_URL}/api/note`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -25,13 +26,13 @@ const useNoteStore = create((set) => ({
         return createdNote;
     },
     deleteNote: async (id) => {
-        await fetch(`https://localhost:7203/api/note/${id}`, { method: 'DELETE' });
+        await fetch(`${API_BASE_URL}/api/note/${id}`, { method: 'DELETE' });
         set((state) => ({
             notes: state.notes.filter(n => n.id !== id),
         }));
     },
     updateNote: async (note) => {
-        const response = await fetch(`https://localhost:7203/api/note/${note.id}`, {
+        const response = await fetch(`${API_BASE_URL}/api/note/${note.id}`, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',

@@ -209,7 +209,7 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
                             type="text"
                             placeholder="Text size"
                             value={currentTextSize}
-                            class="w-full rounded-md border border-main-green bg-white px-3 py-2 text-sm font-medium text-main-green placeholder-main-green/70 focus:outline-none"
+                            class="w-full rounded-xs border border-main-green bg-white px-3 py-1.5 text-sm font-medium placeholder-main-green/70 focus:outline-none"
                             onClick={() => setShowAvailableSizes(true)}
                             
             
