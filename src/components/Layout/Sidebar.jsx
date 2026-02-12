@@ -83,12 +83,14 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
       setDefaultMenuItems(defaultItems)
       setUserMenuItems(userItems)
   
-      if(userMenuItems.length > 0){
-  
+      if(defaultMenuItems.length > 0){
         setActiveItem(defaultMenuItems[0].id)
       }
     } else if (pageMode == 'notes'){
       setUserMenuItems(userNotes);
+      if(userMenuItems.length > 0){
+        setActiveItem(userMenuItems[0].id)
+      }
 
       if(userNotes.length > 0){
           if(!noteStore.activeNote){

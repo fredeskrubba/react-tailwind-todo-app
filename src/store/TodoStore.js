@@ -66,6 +66,17 @@ const useTodoStore = create((set) => ({
             categories: state.categories.filter(c => c.id !== id),
         }));
     },
+
+    createCategory: async(item) => {
+        const response = await fetch(`${API_BASE_URL}/api/category`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(item)})
+        return response;
+    }
 }))
 
 export default useTodoStore;

@@ -3,6 +3,7 @@ import { Sketch, Wheel, ShadeSlider } from '@uiw/react-color';
 import { hsvaToHex } from '@uiw/color-convert';
 import { use, useState } from "react";
 import useAuthStore from "../../store/AuthStore";
+import useTodoStore from "../../store/TodoStore";
 import { toast } from 'react-toastify';
 
 const AddCategoryModal = ({ onClose, onSubmit }) => {
@@ -18,6 +19,7 @@ const AddCategoryModal = ({ onClose, onSubmit }) => {
     const [error, setError] = useState({});
 
     const activeUser = useAuthStore((state) => state.activeUser);
+    const createCategory = useTodoStore((state) => state.createCategory)
 
     const notifySuccess = () => toast("Category created successfully", { type: "success", position: "bottom-center", autoClose: 2000 });
     const notifyError = () => toast("Failed to create category", { type: "error", position: "bottom-center", autoClose: 2000 });
@@ -36,16 +38,10 @@ const AddCategoryModal = ({ onClose, onSubmit }) => {
         }
 
         try {
-            await fetch('https://localhost:7203/api/category', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(item)}).then(res => res.json()).then(createdItem => {
+            await createCategory(item).then(res => res.json()).then(createdItem => {
                     onSubmit(createdItem);
                     onClose();
-                });
+            });
             notifySuccess(); 
         } catch (err) {
             notifyError();
