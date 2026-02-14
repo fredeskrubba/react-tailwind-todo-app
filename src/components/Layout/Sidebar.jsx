@@ -18,7 +18,7 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
   const [isCreateCategoryModalOpen, setCreateCategoryModalOpen] = useState(false);
   const [isHovering, setIsHovering] = useState(null);
   const activeUser = useAuthStore(state => state.activeUser);
-  
+
 
   const [userMenuItems, setUserMenuItems] = useState([]);
   const [defaultMenuItems, setDefaultMenuItems] = useState([]);
@@ -33,7 +33,7 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
   const setIsLoading = useMainStore((state) => state.setIsLoading);
   const isLoading = useMainStore((state) => state.isLoading);
   const setActiveTodoItem = useTodoStore((state) => state.setActiveTodoItem);
-
+  const setActiveCategory = useTodoStore((state)=> state.setActiveCategory)
 
   const notifyDeletionSuccess = () => toast("Category deleted", { type: "success", position: "bottom-center", autoClose: 2000 });
   const notifyNoteDeletionSuccess = () => toast("Note deleted", { type: "success", position: "bottom-center", autoClose: 2000 });
@@ -88,9 +88,9 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
       }
     } else if (pageMode == 'notes'){
       setUserMenuItems(userNotes);
-      if(userMenuItems.length > 0){
-        setActiveItem(userMenuItems[0].id)
-      }
+      // if(userMenuItems.length > 0){
+      //   // setActiveItem(userMenuItems[0].id)
+      // }
 
       if(userNotes.length > 0){
           if(!noteStore.activeNote){
@@ -106,6 +106,8 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
 
   const AddCategory = (category) => {
     setUserMenuItems(prev => [...prev, category]);
+    setActiveCategory({name: category.name, id: category.id, color: category.color, userId: activeUser.id});
+    setActiveItem(category.id)
   };
 
   const deleteCategory = async (id) => {
@@ -116,6 +118,7 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
         notifyDeletionError();
     } finally {
         setShowWarningModal(false);
+        setActiveItem(defaultMenuItems[0].id)
         handleContextMenu();
     }
   }
@@ -152,13 +155,12 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
   const changeActiveCategory = (category) => {
     setActiveItem(category.id);
     setActiveTodoItem(null);
-    todoStore.setActiveCategory({name: category.name, id: category.id, color: category.color, userId: 1});
+    setActiveCategory({name: category.name, id: category.id, color: category.color, userId: activeUser.id});
   };
 
   const changeActiveNote = (note) => {
 
     setActiveItem(note.id);
-    
     noteStore.setActiveNote(note);
   }
 

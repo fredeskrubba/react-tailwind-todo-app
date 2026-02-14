@@ -243,6 +243,7 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
                             
                             <div
                                 contentEditable
+                                suppressContentEditableWarning
                                 className="flex-1 flex items-center whitespace-nowrap max-w-full h-full bg-white px-3 text-sm font-medium text-main-green placeholder-main-green/70 focus:outline-none overflow-hidden " 
                                 onKeyDown={(e)=> {
                                     const value = e.target.innerText;
