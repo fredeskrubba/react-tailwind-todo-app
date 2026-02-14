@@ -282,7 +282,7 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
             </div>
             <div className='p-2 flex flex-col gap-3'>
                 <input type="text" placeholder='No title yet' className='w-full text-2xl focus:outline-none' value={activeTitle} onChange={(e) => setActiveTitle(e.target.value)}/>
-                <span className='flex gap-1 border-b-1 border-main-green pb-1 md:w-35'>
+                <span className='flex gap-1 border-b-1 border-main-green pb-1 md:w-40'>
                     <p className='text-sm text-neutral-400'>{activeDate ? new Date(activeDate).toLocaleDateString([], {year: "numeric", month: "long", day: "numeric"}) : ''}</p>
                     <p className='text-sm text-neutral-400'>{activeDate ? new Date(activeDate).toLocaleTimeString([], {hour: "2-digit", minute: "2-digit", hour12: false, }) : ''}</p>
                 </span>
