@@ -49,3 +49,8 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   margin-left: -25px;
   pointer-events: none;       
 }
+
+.previous-text-highlight {
+  background-color: var(--color-main-green-light);
+  color: white;
+}

@@ -1,7 +1,7 @@
 import { useEditor, EditorContent, EditorContext } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import useNoteStore from '../store/NoteStore'
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { TextStyle, FontSize } from '@tiptap/extension-text-style'
 import Color from '@tiptap/extension-color'
 import BoldIcon from "../assets/icons/bold-icon.svg?react"
@@ -9,7 +9,7 @@ import ItalicIcon from "../assets/icons/italic-icon.svg?react"
 import StrikethroughIcon from "../assets/icons/strikethrough-icon.svg?react"
 import UlIcon from "../assets/icons/ul-icon.svg?react"
 import OlIcon from "../assets/icons/ol-icon.svg?react"
-
+import ArrowIcon from "../assets/icons/expand-icon.svg?react"
 
 const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
 
@@ -20,17 +20,9 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
     const [isItalicToggled, setIsItalicToggled] = useState(false);
     const [isStrikethroughToggled, setIsStrikethroughToggled] = useState(false);
     const [currentTextColor, setCurrentTextColor] = useState("#000");
-    const [showAvailableSizes, setShowAvailableSizes] = useState(false);
-    const [currentTextSize, setCurrentTextSize] = useState("12px");
-    const availableSizes = [
-        "12px",
-        "14px",
-        "16px",
-        "18px",
-        "20px",
-        "22px",
-        "24px"
-    ];
+    const [currentTextSize, setCurrentTextSize] = useState("16");
+
+    const savedSelectionRef = useRef<Range | null>(null);
 
     useEffect(() => {
 
@@ -48,7 +40,7 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
         setActiveTitle(activeNote.title || '');
     }, [activeNote?.id]);
 
-    
+
     function updateToolbar(editor) {
 
         setIsBoldToggled(editor.isActive('bold'))
@@ -75,6 +67,50 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
             updateToolbar(editor)
         },
     })
+    
+    const updateCurrentSize = () => {
+          const { fontSize } = editor.getAttributes("textStyle");
+          setCurrentTextSize(fontSize ? parseInt(fontSize) : 16);
+    };
+
+    useEffect(() => {
+        if (!editor) return;
+
+        updateCurrentSize();
+
+       
+        editor.on("selectionUpdate", updateCurrentSize);
+        editor.on("transaction", updateCurrentSize);
+
+        return () => {
+            editor.off("selectionUpdate", updateCurrentSize);
+            editor.off("transaction", updateCurrentSize);
+        };
+
+    }, [editor]);
+
+    const increaseFontSize = () => {
+        editor.chain().focus().setFontSize(`${currentTextSize + 1}px`).run()
+        setCurrentTextSize(prev => prev + 1);
+    }
+
+    const decreaseFontSize = () => {
+        if(currentTextSize <= 1){
+            editor.chain().focus().setFontSize(`1px`).run()
+            setCurrentTextSize(1)
+
+        } else {
+            editor.chain().focus().setFontSize(`${currentTextSize - 1}px`).run()
+            setCurrentTextSize(prev => prev - 1);
+        }
+    }
+
+    const highlightPreviousText = () => {
+        const { from, to } = editor.state.selection;
+        savedSelectionRef.current = editor.state.selection; // save range
+        // add a temporary mark or decoration if needed
+        editor.chain().focus().setTextSelection({ from, to }).run();
+    };
 
     return (
         <div className="h-full relative">
@@ -203,36 +239,43 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
                             )}
                         </div>
 
-                        <div class="relative inline-block w-28">
-
-                        <input
-                            type="text"
-                            placeholder="Text size"
-                            value={currentTextSize}
-                            class="w-full rounded-xs border border-main-green bg-white px-3 py-1.5 text-sm font-medium placeholder-main-green/70 focus:outline-none"
-                            onClick={() => setShowAvailableSizes(true)}
+                        <div className="relative flex w-22 h-8.5 border border-main-green items-center" >
                             
-            
-                        />
+                            <div
+                                contentEditable
+                                className="flex-1 flex items-center whitespace-nowrap max-w-full h-full bg-white px-3 text-sm font-medium text-main-green placeholder-main-green/70 focus:outline-none overflow-hidden " 
+                                onKeyDown={(e)=> {
+                                    const value = e.target.innerText;
+                                    if(e.key === "Enter"){
+                                        editor.chain().focus().setFontSize(`${value}px`).run()
+                                    }
+                                }}  
+                                onFocus={()=> {
+                                    if (!savedSelectionRef.current) return;
 
-                        {
-                            showAvailableSizes == true &&
-                            <div className="absolute z-10 mt-1 w-full rounded-md border border-main-green bg-white shadow-lg">
-                                {
-                                    availableSizes.map((size)=> {
-                                       return <div className="cursor-pointer px-3 py-2 text-sm text-main-green hover:bg-main-green/10" onClick={() => {
-                                            editor.chain().focus().setFontSize(size).run()
-                                            setCurrentTextSize(size)
-                                            setShowAvailableSizes(false)
-                                        }
-                                        }>
-                                           {size}
-                                        </div>
-
-                                    })
-                                }
+                                    editor.chain().focus().setTextSelection(savedSelectionRef.current).unsetMark("textStyle").run();
+                                    savedSelectionRef.current = null;
+                                }}>
+                                {currentTextSize}
                             </div>
-                        }
+                            <div className='flex flex-col border-l-1 border-main-green'>
+                                <button onClick={()=> {
+                                    increaseFontSize()
+                                }}
+                                className='cursor-pointer hover:bg-main-green/70 w-full h-full p-0.5'
+                                >
+                                    <ArrowIcon className="w-3 h-3 rotate-180" />
+                                </button>
+                                <button
+                                    className='cursor-pointer hover:bg-main-green/70 w-full h-full p-0.5'
+                                    onClick={()=> {
+                                        decreaseFontSize()
+                                    }}
+                                >
+                                    <ArrowIcon className="w-3 h-3"/>
+                                </button>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>
