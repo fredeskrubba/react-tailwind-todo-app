@@ -75,7 +75,7 @@ const LoginPage = () => {
           </p>
 
           <ul className="space-y-3 text-base">
-            <li>• Create and manage notebooks</li>
+            <li>• Create and manage notes</li>
             <li>• Add, edit, and complete to-do items</li>
             <li>• Secure login with guest access</li>
           </ul>

@@ -56,8 +56,6 @@ const ListItem = ({item, isOverdue}) => {
 
     const removeItem = async () => {
         
-        await deleteItem(item.id);
-
         try {
             await deleteItem(item.id);
             notifyDeletionSuccess();
@@ -65,6 +63,7 @@ const ListItem = ({item, isOverdue}) => {
             notifyDeletionError();
         } finally {
             setShowWarningModal(false);
+            setActiveTodoItem(null);
         }
     }
 

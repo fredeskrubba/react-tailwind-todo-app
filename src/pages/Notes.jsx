@@ -59,16 +59,20 @@ const Notes = () => {
                 {
                     isLoading ? (
                         <LoadingIcon />
-                    ) : userNotes?.length > 0 ? (
+                    ) : activeNote ? (
+                        userNotes?.length > 0 ? (
                         <Editor
-                        setActiveContent={setActiveContent}
-                        setActiveTitle={setActiveTitle}
-                        activeTitle={activeTitle}
+                            setActiveContent={setActiveContent}
+                            setActiveTitle={setActiveTitle}
+                            activeTitle={activeTitle}
                         />
-                    ) : (
+                        ) : (
                         "No notes available. Please create a note to get started."
+                        )
+                    ) : (
+                        "Select or create a note to get started."
                     )
-                }
+                    }
              </Layout> 
         </>
      );

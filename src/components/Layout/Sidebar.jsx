@@ -88,17 +88,12 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
       }
     } else if (pageMode == 'notes'){
       setUserMenuItems(userNotes);
-      // if(userMenuItems.length > 0){
-      //   // setActiveItem(userMenuItems[0].id)
-      // }
-
-      if(userNotes.length > 0){
-          if(!noteStore.activeNote){
-            noteStore.setActiveNote(userNotes[0]);
-            setActiveItem(userNotes[0].id)
-
-          }
-        
+      if(userMenuItems.length > 0){
+        setActiveItem(userMenuItems[0].id)
+        noteStore.setActiveNote(userNotes[0]);
+      } else {
+        setActiveItem(null)
+        noteStore.setActiveNote(null);
       }
     }
   }, [categories, userNotes, pageMode ]);
@@ -148,7 +143,6 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
     } finally {
         setShowWarningModal(false);
         handleContextMenu();
-        changeActiveNote(null)
     }
   }
 
