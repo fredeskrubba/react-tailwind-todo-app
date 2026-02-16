@@ -283,6 +283,8 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
           ${isMenuOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
+
+        {/* mobile nav menu */}
         <div className="flex justify-end mb-4 border-b-2 border-main-green pb-3">
           
             <CrossIcon className="w-6 h-6 fill-main-green" onClick={() => setIsMenuOpen(false)}/>
@@ -290,41 +292,64 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
 
         </div>
 
-        <div className="flex flex-col gap-4">
-          {defaultMenuItems.map((item) => (
-                
-                  <button
-                    key={item.id}
-                    className={`text-left px-3 py-2 hover:bg-gray-100 rounded text-lg`}
-                    style={{
-                      color: activeItem === item.id ? "#fff" : isHovering === item.id ? "#fff" : "#000",
-                      backgroundColor: activeItem === item.id ? item.color : isHovering === item.id ? lightenColor(item.color, 0.3) : "#fff",      
-                      borderColor: item.color,
-                    }}
-                    onClick={() => { 
-                      changeActiveCategory(item); 
-                      setIsMenuOpen(false); 
-                    }}>
-                    {item.name}
-                  </button>   
-          ))}
+          {
+            pageMode == "todo" ? 
+            <div className="flex flex-col gap-4">
+              {defaultMenuItems.map((item) => (
+                    
+                      <button
+                        key={item.id}
+                        className={`text-left px-3 py-2 hover:bg-gray-100 rounded text-lg`}
+                        style={{
+                          color: activeItem === item.id ? "#fff" : isHovering === item.id ? "#fff" : "#000",
+                          backgroundColor: activeItem === item.id ? item.color : isHovering === item.id ? lightenColor(item.color, 0.3) : "#fff",      
+                          borderColor: item.color,
+                        }}
+                        onClick={() => { 
+                          changeActiveCategory(item); 
+                          setIsMenuOpen(false); 
+                        }}>
+                        {item.name}
+                      </button>   
+              ))}
+              
+              {userMenuItems.map((item) => (
+                <button
+                  className="text-left px-3 py-2 hover:bg-gray-100 rounded text-lg"
+                  key={item.id}
+                  style={{
+                          color: activeItem === item.id ? "#fff" : isHovering === item.id ? "#fff" : "#000",
+                          backgroundColor: activeItem === item.id ? item.color : isHovering === item.id ? lightenColor(item.color, 0.3) : "#fff",      
+                          borderColor: item.color,
+                        }}
+                  onClick={() => { 
+                    changeActiveCategory(item); 
+                    setIsMenuOpen(false); }}>
+                  {item.name}
+                </button>
+              ))}
+            </div> : 
+             <div className="flex flex-col gap-4">
+             
+              {userNotes.map((note) => (
+                <button
+                  className="text-left px-3 py-2 hover:bg-gray-100 rounded text-lg"
+                  key={note.id}
+                  style={{
+                          color: activeItem === note.id ? "#fff" : isHovering === note.id ? "#fff" : "#000",
+                          backgroundColor: activeItem === note.id ? note.color : isHovering === note.id ? lightenColor(note.color, 0.3) : "#fff",      
+                          borderColor: note.color,
+                        }}
+                  onClick={() => { 
+                    setActiveItem(note.id); 
+                    changeActiveNote(note)
+                    setIsMenuOpen(false); }}>
+                  {note.title}
+                </button>
+              ))}
+            </div> 
 
-          {userMenuItems.map((item) => (
-            <button
-              className="text-left px-3 py-2 hover:bg-gray-100 rounded text-lg"
-              key={item.id}
-              style={{
-                      color: activeItem === item.id ? "#fff" : isHovering === item.id ? "#fff" : "#000",
-                      backgroundColor: activeItem === item.id ? item.color : isHovering === item.id ? lightenColor(item.color, 0.3) : "#fff",      
-                      borderColor: item.color,
-                    }}
-              onClick={() => { 
-                changeActiveCategory(item); 
-                setIsMenuOpen(false); }}>
-              {item.name}
-            </button>
-          ))}
-        </div>
+          }
 
         <div className="sticky border-t-2 border-main-green w-full py-2 mt-auto flex justify-end items-center">
             <button type="button" onClick={onLogout} title="logout" className=" md:hidden">

@@ -105,18 +105,12 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
         }
     }
 
-    const highlightPreviousText = () => {
-        const { from, to } = editor.state.selection;
-        savedSelectionRef.current = editor.state.selection; // save range
-        // add a temporary mark or decoration if needed
-        editor.chain().focus().setTextSelection({ from, to }).run();
-    };
 
     return (
         <div className="h-full relative">
             <div className=" sticky top-0 z-10 bg-white/90 backdrop-blur border-b border-main-green">
                 <div className="sticky top-0 z-10 border-b border-main-green bg-white/90 backdrop-blur">
-                    <div className="mx-auto flex items-center gap-1 px-4 py-2">
+                    <div className="mx-auto flex items-center gap-1 px-4 py-2 overflow-x-auto overscroll-x-contain whitespace-nowrap scrollbar-hide touch-pan-x" >
                         <button
                         type="button"
                         className={` px-1.5 py-1.5 rounded-xs text-sm font-medium transition-colors focus:outline-none hover:bg-main-green/30 cursor-pointer ${isBoldToggled ? "bg-main-green" : ""}`}
