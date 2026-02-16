@@ -86,18 +86,21 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
       if(defaultMenuItems.length > 0){
         setActiveItem(defaultMenuItems[0].id)
       }
-    } else if (pageMode == 'notes'){
-      setUserMenuItems(userNotes);
-      if(userMenuItems.length > 0){
-        setActiveItem(userMenuItems[0].id)
+    } 
+  }, [categories, pageMode ]);
+
+
+  useEffect(()=> {
+
+    if(userNotes.length > 0){
+        setActiveItem(userNotes[0].id)
         noteStore.setActiveNote(userNotes[0]);
       } else {
         setActiveItem(null)
         noteStore.setActiveNote(null);
       }
-    }
-  }, [categories, userNotes, pageMode ]);
 
+  }, [userNotes.length, pageMode])
 
   const AddCategory = (category) => {
     setUserMenuItems(prev => [...prev, category]);
