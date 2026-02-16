@@ -157,7 +157,6 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
                         <div className="mx-2 h-5 w-px bg-main-green" />
 
                         {/* text color */}
-                        <div className="relative">
                             <div className='flex border-1 border-main-green'>
                                 <button
                                     type="button"
@@ -190,7 +189,7 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
                                     ▾
                                 </button> 
 
-                            </div>
+                         
                             {showColorPicker && (
                                 <div
                                     className="
