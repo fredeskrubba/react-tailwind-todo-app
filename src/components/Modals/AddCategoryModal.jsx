@@ -85,7 +85,7 @@ const AddCategoryModal = ({ onClose, onSubmit }) => {
                                         setSelectedBackgroundColor(color.hex);
                                     }}/>
                             </div>
-                            <div className="absolute right-15 bottom-0 bg-neutral-50 p-2 md:top-10 z-50 lg:hidden">
+                            <div className="absolute right-15 bottom-0 bg-neutral-50 p-2 md:top-10 z-50 lg:hidden w-fit h-fit">
                                     <Wheel color={hsva} onChange={(color) => {
                                         setHsva(color.hsva);
                                         setSelectedBackgroundColor(hsvaToHex(color.hsva))
