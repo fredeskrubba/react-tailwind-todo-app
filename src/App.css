@@ -50,7 +50,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   pointer-events: none;       
 }
 
-.previous-text-highlight {
-  background-color: var(--color-main-green-light);
-  color: white;
+.selection-preview {
+  background-color: rgba(0, 200, 100, 0.35);
 }

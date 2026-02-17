@@ -10,6 +10,9 @@ import StrikethroughIcon from "../assets/icons/strikethrough-icon.svg?react"
 import UlIcon from "../assets/icons/ul-icon.svg?react"
 import OlIcon from "../assets/icons/ol-icon.svg?react"
 import ArrowIcon from "../assets/icons/expand-icon.svg?react"
+import { SelectionPreviewExtension, selectionPreviewPluginKey } from './Tiptap/SelectionPreview';
+
+
 
 const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
 
@@ -22,7 +25,7 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
     const [currentTextColor, setCurrentTextColor] = useState("#000");
     const [currentTextSize, setCurrentTextSize] = useState("16");
 
-    const savedSelectionRef = useRef<Range | null>(null);
+    const savedSelectionRef = useRef(null);
 
     useEffect(() => {
 
@@ -57,7 +60,7 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
                 class: 'h-full p-2 focus:outline-none',
             },
         },
-        extensions: [StarterKit, TextStyle, Color, FontSize],
+        extensions: [StarterKit, TextStyle, Color, FontSize, SelectionPreviewExtension],
         content: activeNote?.htmlContent || '<p>Get Started writing!</p>',
         onUpdate: ({ editor }) => {
             const html = editor.getHTML();
@@ -105,6 +108,14 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
         }
     }
 
+    const highlightSelectedText = ()=> {
+        editor.view.dispatch(editor.state.tr.setMeta(selectionPreviewPluginKey, savedSelectionRef.current)) 
+    }
+
+    const clearHighlightedText = ()=> {
+        editor.view.dispatch(editor.state.tr.setMeta(selectionPreviewPluginKey, 'clear'))
+        savedSelectionRef.current = null
+    }
 
     return (
         <div className="h-full relative">
@@ -238,18 +249,30 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
                                 contentEditable
                                 suppressContentEditableWarning
                                 className="flex-1 flex items-center whitespace-nowrap max-w-full h-full bg-white px-3 text-sm font-medium text-main-green placeholder-main-green/70 focus:outline-none overflow-hidden " 
+                                onMouseDown={() => {
+                                    if (!editor) return
+                                    const { from, to } = editor.state.selection
+                                    savedSelectionRef.current = { from, to }
+                                }}
                                 onKeyDown={(e)=> {
                                     const value = e.target.innerText;
+
                                     if(e.key === "Enter"){
-                                        editor.chain().focus().setFontSize(`${value}px`).run()
+                                        editor.chain().focus().setTextSelection(savedSelectionRef.current).setFontSize(`${value}px`).run()
+                                        clearHighlightedText()
                                     }
                                 }}  
-                                onFocus={()=> {
-                                    if (!savedSelectionRef.current) return;
+                              
+                                onFocus={() => {
+                                    if (!savedSelectionRef.current) return
+                                    
+                                    highlightSelectedText()                   
 
-                                    editor.chain().focus().setTextSelection(savedSelectionRef.current).unsetMark("textStyle").run();
-                                    savedSelectionRef.current = null;
-                                }}>
+                                }}
+                                onBlur={()=> clearHighlightedText()}
+                                >
+
+                                    
                                 {currentTextSize}
                             </div>
                             <div className='flex flex-col border-l-1 border-main-green'>
