@@ -26,6 +26,8 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
     const [currentTextSize, setCurrentTextSize] = useState("16");
 
     const savedSelectionRef = useRef(null);
+    const fontInputRef = useRef(null);
+
 
     useEffect(() => {
 
@@ -243,12 +245,20 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
                             )}
                         </div>
 
-                        <div className="relative flex w-22 h-8.5 border border-main-green items-center" >
-                            
+                        <div className="relative flex w-17 h-8.5 border border-main-green items-center justify-between" >
+                            <button
+                                className='cursor-pointer hover:bg-main-green/70 w-5 h-full p-0.5 flex justify-center items-center'
+                                onClick={()=> {
+                                    decreaseFontSize()
+                                }}
+                            >
+                                <ArrowIcon className="w-3 h-3"/>
+                            </button>
                             <div
                                 contentEditable
                                 suppressContentEditableWarning
-                                className="flex-1 flex items-center whitespace-nowrap max-w-full h-full bg-white px-3 text-sm font-medium text-main-green placeholder-main-green/70 focus:outline-none overflow-hidden " 
+                                ref={fontInputRef}
+                                className="flex items-center whitespace-nowrap max-w-full h-full bg-white text-sm font-medium text-main-green placeholder-main-green/70 focus:outline-none overflow-hidden " 
                                 onMouseDown={() => {
                                     if (!editor) return
                                     const { from, to } = editor.state.selection
@@ -266,6 +276,16 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
                                 onFocus={() => {
                                     if (!savedSelectionRef.current) return
                                     
+                                    const el = fontInputRef.current
+                                    if (!el) return
+
+                                    // Select all text inside the div
+                                    const range = document.createRange()
+                                    range.selectNodeContents(el)
+
+                                    const sel = window.getSelection()
+                                    sel.removeAllRanges()
+                                    sel.addRange(range)
                                     highlightSelectedText()                   
 
                                 }}
@@ -275,24 +295,10 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
                                     
                                 {currentTextSize}
                             </div>
-                            <div className='flex flex-col border-l-1 border-main-green'>
-                                <button onClick={()=> {
-                                    increaseFontSize()
-                                }}
-                                className='cursor-pointer hover:bg-main-green/70 w-full h-full p-0.5'
-                                >
-                                    <ArrowIcon className="w-3 h-3 rotate-180" />
-                                </button>
-                                <button
-                                    className='cursor-pointer hover:bg-main-green/70 w-full h-full p-0.5'
-                                    onClick={()=> {
-                                        decreaseFontSize()
-                                    }}
-                                >
-                                    <ArrowIcon className="w-3 h-3"/>
-                                </button>
-                            </div>
-                            
+                           
+                            <button onClick={()=> {increaseFontSize()}} className='cursor-pointer hover:bg-main-green/70 w-5 h-full p-0.5 flex justify-center items-center'>
+                                <ArrowIcon className="w-3 h-3 rotate-180" />
+                            </button>
                         </div>
                     </div>
                 </div>
