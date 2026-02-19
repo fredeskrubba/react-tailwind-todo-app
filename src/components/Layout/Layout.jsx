@@ -13,7 +13,7 @@ const Layout = ({ pageMode, children }) => {
         
         <>
             <div className="flex flex-col h-screen md:hidden">
-                <NavigationBar setIsMenuOpen={setIsMenuOpen} />
+                <NavigationBar setIsMenuOpen={setIsMenuOpen} pageMode={pageMode} />
 
                 <div className="flex flex-1 min-h-0 overflow-hidden">
                     <Sidebar pageMode={pageMode} isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />

@@ -85,6 +85,7 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
   
       if(defaultMenuItems.length > 0){
         setActiveItem(defaultMenuItems[0].id)
+        setActiveCategory({name: defaultMenuItems[0].name, id: defaultMenuItems[0].id, color: defaultMenuItems[0].color, userId: defaultMenuItems[0].userId})
       }
     } 
   }, [categories, pageMode ]);
@@ -329,7 +330,7 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
                 </button>
               ))}
             </div> : 
-             <div className="flex flex-col gap-4">
+             <div className="flex flex-col gap-4 h-full">
              
               {userNotes.map((note) => (
                 <button
@@ -347,11 +348,22 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
                   {note.title}
                 </button>
               ))}
+             
             </div> 
 
           }
 
-        <div className="sticky border-t-2 border-main-green w-full py-2 mt-auto flex justify-end items-center">
+        <div className="sticky border-t-2 border-main-green w-full py-2 mt-auto flex justify-between items-center">
+
+            {
+              pageMode === "todo" ?
+              <button className=" px-3 py-2 border-2 border-main-green text-main-green bg-neutral-100 cursor-pointer" onClick={() => { setCreateCategoryModalOpen(true); setIsMenuOpen(false)}}>
+                New Category
+              </button> :
+              <button className=" px-3 py-2 border-2 border-main-green text-main-green bg-neutral-100 cursor-pointer" onClick={() => { addNote(); setIsMenuOpen(false)}}>
+                New Note
+              </button>
+            }         
             <button type="button" onClick={onLogout} title="logout" className=" md:hidden">
               <LogoutIcon className="w-8 h-8 fill-main-green cursor-pointer"/>
             </button>

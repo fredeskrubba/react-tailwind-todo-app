@@ -5,7 +5,7 @@ import useAuthStore from "../../store/AuthStore";
 import TodoIcon from "../../assets/icons/to-do-icon.svg?react";
 import NotesIcon from "../../assets/icons/notes-icon.svg?react";
 
-const NavigationBar = ({ setIsMenuOpen}) => {
+const NavigationBar = ({ setIsMenuOpen, pageMode}) => {
     const [location] = useLocation();
     const logout = useAuthStore(state => state.logout);
 
@@ -29,8 +29,7 @@ const NavigationBar = ({ setIsMenuOpen}) => {
             </div>
             <div className="flex items-center gap-6">
                 
-                <BurgerIcon className="w-8 h-8 fill-main-green sm:w-7 sm:h-7 md:hidden" onClick={() => setIsMenuOpen(true)}/>
-                
+                <BurgerIcon className="w-6 h-6 fill-main-green sm:w-7 sm:h-7 md:hidden" onClick={() => setIsMenuOpen(true)}/>
                 <button type="button" onClick={onLogout} title="logout" className="hidden md:block">
                     <LogoutIcon className="w-8 h-8 fill-main-green cursor-pointer"/>
                 </button>

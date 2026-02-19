@@ -10,7 +10,7 @@ import AddIcon from "../assets/icons/plus-icon.svg?react"
 import ExpandIcon from "../assets/icons/expand-icon.svg?react"
 import ItemInfoView from '../components/ItemInfoView.jsx';
 import { toast } from 'react-toastify';
-
+import TaskIcon from '../assets/icons/to-do-icon.svg?react';
 const TodoList = () => {
     
     
@@ -183,7 +183,14 @@ const TodoList = () => {
                                
                             </div>
                         </div>
-
+                        
+                        {
+                            filteredListItems.length <= 0 &&
+                            <div className='flex flex-col items-center gap-10 mt-10'>
+                                <p className='text-gray-500 text-lg'>No tasks yet, get started by adding a task!</p>
+                                <TaskIcon className='h-22 w-22 fill-gray-500'/>
+                            </div>
+                        }
                         <div className='flex flex-col overflow-y-auto gap-2'>
                             {/* Overdue */}
                             <>
