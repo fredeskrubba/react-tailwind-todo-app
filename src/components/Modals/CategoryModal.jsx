@@ -6,16 +6,16 @@ import useAuthStore from "../../store/AuthStore";
 import useTodoStore from "../../store/TodoStore";
 import { toast } from 'react-toastify';
 
-const AddCategoryModal = ({ onClose, onSubmit }) => {
+const AddCategoryModal = ({ onClose, onSubmit, prevCategory }) => {
     // for desktop
-        const [selectedBackgroundColor, setSelectedBackgroundColor] = useState("#61BD92");
-        const backGroundColors = ["#61BD92", "#C490D1", "#F0B67F", "#E54B4B", "#227C9D"];
+    const [selectedBackgroundColor, setSelectedBackgroundColor] = useState(prevCategory ? prevCategory.color : "#61BD92");
+    const backGroundColors = ["#61BD92", "#C490D1", "#F0B67F", "#E54B4B", "#227C9D"];
         
     // for mobile
     const [hsva, setHsva] = useState({ h: 214, s: 43, v: 90, a: 1 });
     const [showColorPicker, setShowColorPicker] = useState(false);
 
-    const [name, setName] = useState("");
+    const [name, setName] = useState(prevCategory ? prevCategory.name : "");
     const [error, setError] = useState({});
 
     const activeUser = useAuthStore((state) => state.activeUser);
@@ -48,8 +48,28 @@ const AddCategoryModal = ({ onClose, onSubmit }) => {
         }   
     }
 
+    const editCategory = async (category) => {
+        if (name.trim() === "") {
+            setError({name: "name is required"});
+            return;
+        }
+        const updatedCategory = {
+            ...category,
+            name: name,
+            color: selectedBackgroundColor
+        }
+
+        try {
+            onSubmit(updatedCategory);
+            onClose();
+            notifySuccess();
+        } catch (err) {
+            notifyError();
+        }
+    }
+
     return (
-        <BaseModal title="Add Category" onClose={onClose} onSubmit={AddCategory}>
+        <BaseModal title={prevCategory ? "Edit Category" : "Add Category"} onClose={onClose} onSubmit={() => prevCategory ? editCategory(prevCategory) : AddCategory()}>
             <form className="space-y-4 relative text-gray-600" 
             onSubmit={(e) => {
                 e.preventDefault();

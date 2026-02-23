@@ -76,6 +76,18 @@ const useTodoStore = create((set) => ({
                 },
                 body: JSON.stringify(item)})
         return response;
+    },
+
+    updateCategory: async(item) => {
+        const response = await fetch(`${API_BASE_URL}/api/category/${item.id}`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(item),
+        });
+        return response;
     }
 }))
 

@@ -11,6 +11,7 @@ import ExpandIcon from "../assets/icons/expand-icon.svg?react"
 import ItemInfoView from '../components/ItemInfoView.jsx';
 import { toast } from 'react-toastify';
 import TaskIcon from '../assets/icons/to-do-icon.svg?react';
+import { statusses } from '../helpers/todoItemStatusses.js';
 const TodoList = () => {
     
     
@@ -228,7 +229,7 @@ const TodoList = () => {
                                 overdueExpanded && overdueItems.length > 0 && (
                                     <div className="flex flex-col gap-2">
                                         {overdueItems.map((item, index) => (
-                                        <ListItem key={index} item={item} isOverdue={true} />
+                                        <ListItem key={index} item={item} itemStatus="overdue" />
                                         ))}
                                     </div>
                                     )
@@ -249,8 +250,9 @@ const TodoList = () => {
                                                 transition-colors
                                                 select-none 
                                                 rounded-xs
-                                            ">
-                                            <p className="text-lg font-medium text-main-green">
+                                            "
+                                            style={{borderColor: statusses["upcoming"]}}>
+                                            <p className="text-lg font-medium" style={{color: statusses["upcoming"]}}>
                                                 To do ({todoItems.length})
                                             </p>
 
@@ -259,10 +261,10 @@ const TodoList = () => {
                                             <ExpandIcon
                                                 className={`
                                                 h-5 w-5
-                                                fill-main-green
                                                 transition-transform duration-200
                                                 ${incompleteExpanded ? "rotate-180" : ""}
                                                 `}
+                                                style={{fill: statusses["upcoming"]}}
                                             />
                                         </div>
                                 }
@@ -271,7 +273,7 @@ const TodoList = () => {
                                     {
                                         todoItems.length >= 0 && 
                                         todoItems.map((item, index) => (
-                                            <ListItem key={index} item={item} isOverdue={false} />
+                                            <ListItem key={index} item={item} itemStatus="upcoming" />
                                         ))
                                     }   
                                             
@@ -317,7 +319,7 @@ const TodoList = () => {
                                 {
                                     filteredListItems.length >= 0 &&
                                     filteredListItems.filter(item => item.isComplete).map((item, index) => (
-                                        <ListItem key={index} item={item} isOverdue={false}/>
+                                        <ListItem key={index} item={item} itemStatus="completed"/>
                                     ))
                                 }   
                                     

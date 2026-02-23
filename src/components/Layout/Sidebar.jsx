@@ -1,7 +1,6 @@
-import { act, use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import CrossIcon from "../../assets/icons/cross-icon.svg?react";
-import BurgerIcon from "../../assets/icons/burger-icon.svg?react";
-import AddCategoryModal from "../Modals/AddCategoryModal";
+import AddCategoryModal from "../Modals/CategoryModal.jsx";
 import useTodoStore from "../../store/TodoStore";
 import { Menu, Item, useContextMenu } from 'react-contexify';
 import useAuthStore from "../../store/AuthStore";
@@ -11,6 +10,9 @@ import { toast } from 'react-toastify';
 import useNoteStore from "../../store/NoteStore.js";
 import useMainStore from "../../store/Mainstore.js";
 import LogoutIcon from "../../assets/icons/logout-icon.svg?react";
+import EditIcon from "../../assets/icons/edit-icon.svg?react";
+import TrashIcon from "../../assets/icons/trash-icon.svg?react";
+
 
 const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
   
@@ -23,7 +25,7 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
   const [userMenuItems, setUserMenuItems] = useState([]);
   const [defaultMenuItems, setDefaultMenuItems] = useState([]);
   const [showWarningModal, setShowWarningModal] = useState(false);
-  const [selectedItemId, setSelectedItemId] = useState("");
+  const [selectedItem, setSelectedItem] = useState(null);
 
 
   const todoStore = useTodoStore();
@@ -103,7 +105,7 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
 
   }, [userNotes.length, pageMode])
 
-  const AddCategory = (category) => {
+  const addCategory = (category) => {
     setUserMenuItems(prev => [...prev, category]);
     setActiveCategory({name: category.name, id: category.id, color: category.color, userId: activeUser.id});
     setActiveItem(category.id)
@@ -122,6 +124,23 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
     }
   }
   
+  const editCategory = async (category) => {
+    
+   
+    try {
+          let updatedCategory = await todoStore.updateCategory(category);
+          setUserMenuItems(prev => prev.map(cat => cat.id === updatedCategory.id ? updatedCategory : cat));
+          setActiveCategory({name: updatedCategory.name, id: updatedCategory.id, color: updatedCategory.color, userId: activeUser.id});
+          setActiveItem(updatedCategory.id)
+          
+    } catch (err) {
+        notifyDeletionError();
+    } finally {
+        setCreateCategoryModalOpen(false);
+        handleContextMenu();
+    }
+  }
+
   const addNote = async () => {
   try {
     const newNote = await noteStore.createNote({
@@ -186,8 +205,8 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
                     }}
                     onClick={() => changeActiveCategory(item)}
                     onContextMenu={(e) => handleContextMenu(e, item)}
-                    onMouseEnter={(e) => { setIsHovering(item.id)}}
-                    onMouseLeave={(e) => { setIsHovering(null) }}>
+                    onMouseEnter={() => { setIsHovering(item.id)}}
+                    onMouseLeave={() => { setIsHovering(null) }}>
                     {item.name}
                   </button>   
               ))}
@@ -216,11 +235,21 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
                 <Item
                   
                   onClick={({ props }) => {
-                    setSelectedItemId(props.id);
+                    setSelectedItem(props);
                     setShowWarningModal(true);
                   }}
                 >
-                  Delete
+                  Delete category
+                </Item>
+
+                <Item
+                  
+                  onClick={({ props }) => {
+                    setSelectedItem(props);
+                    setCreateCategoryModalOpen(true);
+                  }}
+                >
+                  Edit category
                 </Item>
               </Menu>
             </div>
@@ -247,29 +276,16 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
                       {note.title}
                     </button>   
                 ))}
-
-                <Menu id={MENU_ID} theme="myTheme">
-                <Item
-                  disabled={({ props }) =>
-                    props?.name === "All" ||
-                    props?.name === "Incomplete" ||
-                    props?.name === "Complete"
-                  }
-                  onClick={({ props }) => {
-                    setSelectedItemId(props.id);
-                    setShowWarningModal(true);
-                  }}
-                >
-                  Delete
-                </Item>
-              </Menu>
               </div>
           }
 
 
 
 
-          <button className="mt-4 px-3 py-2 border-2 border-main-green text-main-green bg-neutral-100 cursor-pointer mt-auto" onClick={() => pageMode === "todo" ? setCreateCategoryModalOpen(true) : addNote()}>
+          <button className="mt-4 px-3 py-2 border-2 border-main-green text-main-green bg-neutral-100 cursor-pointer mt-auto" onClick={() => {
+            setSelectedItem(null);
+            pageMode === "todo" ? setCreateCategoryModalOpen(true) : addNote()
+            }}>
             {
               pageMode === "notes" ? "Add Note" : "Add Category"
             }
@@ -298,9 +314,9 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
             <div className="flex flex-col gap-4">
               {defaultMenuItems.map((item) => (
                     
-                      <button
+                      <div
                         key={item.id}
-                        className={`text-left px-3 py-2 hover:bg-gray-100 rounded text-lg`}
+                        className={`text-left px-3 py-2 hover:bg-gray-100 rounded text-lg flex items-center justify-between cursor-pointer`}
                         style={{
                           color: activeItem === item.id ? "#fff" : isHovering === item.id ? "#fff" : "#000",
                           backgroundColor: activeItem === item.id ? item.color : isHovering === item.id ? lightenColor(item.color, 0.3) : "#fff",      
@@ -310,13 +326,15 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
                           changeActiveCategory(item); 
                           setIsMenuOpen(false); 
                         }}>
+
                         {item.name}
-                      </button>   
+              
+                      </div>   
               ))}
               
               {userMenuItems.map((item) => (
-                <button
-                  className="text-left px-3 py-2 hover:bg-gray-100 rounded text-lg"
+                <div
+                  className="text-left px-3 py-2 hover:bg-gray-100 rounded text-lg flex items-center justify-between cursor-pointer"
                   key={item.id}
                   style={{
                           color: activeItem === item.id ? "#fff" : isHovering === item.id ? "#fff" : "#000",
@@ -327,13 +345,26 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
                     changeActiveCategory(item); 
                     setIsMenuOpen(false); }}>
                   {item.name}
-                </button>
+                  <div className="flex gap-4">
+                          <EditIcon className="w-4 h-4 fill-neutral-50 inline-block ml-2" onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedItem(item);
+                            setCreateCategoryModalOpen(true);
+                          }}/>
+                          <TrashIcon className="w-4 h-4 fill-neutral-50 inline-block ml-2" onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedItem(item);
+                            setShowWarningModal(true);
+                          }}/>
+
+                        </div>
+                </div>
               ))}
             </div> : 
              <div className="flex flex-col gap-4 h-full">
              
               {userNotes.map((note) => (
-                <button
+                <div
                   className="text-left px-3 py-2 hover:bg-gray-100 rounded text-lg"
                   key={note.id}
                   style={{
@@ -346,7 +377,9 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
                     changeActiveNote(note)
                     setIsMenuOpen(false); }}>
                   {note.title}
-                </button>
+
+
+                </div>
               ))}
              
             </div> 
@@ -371,13 +404,13 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
       </div>
 
       {
-        isCreateCategoryModalOpen && <AddCategoryModal onClose={() => setCreateCategoryModalOpen(false)} onSubmit={AddCategory} />
+        isCreateCategoryModalOpen && <AddCategoryModal onClose={() => setCreateCategoryModalOpen(false)} onSubmit={selectedItem ? editCategory : addCategory} prevCategory={selectedItem}/>
       }
       {showWarningModal && <WarningModal text="Are you sure you want to delete this item?" onConfirm={() => {
         if(pageMode === "todo"){
-          deleteCategory(selectedItemId);
+          deleteCategory(selectedItem.id);
         } else if (pageMode === "notes"){
-          deleteNote(selectedItemId);
+          deleteNote(selectedItem.id);
         }
       }} onCancel={() => setShowWarningModal(false)}/>} 
 

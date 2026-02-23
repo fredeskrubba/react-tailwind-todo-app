@@ -8,8 +8,9 @@ import ItemTaskModal from "./Modals/ItemTaskModal.jsx";
 import { Menu, Item, useContextMenu } from 'react-contexify';
 import {useId} from 'react';
 import { toast } from 'react-toastify';
+import { statusses } from "../helpers/todoItemStatusses.js";
 
-const ListItem = ({item, isOverdue}) => {
+const ListItem = ({item, itemStatus}) => {
 
     const [isHover, setIsHover] = useState(false);
     const updateItem = useTodoStore(state => state.updateTodoItem)
@@ -28,10 +29,13 @@ const ListItem = ({item, isOverdue}) => {
     const notifyCompletedToggleSuccess = () => toast("Item status updated", { type: "success", position: "bottom-center", autoClose: 2000 });
     const notifyCompletedToggleError = () => toast("Failed to update item status", { type: "error", position: "bottom-center", autoClose: 2000 });
     
+ 
+
+
     const backgroundColor = activeTodoItem && activeTodoItem.id === item.id
-    ? isOverdue ? "#f87171" : "#61bd92"
+    ? statusses[itemStatus]
     : isHover
-    ? lightenColor(isOverdue ? "#f87171" : "#61bd92", 40)
+    ? lightenColor(statusses[itemStatus], 40)
     : "white"; 
 
     const textColor = activeTodoItem && activeTodoItem.id === item.id
@@ -95,7 +99,7 @@ const ListItem = ({item, isOverdue}) => {
 
     return (
         <div className="border-l-4 w-full transition-transform duration-300 bg-white cursor-pointer shadow-sm md:min-h-3 grid grid-cols-[1fr_auto]" 
-            style={{borderColor: isOverdue ? "#f87171" : "#61bd92", backgroundColor: backgroundColor, color: textColor}} 
+            style={{borderColor: statusses[itemStatus], backgroundColor: backgroundColor, color: textColor}} 
             onClick={(e)=> {
                 e.stopPropagation();
                 ShowInfoForItem(item)
