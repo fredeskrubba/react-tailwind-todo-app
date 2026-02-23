@@ -270,12 +270,27 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
                         borderColor: note.color,
                       }} onClick={() => changeActiveNote(note)}
                       onContextMenu={(e) => handleContextMenu(e, note)}
-                      onMouseEnter={(e) => { setIsHovering(note.id)}}
-                      onMouseLeave={(e) => { setIsHovering(null) }}
+                      onMouseEnter={() => { setIsHovering(note.id)}}
+                      onMouseLeave={() => { setIsHovering(null) }}
                       >
                       {note.title}
                     </button>   
                 ))}
+                 <Menu id={MENU_ID} theme="myTheme">
+                <Item
+                  disabled={({ props }) =>
+                    props?.name === "All" ||
+                    props?.name === "Incomplete" ||
+                    props?.name === "Complete"
+                  }
+                  onClick={({ props }) => {
+                    setSelectedItem(props);
+                    setShowWarningModal(true);
+                  }}
+                >
+                  Delete
+                </Item>
+              </Menu>
               </div>
           }
 
