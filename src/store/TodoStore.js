@@ -87,7 +87,7 @@ const useTodoStore = create((set) => ({
             },
             body: JSON.stringify(item),
         });
-        return response;
+        return response.json();
     }
 }))
 

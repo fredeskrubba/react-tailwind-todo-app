@@ -130,9 +130,7 @@ const Sidebar = ({ pageMode, isMenuOpen, setIsMenuOpen }) => {
     try {
           let updatedCategory = await todoStore.updateCategory(category);
           setUserMenuItems(prev => prev.map(cat => cat.id === updatedCategory.id ? updatedCategory : cat));
-          setActiveCategory({name: updatedCategory.name, id: updatedCategory.id, color: updatedCategory.color, userId: activeUser.id});
-          setActiveItem(updatedCategory.id)
-          
+          console.log(userMenuItems);          
     } catch (err) {
         notifyDeletionError();
     } finally {
