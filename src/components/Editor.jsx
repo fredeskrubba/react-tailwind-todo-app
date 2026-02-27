@@ -11,7 +11,7 @@ import UlIcon from "../assets/icons/ul-icon.svg?react"
 import OlIcon from "../assets/icons/ol-icon.svg?react"
 import ArrowIcon from "../assets/icons/expand-icon.svg?react"
 import { SelectionPreviewExtension, selectionPreviewPluginKey } from './Tiptap/SelectionPreview';
-
+import Image from '@tiptap/extension-image'
 
 
 const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
@@ -62,8 +62,8 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
                 class: 'h-full p-2 focus:outline-none',
             },
         },
-        extensions: [StarterKit, TextStyle, Color, FontSize, SelectionPreviewExtension],
-        content: activeNote?.htmlContent || '<p>Get Started writing!</p>',
+        extensions: [StarterKit, TextStyle, Color, FontSize, SelectionPreviewExtension, Image],
+        content: activeNote?.htmlContent || '<p>Get Started writing!</p> <img src="https://placehold.co/600x400" />',
         onUpdate: ({ editor }) => {
             const html = editor.getHTML();
             setActiveContent(html);
