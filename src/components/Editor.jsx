@@ -63,7 +63,7 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
             },
         },
         extensions: [StarterKit, TextStyle, Color, FontSize, SelectionPreviewExtension, Image],
-        content: activeNote?.htmlContent || '<p>Get Started writing!</p> <img src="https://placehold.co/600x400" />',
+        content: activeNote?.htmlContent || '<p>Get Started writing!</p>',
         onUpdate: ({ editor }) => {
             const html = editor.getHTML();
             setActiveContent(html);

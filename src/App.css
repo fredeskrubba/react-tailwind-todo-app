@@ -53,3 +53,8 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .selection-preview {
   background-color: rgba(0, 200, 100, 0.35);
 }
+
+.ProseMirror-selectednode {
+  outline: 2px solid var(--color-main-green);
+  outline-offset: 2px;
+}
