@@ -16,6 +16,11 @@ const useAuthStore = create((set) => ({
             },
             body: JSON.stringify(userData)
         });
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ message: 'Login failed' }));
+            console.log(2222222)
+            throw new Error(errorData.message || 'Invalid credentials');
+        }
         const result = await response.json(); 
         set({ userToken: result.token, activeUser: result.user});
     },
@@ -28,6 +33,10 @@ const useAuthStore = create((set) => ({
             },
             body: JSON.stringify({})
         });
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ message: 'Guest login failed' }));
+            throw new Error(errorData.message || 'Guest login failed');
+        }
         const result = await response.json(); 
         set({ userToken: result.token, activeUser: result.user});
     },

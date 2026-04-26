@@ -14,6 +14,7 @@ const LoginPage = () => {
   const loginGuest = useAuthStore((state) => state.loginGuest);
 
   const [emailError, setEmailError] = useState("");
+  const [loginError, setLoginError] = useState("");
 
 
 
@@ -39,15 +40,24 @@ const LoginPage = () => {
   const OnLogin = async () => {
     setIsLoading(true)
     setEmailError("");
+    setLoginError("");
 
 
     checkEmailValidity(email);
 
 
-    if (!emailValid) return;
+    if (!emailValid) {
+      setIsLoading(false);
+      return;
+    }
 
-    await login({ email, password });
-    setIsLoading(false)
+    try {
+      await login({ email, password });
+    } catch (error) {
+      setLoginError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
     useEffect(() => {
@@ -57,9 +67,15 @@ const LoginPage = () => {
   }, [userToken]);
 
   const onGuestLogin = async () => {
-    setIsLoading(true)
-    await loginGuest();
-    setIsLoading(false);
+    setIsLoading(true);
+    setLoginError("");
+    try {
+      await loginGuest();
+    } catch (error) {
+      setLoginError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -82,7 +98,7 @@ const LoginPage = () => {
 
           <p className="mt-6 text-sm opacity-90">
             Built with React & Tailwind on the frontend,  
-            ASP.NET Core backend, and MariaDB database.
+            .NET Core backend, and PostGres database.
           </p>
       </div>
       <form className="min-h-screen flex items-center justify-center bg-gray-100" onSubmit={(e) => {
@@ -143,7 +159,9 @@ const LoginPage = () => {
                 setPassword(e.target.value)
               }}
             />
-
+            {loginError && (
+              <p className="text-red-500 text-sm mt-1">{loginError}</p>
+            )}
           </div>
           {
             isLoading ? <LoadingIcon/> : 
