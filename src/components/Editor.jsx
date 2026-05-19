@@ -120,9 +120,8 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
     }
 
     return (
-        <div className="h-full relative">
-            <div className=" sticky top-0 z-10 bg-white/90 backdrop-blur border-b border-main-green">
-                <div className="sticky top-0 z-10 border-b border-main-green bg-white/90 backdrop-blur">
+        <div className="relative">
+            <div className="sticky top-0 z-10 bg-white/90 backdrop-blur border-b border-main-green">
                     <div className="mx-auto flex items-center gap-1 px-4 py-2 overflow-x-auto overscroll-x-contain whitespace-nowrap scrollbar-hide touch-pan-x" >
                         <button
                         type="button"
@@ -301,7 +300,7 @@ const Editor = ({setActiveContent, setActiveTitle, activeTitle}) => {
                             </button>
                         </div>
                     </div>
-                </div>
+
             </div>
             <div className='p-2 flex flex-col gap-3'>
                 <input type="text" placeholder='No title yet' className='w-full text-2xl focus:outline-none' value={activeTitle} onChange={(e) => setActiveTitle(e.target.value)}/>
